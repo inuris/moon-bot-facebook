@@ -1,5 +1,6 @@
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const amazon = require("./amazon.js");
+const logger = require('./logger').logger;
 const select = require("soupselect-update").select;
 // Imports dependencies and set up http server
 const request = require("request"),
@@ -8,6 +9,7 @@ const request = require("request"),
   htmlparser = require("htmlparser2"),
   app = express().use(body_parser.json()); // creates express http server
 
+console.log("Hello world");
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
 
@@ -76,15 +78,18 @@ function handleMessage(sender_psid, received_message) {
 
   // Check if the message contains text
   if (received_message.text) {
-    // Create the payload for a basic text message
-    var reg=/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?(amazon.com\/.+)/gm;
-    if (received_message.text.match(reg)!==null){
+    
+    var reg=/(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?(amazon.com\/\S+)/gm;
+    var matchurl=received_message.text.match(reg);
+    if (matchurl!==null){
       
+      // Create the payload for a basic text message
       var requestOptions = {
         method: "GET",
-        url: received_message.text,
+        url: matchurl[0],
         gzip: true
       };
+      logger.log("info", "URL:"+matchurl[0]);
       request(requestOptions, function(error, response, body) {
         var price = amazon.getPrice(body);    
         response = {

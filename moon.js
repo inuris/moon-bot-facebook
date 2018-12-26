@@ -1,4 +1,5 @@
 const select = require("soupselect-update").select;
+const logger = require('./logger').logger;
 const RATE_USD_VND = 24066;
 exports.RATE_USD_VND = RATE_USD_VND;
 const FACEBOOK_LINK = "https://www.facebook.com/moonhangmy";
@@ -60,8 +61,8 @@ const CATEGORIES = {
     HQANCHOR: 500,
     NAME: "Xe đạp",
     NOTE: "Giá đã bao gồm Phí ship $12/kg + Phụ thu $40/chiếc",
-    KEYWORD: ["bike", "walker", "rollator"],
-    NOTKEYWORD: []
+    KEYWORD: ["bike", "walker", "rollator","cycling"],
+    NOTKEYWORD: ["accessories"]
   },
   KITCHENAPPLIANCE: {
     SHIP: 12,
@@ -187,7 +188,16 @@ const CATEGORIES = {
       "cases",
       "bags",
       "camera & photo accessories",
-      "cell phones & accessories >"
+      "accessory kits",
+      "cables",
+      "holder",
+      "stands",
+      "cradles",
+      "mounts",
+      "repair kits",
+      "sticks",
+      "tripods",
+      "styluses"
     ]
   },
   AUTOMOTIVE: {
@@ -489,9 +499,13 @@ function calculateMoonPrice(website, item){
   return itemTotal;
 }
 function printMoonPrice(website, item){
-var total = calculateMoonPrice(website, item);
-var itemText=`Giá của Moon: ${toVND(total).formatMoney(0, '.', ',')} VNĐ. ${(item.weight==0?'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.':'Loại mặt hàng: ' + CATEGORIES[item.category].NAME +'. '+ CATEGORIES[item.category].NOTE)}`
-return itemText;
+  var total = calculateMoonPrice(website, item);
+  var totalString=toVND(total).formatMoney(0, '.', ',')+" VNĐ";
+  logger.log("info","PRICE:" + item.price + "|WEIGHT:" + item.weightString+ "|CATEGORY:" + item.category+"|TOTAL:"+totalString);
+  var itemText=`[Auto Reply] Giá của Moon: ${totalString}.
+${(item.weight==0?'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về':'Loại mặt hàng: '+CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE)}.
+(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)`
+  return itemText;
 }
 module.exports = {
   CATEGORIES: CATEGORIES,
