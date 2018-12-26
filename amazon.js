@@ -7,7 +7,7 @@ const DETAILBLOCK = [
   "#detailBullets_feature_div span.a-list-item",
   "#detailBulletsWrapper_feature_div li",
   "#prodDetails tr",
-  "#detail-bullets li",
+  "#detail-bullets .content li",
   "#technical-details-table tr",
   "#tech-specs-desktop tr"
 ];
@@ -25,14 +25,15 @@ function getAmazonPrice(dom) {
   var priceString = "";
   var itemPrice = 0;
   for (var i = 0; i < PRICEBLOCK.length; i++) {
-    var itemPriceBlock = select(dom, PRICEBLOCK[i]);
-    if (itemPriceBlock.length > 0) {
-      priceString = itemPriceBlock[0].children[0].data
-        .trim()
+    var itemPriceBlock = select(dom, PRICEBLOCK[i]);    
+    if (itemPriceBlock.length > 0) {        
+      priceString = htmlparser.DomUtils.getText(itemPriceBlock[0])
+        .replace(/\s+/g," ")
+        .trim()        
         .replace("$ ", "")
         .replace("$", "")
         .replace(",", "")
-        .replace(" ", "."); // $33 99 => 33.99
+        .replace(" ", ".") // $33 99 => 33.99
       break;
     }
   }
@@ -66,30 +67,45 @@ function getAmazonDetailString(dom, block) {
   
   for (var e of detailTable) {
     if (e.type === "tag") {
-      var row = e.children;
+      var row = e.children; 
+      // try{console.log(row.length);
+      //    console.log(htmlparser.DomUtils.getText(row))}
+      // catch(e){};
       // row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
       try {
-        if (row[1].type === "tag" && row[3].type === "tag") {
-          
-          // Tìm từ "Weight/Demensions" (1 số sp có weight nằm ở dimension)
-          if (
-            row[1].children[0].data.indexOf("Weight") >= 0 ||
-            row[1].children[0].data.indexOf("Dimensions") >= 0
+        var rowText=htmlparser.DomUtils.getText(row).trim().toLowerCase();
+        if (
+            rowText.indexOf("weight") >= 0 ||
+            rowText.indexOf("dimensions") >= 0
           ) {
-            detailString.weight.push(
-              row[3].children[0].data.trim().toLowerCase()
-            );
+            detailString.weight.push(rowText);
             // Có dạng: 1.1 pounds
           }
           // Tìm từ "Sellers Rank" để add Category
-          else if (row[1].children[0].data.indexOf("Sellers Rank") >= 0) {            
-            detailString.category += htmlparser.DomUtils.getText(
-              row[3].children
-            )
-              .trim()
-              .toLowerCase();
+          else if (rowText.indexOf("sellers rank") >= 0) {            
+            detailString.category += rowText;
           }
-        }
+             
+        // if (row[1].type === "tag" && row[3].type === "tag") {          
+        //   // Tìm từ "Weight/Demensions" (1 số sp có weight nằm ở dimension)
+        //   if (
+        //     row[1].children[0].data.indexOf("Weight") >= 0 ||
+        //     row[1].children[0].data.indexOf("Dimensions") >= 0
+        //   ) {
+        //     detailString.weight.push(
+        //       row[3].children[0].data.trim().toLowerCase()
+        //     );
+        //     // Có dạng: 1.1 pounds
+        //   }
+        //   // Tìm từ "Sellers Rank" để add Category
+        //   else if (row[1].children[0].data.indexOf("Sellers Rank") >= 0) {            
+        //     detailString.category += htmlparser.DomUtils.getText(
+        //       row[3].children
+        //     )
+        //       .trim()
+        //       .toLowerCase();
+        //   }
+        // }
       } catch (err) {}
     }
   }
@@ -147,7 +163,7 @@ function handleAmazonCategory(categoryString) {
     .replace(" in ", " ")
     .replace("amazon best sellers rank:", "")
     .replace("best sellers rank:", "");
-  console.log(categoryStr);
+  // console.log(categoryStr);
   // Query từng KEYWORD trong category
   for (var category in moon.CATEGORIES) {
     if (
@@ -183,37 +199,31 @@ function getAmazonDetail(dom) {
     category: handleAmazonCategory(detailString.category)
   };
 }
+function getPrice(htmlraw){
+  console.clear();
+  var item={
+    price:0,
+    weight:0,
+    weightString:"",
+    category:"" 
+  };
+  var handler = new htmlparser.DomHandler((error, dom) => {
+    if (error) {
+      console.log(error);
+    } else {
+      item.price = getAmazonPrice(dom);
+      
+
+      var itemDetail = getAmazonDetail(dom);      
+      item.weight = itemDetail.weight;
+      item.weightString = itemDetail.weightString;
+      item.category = itemDetail.category;
+    }
+  });
+  var parser = new htmlparser.Parser(handler, { decodeEntities: true });
+  parser.parseComplete(htmlraw);
+  return moon.printMoonPrice("AMAZON", item);
+}
 module.exports = {
-  getPrice: htmlraw => {
-    console.clear();
-    var item={
-      price:0,
-      weight:0,
-      category:""
-    };
-    var handler = new htmlparser.DomHandler((error, dom) => {
-      if (error) {
-        console.log(error);
-      } else {
-        //console.log("1 USD = " + moon.RATE_USD_VND + " VNĐ");
-        console.log("AMAZON");
-
-        console.log("---PRICE---");
-        item.price = getAmazonPrice(dom);
-        console.log(item.price);
-
-        var itemDetail = getAmazonDetail(dom);
-        console.log("---WEIGHT---");
-        item.weight = itemDetail.weight;
-        console.log(itemDetail.weightString);
-
-        console.log("---CATEGORY---");
-        item.category = itemDetail.category;
-        console.log(item.category);
-      }
-    });
-    var parser = new htmlparser.Parser(handler, { decodeEntities: true });
-    parser.parseComplete(htmlraw);
-    return moon.printMoonPrice("AMAZON", item);
-  }
+  getPrice: getPrice
 };

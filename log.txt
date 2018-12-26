@@ -1,0 +1,2 @@
+{"level":"info","message":"URL:https://www.amazon.com/Cancelling-Headphones-Wireless-Bluetooth-Microphone/dp/B07BNJ933J/ref=br_msw_pdt-2?_encoding=UTF8&smid=A1DD8WAGHSJ7M5&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=0AY76NZ0RSZSN96WBZ0Z&pf_rd_t=36701&pf_rd_p=28b04fc5-b068-4db7-9f75-c6ec32ddbd9a&pf_rd_i=desktop"}
+{"level":"info","message":"PRICE:65.99|WEIGHT:8 ounce|CATEGORY:DIGITAL|TOTAL:1,935,000 VNĐ"}
