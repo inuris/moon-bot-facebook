@@ -1,0 +1,21 @@
+{
+  "name": "moon-bot",
+  "version": "1.0.0",
+  "description": "Moon Bot",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "KhoaLam",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "request": "^2.88.0",
+    "htmlparser2": "^3.10.0",
+    "soupselect-update": "^0.2.5"
+  },
+  "engines": {
+    "node": "10"
+  }
+}
