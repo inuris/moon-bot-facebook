@@ -1,17 +1,48 @@
-const fs = require('fs');
-const winston = require('winston');
+var winston = require('winston');
 
-const filename = './log.txt';
+// define the custom settings for each transport (file, console)
+var options = {
+  infofile: {
+    level: 'info',
+    filename: `./logs/info.log`,
+    handleExceptions: true,
+    json: true,
+    maxsize: 5242880, // 5MB
+    maxFiles: 5,
+    colorize: false,
+  },
+  infoconsole: {
+    level: 'info',
+    handleExceptions: true,
+    json: false,
+    colorize: true,
+  },
+  errorfile: {
+    level: 'error',
+    filename: `./logs/error.log`,
+    handleExceptions: true,
+    json: true,
+    maxsize: 5242880, // 5MB
+    maxFiles: 5,
+    colorize: false,
+  },
+  errorconsole: {
+    level: 'error',
+    handleExceptions: true,
+    json: false,
+    colorize: true,
+  },
+};
 
-//
-// Create a new winston logger instance with two tranports: Console, and File
-const logger = winston.createLogger({
+// instantiate a new Winston Logger with the settings defined above
+var logger = winston.createLogger({
   transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename })
-  ]
+    new winston.transports.File(options.infofile),
+    new winston.transports.Console(options.infoconsole),
+    new winston.transports.File(options.errorfile),
+    new winston.transports.Console(options.errorconsole),
+  ],
+  exitOnError: false, // do not exit on handled exceptions
 });
 
-module.exports = {
-  logger:logger
-}
+module.exports = logger;

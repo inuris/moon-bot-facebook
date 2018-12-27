@@ -1,3 +1,6 @@
+module.exports = {
+  getMoonPrice
+};
 const moon = require("./moon.js");
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
@@ -68,9 +71,9 @@ function getAmazonDetailString(dom, block) {
   for (var e of detailTable) {
     if (e.type === "tag") {
       var row = e.children; 
-      // try{console.log(row.length);
-      //    console.log(htmlparser.DomUtils.getText(row))}
-      // catch(e){};
+      try{console.log(row.length);
+         console.log(htmlparser.DomUtils.getText(row))}
+      catch(e){};
       // row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
       try {
         var rowText=htmlparser.DomUtils.getText(row).trim().toLowerCase();
@@ -180,10 +183,17 @@ function handleAmazonCategory(categoryString) {
 
 // Lấy cân nặng và category sau khi xử lý
 function getAmazonDetail(dom) {
-  var detailString;
+  var detailString= {
+    weight: [],
+    category: ""
+  };
   for (var i = 0; i < DETAILBLOCK.length; i++) {
-    detailString = getAmazonDetailString(dom, DETAILBLOCK[i]);
-    if (detailString.weight.length > 0) break;
+    var detailStringTemp = getAmazonDetailString(dom, DETAILBLOCK[i]);
+    if (detailString.weight.length === 0 && detailStringTemp.weight.length > 0)
+      detailString.weight = detailStringTemp.weight;
+    if (detailString.category === "" && detailStringTemp.category != "")
+      detailString.category = detailStringTemp.category;
+    if (detailString.weight.length > 0 && detailString.category!="") break;
   }
   var weight = handleAmazonWeight(detailString.weight);
   if (weight.kg == undefined){
@@ -199,8 +209,7 @@ function getAmazonDetail(dom) {
     category: handleAmazonCategory(detailString.category)
   };
 }
-function getPrice(htmlraw){
-  console.clear();
+function getMoonPrice(htmlraw){
   var item={
     price:0,
     weight:0,
@@ -224,6 +233,4 @@ function getPrice(htmlraw){
   parser.parseComplete(htmlraw);
   return moon.printMoonPrice("AMAZON", item);
 }
-module.exports = {
-  getPrice: getPrice
-};
+
