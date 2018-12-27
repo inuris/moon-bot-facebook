@@ -1,8 +1,5 @@
 const select = require("soupselect-update").select;
-const logger = require('./logger').logger;
 const RATE_USD_VND = 24066;
-exports.RATE_USD_VND = RATE_USD_VND;
-const FACEBOOK_LINK = "https://www.facebook.com/moonhangmy";
 const CATEGORIES = {
   GLASSES: {
     SHIP: 0,
@@ -85,7 +82,7 @@ const CATEGORIES = {
     HQANCHOR: 500,
     NAME: "Đĩa nhạc, game",
     NOTE: "Giá đã bao gồm Phí ship $10/kg",
-    KEYWORD: ["video games", " > games"],
+    KEYWORD: ["video games", " > games","blu-ray >", "dvd >"],
     NOTKEYWORD: ["accessories", "controllers", " > consoles", "cards"]
   },
   CHEMICAL_VITAMIN: {
@@ -103,7 +100,8 @@ const CATEGORIES = {
       "vitamin",
       "supplement",
       "personal care",
-      "liquid"
+      "liquid",
+      "health supplies"
     ],
     NOTKEYWORD: ["> professional dental supplies", "> toothbrushes","diffusers", "candles"]
   },
@@ -122,7 +120,7 @@ const CATEGORIES = {
       " > 2 in 1 laptops",
       " > traditional laptops"
     ],
-    NOTKEYWORD: []
+    NOTKEYWORD: ["accessories"]
   },
   CONSOLE: {
     SHIP: 13,
@@ -409,6 +407,14 @@ const WEBSITES = {
     WRITEBLOCK: ""
   }
 };
+module.exports = {
+  RATE_USD_VND,
+  CATEGORIES,
+  checkKeyword,
+  calculateMoonPrice,
+  printMoonPrice,
+  toVND
+}
 
 // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
 Number.prototype.formatMoney = function(c, d, t) {
@@ -434,8 +440,8 @@ Number.prototype.formatMoney = function(c, d, t) {
 
 // Đổi USD sang VND, làm tròn 5000
 function toVND(price){
-  var priceNew = Math.ceil((price * RATE_USD_VND) / 5000) * 5000; //Làm tròn lên 10000
-  return priceNew;
+  var priceNew = Math.ceil((price * RATE_USD_VND) / 5000) * 5000; //Làm tròn lên 5000  
+  return formatMoney(priceNew)+" VND"; // Thêm VND vào
 }
 
 // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
@@ -461,58 +467,47 @@ function checkKeyword(keyString, include, exclude){
 
 // Tính giá USD tổng dựa trên [tên website, giá web, cân nặng, danh mục], return int
 function calculateMoonPrice(website, item){
-  console.log("---CALCULATE---");
   var itemPrice = item.price;
   var category=item.category;
   var itemTax = itemPrice * WEBSITES[website].TAX; // Thuế tại Mỹ
   var itemPriceAfterTax = itemPrice + itemTax; // Giá Sau Thuế
-  console.log("tax: " + itemTax + " (" + WEBSITES[website].TAX * 100 + "%)");
+  //console.log("tax: " + itemTax + " (" + WEBSITES[website].TAX * 100 + "%)");
 
   var itemMoon = itemPriceAfterTax * (itemPriceAfterTax < 300 ? 0.07 : 0.05); // Công mua tính theo Giá Sau Thuế
-  console.log("moon: " + itemMoon);
+  //console.log("moon: " + itemMoon);
 
   var itemWeight = Math.ceil(item.weight * 10) / 10;
   var itemShip = itemWeight * CATEGORIES[category].SHIP; // Giá ship theo cân nặng
-  console.log(
-    "ship: $" + CATEGORIES[category].SHIP + "/kg x " + itemWeight + "kg"
-  );
+  //console.log("ship: $" + CATEGORIES[category].SHIP + "/kg x " + itemWeight + "kg");
 
   var itemPriceExtra =
     CATEGORIES[category].EXTRA +
     (itemPrice >= CATEGORIES[category].PRICEANCHOR
       ? CATEGORIES[category].PRICEEXTRA
       : 0); /// Phụ thu theo cái
-  console.log("extra: " + CATEGORIES[category].EXTRA);
+  //console.log("extra: " + CATEGORIES[category].EXTRA);
 
   var itemHQEXTRA =
     itemPrice *
     (itemPrice >= CATEGORIES[category].HQANCHOR
       ? CATEGORIES[category].HQEXTRA
       : 0); // Phụ thu giá trị cao (HQANCHOR)
-  console.log("high price extra: " + itemHQEXTRA);
+  //console.log("high price extra: " + itemHQEXTRA);
 
   var itemTotal =
     itemPrice > 0
       ? itemPriceAfterTax + itemMoon + itemShip + itemPriceExtra + itemHQEXTRA
       : 0;
-  console.log("total: " + itemTotal);
+  //console.log("total: " + itemTotal);
   return itemTotal;
 }
-function printMoonPrice(website, item){
-  var total = calculateMoonPrice(website, item);
-  var totalString=toVND(total).formatMoney(0, '.', ',')+" VNĐ";
-  logger.log("info","PRICE:" + item.price + "|WEIGHT:" + item.weightString+ "|CATEGORY:" + item.category+"|TOTAL:"+totalString);
-  var itemText=`[Auto Reply] Giá của Moon: ${totalString}.
-${(item.weight==0?'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về':'Loại mặt hàng: '+CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE)}.
-(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)`
+function printMoonPrice(item){
+  var itemText='[Auto Reply] Giá của Moon: '+item.totalString +'.\n'
++(item.total>0?(item.weight==0 && CATEGORIES[item.category].SHIP!==0?'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về':'Loại mặt hàng: '+CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE) +'.\n'
++'(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)':'');
   return itemText;
 }
-module.exports = {
-  CATEGORIES: CATEGORIES,
-  checkKeyword: checkKeyword,  
-  calculateMoonPrice: calculateMoonPrice,
-  printMoonPrice: printMoonPrice
-}
+
 
 // Lấy variable có sẵn trên website
 // function retrieveWebsiteVariables(variables) {

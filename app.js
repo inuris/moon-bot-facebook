@@ -1,6 +1,5 @@
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const amazon = require("./amazon.js");
-const logger = require('./logger').logger;
 const select = require("soupselect-update").select;
 // Imports dependencies and set up http server
 const request = require("request"),
@@ -16,7 +15,6 @@ app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
 app.post("/webhook", (req, res) => {
   // Parse the request body from the POST
   let body = req.body;
-  console.log("receive");
   // Check the webhook event is from a Page subscription
   if (body.object === "page") {
     // Iterate over each entry - there may be multiple if batched
@@ -24,11 +22,10 @@ app.post("/webhook", (req, res) => {
       // Get the webhook event. entry.messaging is an array, but
       // will only ever contain one event, so we get index 0
       let webhook_event = entry.messaging[0];
-      console.log(webhook_event);
+      
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
-      console.log("Sender PSID: " + sender_psid);
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
@@ -88,15 +85,13 @@ function handleMessage(sender_psid, received_message) {
         url: matchurl[0],
         gzip: true
       };
-      logger.log("info", "URL:"+matchurl[0]);
       request(requestOptions, function(error, response, body) {
-        var price = amazon.getMoonPrice(body);    
+        var price = amazon.getMoonPrice(matchurl[0],body);    
         response = {
         "text": price
         }
         callSendAPI(sender_psid, response);
-      });     
-      
+      });           
     }
   }
 }
