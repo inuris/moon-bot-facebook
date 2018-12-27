@@ -1,2 +1,28 @@
 {"level":"info","message":"URL:https://www.amazon.com/Cancelling-Headphones-Wireless-Bluetooth-Microphone/dp/B07BNJ933J/ref=br_msw_pdt-2?_encoding=UTF8&smid=A1DD8WAGHSJ7M5&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=0AY76NZ0RSZSN96WBZ0Z&pf_rd_t=36701&pf_rd_p=28b04fc5-b068-4db7-9f75-c6ec32ddbd9a&pf_rd_i=desktop"}
 {"level":"info","message":"PRICE:65.99|WEIGHT:8 ounce|CATEGORY:DIGITAL|TOTAL:1,935,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/CineMilled-PRO-Dovetail-Ronin-M-Gimbal/dp/B01IQIZ7MS?fbclid=IwAR2HZORc30C2GS1Z3OKCoiMOFju638a-48PNmgNR_rKvdXYlLo78XYwPxyA"}
+{"level":"info","message":"PRICE:99.99|WEIGHT:4 ounce|CATEGORY:DIGITAL|TOTAL:2,855,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/Fujifilm-Instax-Instant-Packs-Pictures/dp/B00O4OR4GQ/ref=zg_bs_502394_1?_encoding=UTF8&psc=1&refRID=DZDGFC60XJ53XYVZ9QRK"}
+{"level":"info","message":"PRICE:41.22|WEIGHT:2.4 ounce|CATEGORY:DIGITAL|TOTAL:1,185,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/Womens-Crewneck-Sleeve-Pullover-Sweatshirt/dp/B07JR7LLT4/ref=br_msw_pdt-3?_encoding=UTF8&smid=A2MJWVWRXKW8BJ&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=3AB757BRRZ30YQWP0HKV&pf_rd_t=36701&pf_rd_p=28b04fc5-b068-4db7-9f75-c6ec32ddbd9a&pf_rd_i=desktop"}
+{"level":"info","message":"PRICE:19.99|WEIGHT:10.6 ounce|CATEGORY:UNKNOWN|TOTAL:560,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/ArtNaturals-Therapeutic-Grade-Aromatherapy-Essential-Oil/dp/B01161IL20/ref=zg_bs_3767491_4?_encoding=UTF8&psc=1&refRID=S1GE7RBGYB8P9XG4G762"}
+{"level":"info","message":"PRICE:19.95|WEIGHT:12 ounce|CATEGORY:CHEMICAL_VITAMIN|TOTAL:665,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/Womens-Crewneck-Sleeve-Pullover-Sweatshirt/dp/B07JR7LLT4/ref=br_msw_pdt-3?_encoding=UTF8&smid=A2MJWVWRXKW8BJ&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=3AB757BRRZ30YQWP0HKV&pf_rd_t=36701&pf_rd_p=28b04fc5-b068-4db7-9f75-c6ec32ddbd9a&pf_rd_i=desktop"}
+{"level":"info","message":"PRICE:19.99|WEIGHT:10.6 ounce|CATEGORY:UNKNOWN|TOTAL:560,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/Womens-Crewneck-Sleeve-Pullover-Sweatshirt/dp/B07JR7LLT4/ref=br_msw_pdt-3?_encoding=UTF8&smid=A2MJWVWRXKW8BJ&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=3AB757BRRZ30YQWP0HKV&pf_rd_t=36701&pf_rd_p=28b04fc5-b068-4db7-9f75-c6ec32ddbd9a&pf_rd_i=desktop"}
+{"level":"info","message":"PRICE:19.99|WEIGHT:10.6 ounce|CATEGORY:UNKNOWN|TOTAL:560,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/Womens-Crewneck-Sleeve-Pullover-Sweatshirt/dp/B07JR7LLT4/ref=br_msw_pdt-3?_encoding=UTF8&smid=A2MJWVWRXKW8BJ&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=3AB757BRRZ30YQWP0HKV&pf_rd_t=36701&pf_rd_p=28b04fc5-b068-4db7-9f75-c6ec32ddbd9a&pf_rd_i=desktop"}
+{"level":"info","message":"PRICE:19.99|WEIGHT:10.6 ounce|CATEGORY:CLOTHES|TOTAL:640,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/dp/B07DR89BR6/ref=gbps_img_m12_a6c6_4f4fca00?smid=A2KE3DSCBBL2YQ&pf_rd_p=3c3b39ac-f970-4c76-8948-33916e2ca6c6&pf_rd_s=merchandised-search-12&pf_rd_t=101&pf_rd_i=18108207011&pf_rd_m=ATVPDKIKX0DER&pf_rd_r=CM4R7RBBCCJR8S8J0TKN"}
+{"level":"info","message":"PRICE:79.99|WEIGHT:7.05 pound|CATEGORY:KITCHENAPPLIANCE|TOTAL:3,185,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/Twinklady-Hoodies-Pullover-Sweatshirt-Pockets/dp/B07H6DDVSS/ref=pd_rhf_dp_s_vtp_ses_clicks_1_2?_encoding=UTF8&pd_rd_i=B07H6DDVSS&pd_rd_r=6895b33f-7086-462f-b8f6-3839bf0db3e5&pd_rd_w=m5h0W&pd_rd_wg=xsqA0&pf_rd_p=05d75987-58ed-4d36-bbfa-515cd87e4ee3&pf_rd_r=H4RGRSSGJB8WA1Y3PG33&psc=1&refRID=H4RGRSSGJB8WA1Y3PG33"}
+{"level":"info","message":"PRICE:17.99|WEIGHT:none|CATEGORY:CLOTHES|TOTAL:505,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/Citizen-Eco-Drive-Stainless-Casual-AO9000-06B/dp/B00843L4S2/ref=pd_rhf_dp_s_vtp_ses_clicks_1_12?_encoding=UTF8&pd_rd_i=B00843L4S2&pd_rd_r=6895b33f-7086-462f-b8f6-3839bf0db3e5&pd_rd_w=m5h0W&pd_rd_wg=xsqA0&pf_rd_p=05d75987-58ed-4d36-bbfa-515cd87e4ee3&pf_rd_r=H4RGRSSGJB8WA1Y3PG33&psc=1&refRID=H4RGRSSGJB8WA1Y3PG33"}
+{"level":"info","message":"PRICE:119.9|WEIGHT:1.19 pound|CATEGORY:WATCH|TOTAL:3,705,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/Michael-Kors-Womens-Large-Crossbody/dp/B07CMCNTYP/ref=pd_rhf_dp_s_vtp_ses_clicks_1_30?_encoding=UTF8&pd_rd_i=B07CMCNTYP&pd_rd_r=6895b33f-7086-462f-b8f6-3839bf0db3e5&pd_rd_w=m5h0W&pd_rd_wg=xsqA0&pf_rd_p=05d75987-58ed-4d36-bbfa-515cd87e4ee3&pf_rd_r=H4RGRSSGJB8WA1Y3PG33&refRID=H4RGRSSGJB8WA1Y3PG33"}
+{"level":"info","message":"PRICE:163.99|WEIGHT:1.06 pound|CATEGORY:CLOTHES|TOTAL:4,680,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/Coach-Womens-Odette/dp/B078JP2XFQ/ref=pd_rhf_dp_s_vtp_ses_clicks_1_29?_encoding=UTF8&pd_rd_i=B078JP2XFQ&pd_rd_r=6895b33f-7086-462f-b8f6-3839bf0db3e5&pd_rd_w=m5h0W&pd_rd_wg=xsqA0&pf_rd_p=05d75987-58ed-4d36-bbfa-515cd87e4ee3&pf_rd_r=H4RGRSSGJB8WA1Y3PG33&refRID=H4RGRSSGJB8WA1Y3PG33"}
+{"level":"info","message":"PRICE:49.99|WEIGHT:8 ounce|CATEGORY:CLOTHES|TOTAL:1,460,000 VNĐ"}
+{"level":"info","message":"URL:https://www.amazon.com/Coach-Womens-Odette/dp/B078JP2XFQ/ref=pd_rhf_dp_s_vtp_ses_clicks_1_29?_encoding=UTF8&pd_rd_i=B078JP2XFQ&pd_rd_r=6895b33f-7086-462f-b8f6-3839bf0db3e5&pd_rd_w=m5h0W&pd_rd_wg=xsqA0&pf_rd_p=05d75987-58ed-4d36-bbfa-515cd87e4ee3&pf_rd_r=H4RGRSSGJB8WA1Y3PG33&refRID=H4RGRSSGJB8WA1Y3PG33"}
+{"level":"info","message":"PRICE:49.99|WEIGHT:8 ounce|CATEGORY:CLOTHES|TOTAL:1,460,000 VNĐ"}

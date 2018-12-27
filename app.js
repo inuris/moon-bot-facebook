@@ -9,7 +9,6 @@ const request = require("request"),
   htmlparser = require("htmlparser2"),
   app = express().use(body_parser.json()); // creates express http server
 
-console.log("Hello world");
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
 
@@ -91,7 +90,7 @@ function handleMessage(sender_psid, received_message) {
       };
       logger.log("info", "URL:"+matchurl[0]);
       request(requestOptions, function(error, response, body) {
-        var price = amazon.getPrice(body);    
+        var price = amazon.getMoonPrice(body);    
         response = {
         "text": price
         }

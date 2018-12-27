@@ -105,7 +105,7 @@ const CATEGORIES = {
       "personal care",
       "liquid"
     ],
-    NOTKEYWORD: ["> professional dental supplies", "> toothbrushes"]
+    NOTKEYWORD: ["> professional dental supplies", "> toothbrushes","diffusers", "candles"]
   },
   PHONE_TABLET_LAPTOP: {
     SHIP: 12,
