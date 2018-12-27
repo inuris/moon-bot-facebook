@@ -1,48 +1,44 @@
-var winston = require('winston');
+const fs = require('fs');
+const winston = require('winston');
 
 // define the custom settings for each transport (file, console)
-var options = {
+const options = {
   infofile: {
     level: 'info',
-    filename: `./logs/info.log`,
+    filename: './info.log',
     handleExceptions: true,
     json: true,
-    maxsize: 5242880, // 5MB
-    maxFiles: 5,
-    colorize: false,
-  },
-  infoconsole: {
-    level: 'info',
-    handleExceptions: true,
-    json: false,
-    colorize: true,
+    colorize: false
   },
   errorfile: {
     level: 'error',
-    filename: `./logs/error.log`,
+    filename: './error.log',
     handleExceptions: true,
     json: true,
-    maxsize: 5242880, // 5MB
-    maxFiles: 5,
-    colorize: false,
+    colorize: false
   },
-  errorconsole: {
-    level: 'error',
+  console: {
+    level: 'info',
     handleExceptions: true,
     json: false,
-    colorize: true,
-  },
+    colorize: true
+  }  
 };
 
 // instantiate a new Winston Logger with the settings defined above
-var logger = winston.createLogger({
+const logger = winston.createLogger({
+  format: winston.format.combine(
+    winston.format.splat(),
+    winston.format.simple()
+  ),
   transports: [
-    new winston.transports.File(options.infofile),
-    new winston.transports.Console(options.infoconsole),
+    new winston.transports.File(options.infofile),    
     new winston.transports.File(options.errorfile),
-    new winston.transports.Console(options.errorconsole),
+    new winston.transports.Console(options.console)
   ],
-  exitOnError: false, // do not exit on handled exceptions
+  exitOnError: false // do not exit on handled exceptions
 });
 
-module.exports = logger;
+module.exports = {
+   logger
+ } 

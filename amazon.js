@@ -4,6 +4,7 @@ module.exports = {
 const moon = require("./moon.js");
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
+const logger = require('./logger.js').logger;
 // Danh sách các loại detail block của Amazon
 const DETAILBLOCK = [
   "#productDetails_detailBullets_sections1 tr",
@@ -21,21 +22,23 @@ const PRICEBLOCK = [
   "#priceblock_ourprice",
   "#priceblock_saleprice",
   ".guild_priceblock_ourprice:first",
-  ".offer-price:first"
+  ".offer-price"
 ];
 // Lấy Giá web sau sale, return Float;
 function getAmazonPrice(dom) {
   var priceString = "";
-  var itemPrice = 0;
+  var itemPrice = {
+    price:0,
+    priceString:""
+  };
   for (var i = 0; i < PRICEBLOCK.length; i++) {
-    var itemPriceBlock = select(dom, PRICEBLOCK[i]);    
+    var itemPriceBlock = select(dom, PRICEBLOCK[i]);   
+    //console.log(htmlparser.DomUtils.getText(itemPriceBlock));
     if (itemPriceBlock.length > 0) {        
       priceString = htmlparser.DomUtils.getText(itemPriceBlock[0])
-        .replace(/\s+/g," ")
+        .replace(/\s+/gm," ")
         .trim()        
-        .replace("$ ", "")
-        .replace("$", "")
-        .replace(",", "")
+        .replace(/\$\s*|,/gm, "")
         .replace(" ", ".") // $33 99 => 33.99
       break;
     }
@@ -48,14 +51,15 @@ function getAmazonPrice(dom) {
     );
     if (itemPriceWidget.length > 0) {
       priceString = itemPriceWidget[0].children[0].data
-        .trim()
-        .replace("$ ", "")
-        .replace("$", "")
-        .replace(" ", ".");
+        .replace(/\s+/gm," ")
+        .trim()        
+        .replace(/\$\s*|,/gm, "")
+        .replace(" ", ".") 
     }
   }
   if (priceString !== "") {
-    itemPrice = parseFloat(priceString);
+    itemPrice.price = parseFloat(priceString);
+    itemPrice.priceString=priceString;
   }
   return itemPrice;
 }
@@ -63,17 +67,17 @@ function getAmazonPrice(dom) {
 // Lấy thông tin chung Detail (cân nặng + category) từ DOM theo Block, return {weight, category);
 function getAmazonDetailString(dom, block) {
   var detailString = {
-    weight: [],
-    category: ""
+    weightArray: [],
+    categoryString: ""
   };
   var detailTable = select(dom, block); // Element chứa info cân nặng
   
   for (var e of detailTable) {
     if (e.type === "tag") {
       var row = e.children; 
-      try{console.log(row.length);
-         console.log(htmlparser.DomUtils.getText(row))}
-      catch(e){};
+      // try{console.log(row.length);
+      //    console.log(htmlparser.DomUtils.getText(row))}
+      // catch(e){};
       // row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
       try {
         var rowText=htmlparser.DomUtils.getText(row).trim().toLowerCase();
@@ -81,12 +85,12 @@ function getAmazonDetailString(dom, block) {
             rowText.indexOf("weight") >= 0 ||
             rowText.indexOf("dimensions") >= 0
           ) {
-            detailString.weight.push(rowText);
+            detailString.weightArray.push(rowText.replace(/\s+/gm," ").trim());
             // Có dạng: 1.1 pounds
           }
           // Tìm từ "Sellers Rank" để add Category
           else if (rowText.indexOf("sellers rank") >= 0) {            
-            detailString.category += rowText;
+            detailString.categoryString += rowText;
           }
              
         // if (row[1].type === "tag" && row[3].type === "tag") {          
@@ -112,26 +116,32 @@ function getAmazonDetailString(dom, block) {
       } catch (err) {}
     }
   }
-
+  detailString.categoryString = detailString.categoryString.toLowerCase()
+                                .replace(/\s+/gm," ")
+                                .trim()
+                                .replace(/\s{2,}|\..+ {.+}|see top 100| in|(amazon )*best sellers rank:|#\d*,?\d*/gm, "");
   return detailString;
 }
 
 // Xử lý cân nặng từ array cân nặng, return Float;
-function handleAmazonWeight(weightString) {
+function handleAmazonWeight(weightArray) {
   var itemWeight = {
-    current: 0,
+    current: "",
     kg: 0,
     unit: ""
   };
-  var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/i;
-  if (weightString.length === 0) {
+  //console.log(weightArray);
+  var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/;
+  if (weightArray.length === 0) {
     return 0;
   } else {
-    for (var i = 0; i < weightString.length; i++) {
-      var weightReg = weightString[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
+    for (var i = 0; i < weightArray.length; i++) {
+      var weightReg = weightArray[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
+      console.log(weightReg);
       if (weightReg !== null) {
         var weight = parseFloat(weightReg[1]);
         var weightKg = weight;
+        
         var weightUnit = weightReg[2];
         if (weightUnit.indexOf("ounce") >= 0 || weightUnit.indexOf("oz") >= 0)
           weightKg = weight / 35.274;
@@ -139,12 +149,11 @@ function handleAmazonWeight(weightString) {
         // Tìm weight lớn nhất
         if (
           itemWeight.kg < weightKg ||
-          weightString[i].indexOf("shipping weight") >= 0
+          weightArray[i].indexOf("shipping weight") >= 0
         ) {
-          itemWeight.current = weight;
+          itemWeight.current = weight.toString();
           itemWeight.kg = weightKg;
           itemWeight.unit = weightUnit;
-          break;
         }
       }
     }
@@ -160,18 +169,12 @@ function handleAmazonCategory(categoryString) {
   if (categoryString === "") {
     return "UNKNOWN";
   }
-  var categoryStr = categoryString
-    .toLowerCase()
-    .replace("see top 100", "")
-    .replace(" in ", " ")
-    .replace("amazon best sellers rank:", "")
-    .replace("best sellers rank:", "");
-  // console.log(categoryStr);
+  
   // Query từng KEYWORD trong category
   for (var category in moon.CATEGORIES) {
     if (
       moon.checkKeyword(
-        categoryStr,
+        categoryString,
         moon.CATEGORIES[category].KEYWORD,
         moon.CATEGORIES[category].NOTKEYWORD
       ) === true
@@ -184,53 +187,62 @@ function handleAmazonCategory(categoryString) {
 // Lấy cân nặng và category sau khi xử lý
 function getAmazonDetail(dom) {
   var detailString= {
-    weight: [],
-    category: ""
+    weightArray: [],
+    categoryString: ""
   };
   for (var i = 0; i < DETAILBLOCK.length; i++) {
     var detailStringTemp = getAmazonDetailString(dom, DETAILBLOCK[i]);
-    if (detailString.weight.length === 0 && detailStringTemp.weight.length > 0)
-      detailString.weight = detailStringTemp.weight;
-    if (detailString.category === "" && detailStringTemp.category != "")
-      detailString.category = detailStringTemp.category;
-    if (detailString.weight.length > 0 && detailString.category!="") break;
+    if (detailString.weightArray.length === 0 && detailStringTemp.weightArray.length > 0)
+      detailString.weightArray = detailStringTemp.weightArray;
+    if (detailString.categoryString === "" && detailStringTemp.categoryString != "")
+      detailString.categoryString = detailStringTemp.categoryString;
+    if (detailString.weightArray.length > 0 && detailString.categoryString!="") break;
   }
-  var weight = handleAmazonWeight(detailString.weight);
-  if (weight.kg == undefined){
-    return {
-      weight: 0,
-      weightString: "none",
-      category: handleAmazonCategory(detailString.category)
-    };
-  }
+  var weight = handleAmazonWeight(detailString.weightArray);
   return {
-    weight: weight.kg,
-    weightString: weight.current + weight.unit,
-    category: handleAmazonCategory(detailString.category)
+    weight: weight.kg == undefined?0:weight.kg,
+    weightString: weight.kg == undefined?"":weight.current + weight.unit,
+    category: handleAmazonCategory(detailString.categoryString),
+    categoryString: detailString.categoryString
   };
 }
-function getMoonPrice(htmlraw){
+function getMoonPrice(url, htmlraw){
   var item={
     price:0,
+    priceString:"",
     weight:0,
     weightString:"",
-    category:"" 
+    category:"",
+    categoryString:"",
+    total:0,
+    totalString:""
   };
   var handler = new htmlparser.DomHandler((error, dom) => {
     if (error) {
       console.log(error);
     } else {
-      item.price = getAmazonPrice(dom);
-      
-
+      var itemPrice = getAmazonPrice(dom);
+      item.price = itemPrice.price; 
+      item.priceString = itemPrice.priceString; 
       var itemDetail = getAmazonDetail(dom);      
       item.weight = itemDetail.weight;
       item.weightString = itemDetail.weightString;
       item.category = itemDetail.category;
+      item.categoryString = itemDetail.categoryString;
     }
   });
   var parser = new htmlparser.Parser(handler, { decodeEntities: true });
   parser.parseComplete(htmlraw);
-  return moon.printMoonPrice("AMAZON", item);
+  
+  item.total = moon.calculateMoonPrice("AMAZON", item);
+  item.totalString=(item.total===0?"Ko xác định":moon.toVND(item.total));
+  
+  if (item.weight===0||item.category === "UNKNOWN"){
+    logger.log('error','{\n"URL":"%s",\n"PRICE":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', url, item.price,item.weightString,item.category,item.totalString,item.categoryString);
+  }
+  else{
+    logger.log('info','{\n"URL":"%s",\n"PRICE":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', url, item.price,item.weightString,item.category,item.totalString,item.categoryString);
+  }
+  return moon.printMoonPrice(item);
 }
 
