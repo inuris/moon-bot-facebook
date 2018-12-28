@@ -1,5 +1,5 @@
-const fs = require('fs');
-const winston = require('winston');
+import fs from 'fs';
+import { createLogger, format as _format, transports as _transports } from 'winston';
 
 // define the custom settings for each transport (file, console)
 const options = {
@@ -26,19 +26,19 @@ const options = {
 };
 
 // instantiate a new Winston Logger with the settings defined above
-const logger = winston.createLogger({
-  format: winston.format.combine(
-    winston.format.splat(),
-    winston.format.simple()
+const logger = createLogger({
+  format: _format.combine(
+    _format.splat(),
+    _format.simple()
   ),
   transports: [
-    new winston.transports.File(options.infofile),    
-    new winston.transports.File(options.errorfile),
-    new winston.transports.Console(options.console)
+    new _transports.File(options.infofile),    
+    new _transports.File(options.errorfile),
+    new _transports.Console(options.console)
   ],
   exitOnError: false // do not exit on handled exceptions
 });
 
-module.exports = {
+export default {
    logger
  } 

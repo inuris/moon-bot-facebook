@@ -1,4 +1,3 @@
-const select = require("soupselect-update").select;
 const RATE_USD_VND = 24066;
 const CATEGORIES = {
   GLASSES: {
@@ -407,7 +406,7 @@ const WEBSITES = {
     WRITEBLOCK: ""
   }
 };
-module.exports = {
+export default {
   RATE_USD_VND,
   CATEGORIES,
   checkKeyword,
