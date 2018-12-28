@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 export default {
   getMoonPrice
-=======
-module.exports = {
-  getMoonPrice //getMoonPrice(url, htmlraw)
->>>>>>> cbf387888f8806d46edb15ed0de76aa389767011
 };
 import { CATEGORIES, checkKeyword, calculateMoonPrice, toVND, printMoonPrice } from "./moon.js";
 import { select } from "soupselect-update";

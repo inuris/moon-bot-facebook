@@ -1,4 +1,3 @@
-import fs from 'fs';
 import { createLogger, format as _format, transports as _transports } from 'winston';
 
 // define the custom settings for each transport (file, console)
