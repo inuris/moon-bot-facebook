@@ -22,3 +22,27 @@ error: {
 "TOTAL":"560,000 VND",
 "CATEGORYSTRING":"  clothing, shoes & jewelry ( clothing, shoes & jewelry)   clothing, shoes & jewelry > women > shoes > slippers  clothing, shoes & jewelry > women > shops"
 }
+error: {
+"URL":"https://www.amazon.com/RDHOPE-Women-Athletic-Flannel-Homewear-Pleated/dp/B0797J23C1/ref=bbp_bb_9ea285_st_bZhF_w_44?psc=1&smid=A3KRVH0ZNMBW2B",
+"PRICE":"1.12",
+"WEIGHT":"",
+"CATEGORY":"CLOTHES",
+"TOTAL":"35,000 VND",
+"CATEGORYSTRING":"  clothing, shoes & jewelry ( clothing, shoes & jewelry)   clothing, shoes & jewelry > women > clothing > active > active shorts  clothing, shoes & jewelry > women > shops"
+}
+error: {
+"URL":"https://www.amazon.com/Hankyky-Summer-Sleeveless-Shoulder-Printing/dp/B078MY6M4T/ref=bbp_bb_9ea285_st_Cupg_w_68?psc=1&smid=A36XT8D1LAKPGY",
+"PRICE":"9.99",
+"WEIGHT":"",
+"CATEGORY":"CLOTHES",
+"TOTAL":"280,000 VND",
+"CATEGORYSTRING":"  clothing, shoes & jewelry ( clothing, shoes & jewelry)   clothing, shoes & jewelry > women > clothing > active  clothing, shoes & jewelry > women > shops"
+}
+error: {
+"URL":"https://www.amazon.com/RDHOPE-Women-Athletic-Flannel-Homewear-Pleated/dp/B0797J23C1/ref=bbp_bb_9ea285_st_bZhF_w_44?psc=1&smid=A3KRVH0ZNMBW2B",
+"PRICE":"10",
+"WEIGHT":"",
+"CATEGORY":"CLOTHES",
+"TOTAL":"280,000 VND",
+"CATEGORYSTRING":"  clothing, shoes & jewelry ( clothing, shoes & jewelry)   clothing, shoes & jewelry > women > clothing > active > active shorts  clothing, shoes & jewelry > women > shops"
+}

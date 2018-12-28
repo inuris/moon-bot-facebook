@@ -92,7 +92,7 @@ const CATEGORIES = {
     PRICEANCHOR: 0,
     HQEXTRA: 0,
     HQANCHOR: 500,
-    NAME: "Thuốc - Vitamin",
+    NAME: "Thuốc - Vitamin - Hóa chất",
     NOTE: "Giá đã bao gồm Phí ship $11/kg",
     KEYWORD: [
       "beauty & grooming",
@@ -101,7 +101,8 @@ const CATEGORIES = {
       "supplement",
       "personal care",
       "liquid",
-      "health supplies"
+      "health supplies",
+      "cleaning & care"
     ],
     NOTKEYWORD: ["> professional dental supplies", "> toothbrushes","diffusers", "candles"]
   },

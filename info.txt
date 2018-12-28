@@ -54,3 +54,43 @@ info: {
 "TOTAL":"4,980,000 VND",
 "CATEGORYSTRING":"best sellers rank  cell phones & accessories ( cell phones & accessories)  cell phones & accessories > cell phone accessories > headphones > over-ear headphones  electronics > portable audio & video > mp3 & mp4 player accessories  electronics > home audio & theater"
 }
+info: {
+"URL":"https://www.amazon.com/Jewel-Brite-Biodegradable-Jewelry-Professional/dp/B01KFCWT10?pd_rd_w=80IuS&pf_rd_p=620603ad-0491-422c-a6dc-22dac9d7dad1&pf_rd_r=70ba1f6f-f92c-4da3-b2d5-0ba77f7ffdf3&pd_rd_r=70ba1f6f-f92c-4da3-b2d5-0ba77f7ffdf3&pd_rd_wg=4zg4Y&ref_=pd_gw_srecs_l2ra",
+"PRICE":"19.85",
+"WEIGHT":"2 pound",
+"CATEGORY":"CHEMICAL_VITAMIN",
+"TOTAL":"820,000 VND",
+"CATEGORYSTRING":"  clothing, shoes & jewelry ( clothing, shoes & jewelry)   clothing, shoes & jewelry > shoe, jewelry & watch accessories > jewelry accessories > cleaning & care"
+}
+error: {
+"URL":"https://www.amazon.com/RDHOPE-Women-Athletic-Flannel-Homewear-Pleated/dp/B0797J23C1/ref=bbp_bb_9ea285_st_bZhF_w_44?psc=1&smid=A3KRVH0ZNMBW2B",
+"PRICE":"1.12",
+"WEIGHT":"",
+"CATEGORY":"CLOTHES",
+"TOTAL":"35,000 VND",
+"CATEGORYSTRING":"  clothing, shoes & jewelry ( clothing, shoes & jewelry)   clothing, shoes & jewelry > women > clothing > active > active shorts  clothing, shoes & jewelry > women > shops"
+}
+error: {
+"URL":"https://www.amazon.com/Hankyky-Summer-Sleeveless-Shoulder-Printing/dp/B078MY6M4T/ref=bbp_bb_9ea285_st_Cupg_w_68?psc=1&smid=A36XT8D1LAKPGY",
+"PRICE":"9.99",
+"WEIGHT":"",
+"CATEGORY":"CLOTHES",
+"TOTAL":"280,000 VND",
+"CATEGORYSTRING":"  clothing, shoes & jewelry ( clothing, shoes & jewelry)   clothing, shoes & jewelry > women > clothing > active  clothing, shoes & jewelry > women > shops"
+}
+info: {
+"URL":"https://www.amazon.com/%F0%9F%8D%92Jonerytime%F0%9F%8D%92Eye-Padded-Travel-Sleeping-Blindfold/dp/B07JNMGJS8/ref=bbp_bb_9ea285_st_9gcl_w_62?psc=1&smid=A1XSX0P82J8LUG",
+"PRICE":"2.97",
+"WEIGHT":"0.8 ounce",
+"CATEGORY":"GENERAL",
+"TOTAL":"105,000 VND",
+"CATEGORYSTRING":"  clothing, shoes & jewelry ( clothing, shoes & jewelry)   health & household > health care > sleep & snoring > sleeping masks"
+}
+error: {
+"URL":"https://www.amazon.com/RDHOPE-Women-Athletic-Flannel-Homewear-Pleated/dp/B0797J23C1/ref=bbp_bb_9ea285_st_bZhF_w_44?psc=1&smid=A3KRVH0ZNMBW2B",
+"PRICE":"10",
+"WEIGHT":"",
+"CATEGORY":"CLOTHES",
+"TOTAL":"280,000 VND",
+"CATEGORYSTRING":"  clothing, shoes & jewelry ( clothing, shoes & jewelry)   clothing, shoes & jewelry > women > clothing > active > active shorts  clothing, shoes & jewelry > women > shops"
+}
