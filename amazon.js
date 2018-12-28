@@ -1,5 +1,5 @@
 module.exports = {
-  getMoonPrice
+  getMoonPrice //getMoonPrice(url, htmlraw)
 };
 const moon = require("./moon.js");
 const select = require("soupselect-update").select;
@@ -24,13 +24,18 @@ const PRICEBLOCK = [
   ".guild_priceblock_ourprice:first",
   ".offer-price"
 ];
+const SHIPPINGBLOCK = [
+  "#ourprice_shippingmessage"
+];
 // Lấy Giá web sau sale, return Float;
 function getAmazonPrice(dom) {
   var priceString = "";
+  var shippingString = "";
   var itemPrice = {
     price:0,
     priceString:""
   };
+  // Duyệt các block chứa giá
   for (var i = 0; i < PRICEBLOCK.length; i++) {
     var itemPriceBlock = select(dom, PRICEBLOCK[i]);   
     //console.log(htmlparser.DomUtils.getText(itemPriceBlock));
@@ -42,7 +47,7 @@ function getAmazonPrice(dom) {
         .replace(" ", ".") // $33 99 => 33.99
       break;
     }
-  }
+  }  
   // Block đặc biệt chứa giá kèm text
   if (priceString === "") {
     var itemPriceWidget = select(
@@ -57,8 +62,21 @@ function getAmazonPrice(dom) {
         .replace(" ", ".") 
     }
   }
+  // Duyệt các block chứa ship
+  for (var i = 0; i < SHIPPINGBLOCK.length; i++) {
+    var itemShippingBlock = select(dom, SHIPPINGBLOCK[i]); 
+    if (itemShippingBlock.length > 0) {        
+      shippingString = htmlparser.DomUtils.getText(itemShippingBlock[0]);
+      var reg=/\d+.?\d*/gm;
+      var shippingMatch = shippingString.match(reg)
+      if (shippingMatch!=null){
+        shippingString=shippingMatch[0];      
+        break;
+      }
+    }
+  }  
   if (priceString !== "") {
-    itemPrice.price = parseFloat(priceString);
+    itemPrice.price = parseFloat(priceString) + (shippingString!==""?parseFloat(shippingString):0);
     itemPrice.priceString=priceString;
   }
   return itemPrice;
