@@ -48,6 +48,7 @@ function getAmazonPrice(dom) {
       break;
     }
   }  
+  //console.log(priceString);
   // Block đặc biệt chứa giá kèm text
   if (priceString === "") {
     var itemPriceWidget = select(
@@ -66,19 +67,23 @@ function getAmazonPrice(dom) {
   for (var i = 0; i < SHIPPINGBLOCK.length; i++) {
     var itemShippingBlock = select(dom, SHIPPINGBLOCK[i]); 
     if (itemShippingBlock.length > 0) {        
-      shippingString = htmlparser.DomUtils.getText(itemShippingBlock[0]);
-      var reg=/\d+.?\d*/gm;
-      var shippingMatch = shippingString.match(reg)
-      if (shippingMatch!=null){
-        shippingString=shippingMatch[0];      
-        break;
+      var getShippingString = htmlparser.DomUtils.getText(itemShippingBlock[0]);
+      if (getShippingString!==null)
+      {
+        var reg=/\d+.?\d*/gm;
+        var shippingMatch = getShippingString.match(reg)
+        if (shippingMatch!=null){
+          shippingString=shippingMatch[0];      
+          break;
+        }
       }
     }
-  }  
+  }
   if (priceString !== "") {
     itemPrice.price = parseFloat(priceString) + (shippingString!==""?parseFloat(shippingString):0);
     itemPrice.priceString=priceString;
   }
+  //console.log(itemPrice);
   return itemPrice;
 }
 

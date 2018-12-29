@@ -1,4 +1,4 @@
-import { createLogger, format as _format, transports as _transports } from 'winston';
+const winston = require('winston');
 
 // define the custom settings for each transport (file, console)
 const options = {
