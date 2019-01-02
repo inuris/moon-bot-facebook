@@ -1,3 +1,4 @@
+const select = require("soupselect-update").select;
 const RATE_USD_VND = 24066;
 const CATEGORIES = {
   GLASSES: {
@@ -117,10 +118,9 @@ const CATEGORIES = {
     KEYWORD: [
       "amazon devices",
       " > unlocked cell phones ",
-      " > 2 in 1 laptops",
-      " > traditional laptops"
+      "laptops >"
     ],
-    NOTKEYWORD: ["accessories"]
+    NOTKEYWORD: ["computer components","laptop accessories","tablet accessories","computer accessories"]
   },
   CONSOLE: {
     SHIP: 13,
@@ -407,7 +407,7 @@ const WEBSITES = {
     WRITEBLOCK: ""
   }
 };
-export default {
+module.exports = {
   RATE_USD_VND,
   CATEGORIES,
   checkKeyword,

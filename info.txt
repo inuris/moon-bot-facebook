@@ -150,3 +150,43 @@ info: {
 "TOTAL":"2,645,000 VND",
 "CATEGORYSTRING":"  health & household ( health & household)   health & household > sports nutrition > endurance & energy > supplements"
 }
+info: {
+"URL":"https://www.amazon.com/Nest-Security-Camera-Matters-Anywhere/dp/B00WBJGUA2/ref=zg_bs_502394_27?_encoding=UTF8&psc=1&refRID=FA5F07VCH0MTSA7HYDYW",
+"PRICE":"161",
+"WEIGHT":"1.68 pound",
+"CATEGORY":"DIGITAL",
+"TOTAL":"4,745,000 VND",
+"CATEGORYSTRING":"best sellers rank  tools & home improvement ( tools & home improvement)  tools & home improvement > safety & security > home security & surveillance > surveillance cameras  electronics > security & surveillance"
+}
+info: {
+"URL":"https://www.amazon.com/HP-14-inch-Chromebook-Bluetooth-speakers/dp/B075X4KK58/ref=sr_1_18?s=pc&ie=UTF8&qid=1546399082&sr=1-18&keywords=chromebook",
+"PRICE":"289.99",
+"WEIGHT":"4.85 pound",
+"CATEGORY":"DIGITAL",
+"TOTAL":"8,660,000 VND",
+"CATEGORYSTRING":"best sellers rank  computers & accessories ()  computers & accessories > laptops > traditional laptops"
+}
+info: {
+"URL":"https://www.amazon.com/Chromebook-C202SA-YS02-Ruggedized-Resistant-Celeron/dp/B01DBGVB7K/ref=sr_1_6?s=pc&ie=UTF8&qid=1546399082&sr=1-6&keywords=chromebook",
+"PRICE":"239.9",
+"WEIGHT":"4.05 pound",
+"CATEGORY":"PHONE_TABLET_LAPTOP",
+"TOTAL":"9,890,000 VND",
+"CATEGORYSTRING":"best sellers rank  computers & accessories ()  computers & accessories > laptops > traditional laptops"
+}
+info: {
+"URL":"https://www.amazon.com/Google-Pixelbook-i5-RAM-128GB/dp/B075JSK7TR/ref=sm_n_ma_dka_US_pr_ran?adId=B075JSK7TR&creativeASIN=B075JSK7TR&linkId=f7190e2a123b4bcd0a9c5b4690901e9b&tag=chrome09d-20&linkCode=w58&ref-refURL=https%3A%2F%2Fchromeunboxed.com%2Fgoogle-pixelbook-available-for-pre-order-on-amazon%2F&slotNum=0&imprToken=O.jSqmTOZfm915JXWuwUHg",
+"PRICE":"859",
+"WEIGHT":"6.7 pound",
+"CATEGORY":"PHONE_TABLET_LAPTOP",
+"TOTAL":"29,120,000 VND",
+"CATEGORYSTRING":"best sellers rank  computers & accessories ()  computers & accessories > laptops > 2 1 laptops"
+}
+info: {
+"URL":"https://www.amazon.com/gp/product/B075JSK7TR?pf_rd_p=c2945051-950f-485c-b4df-15aac5223b10&pf_rd_r=QGV2B5K2Y8RK6HMJWFTY",
+"PRICE":"759",
+"WEIGHT":"6.7 pound",
+"CATEGORY":"PHONE_TABLET_LAPTOP",
+"TOTAL":"26,145,000 VND",
+"CATEGORYSTRING":"best sellers rank  computers & accessories ()  computers & accessories > laptops > 2 1 laptops"
+}
