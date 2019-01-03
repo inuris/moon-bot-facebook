@@ -85,10 +85,11 @@ function handleMessage(sender_psid, received_message) {
         gzip: true
       };
       request(requestOptions, function(error, response, body) {
-        var price = amazon.getMoonPrice(matchurl[0],body);    
-        response = {
-        "text": price
-        }
+        var response = amazon.getMoonPrice(matchurl[0],body);    
+        // response = {
+        // "text": price
+        // }
+        
         callSendAPI(sender_psid, response);
       });           
     }

@@ -504,20 +504,71 @@ function calculateMoonPrice(website, item){
   return itemTotal;
 }
 function printMoonPrice(item){
-  var itemText = '[Auto Reply] ';
+  // var itemText = '[Auto Reply] ';
+  // if (item.totalString ==""){
+  //   itemText += 'Ko xác định được giá sản phẩm. Vui lòng liên hệ để được báo giá chính xác.';
+  // }
+  // else{
+  //   itemText += 'Giá của Moon: '+ item.totalString +'.\n';
+  //   if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN')
+  //     // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
+  //     itemText += 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
+  //   else
+  //     itemText += 'Loại mặt hàng: ' + CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE +'.\n'
+  //     +'(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
+  // }
+
+  var response;
   if (item.totalString ==""){
-    itemText += 'Ko xác định được giá sản phẩm. Vui lòng liên hệ để được báo giá chính xác.';
+    respone= {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": [{
+            "title": "Ko xác định được giá sản phẩm",
+            "subtitle": "Vui lòng liên hệ để được báo giá chính xác",
+            "buttons": [
+              {
+                "type": "web_url",
+                "url": "https://m.me/moonhangmy",
+                "title": "Chat với Moon",
+              }
+            ],
+          }]
+        }
+      }
+    }
   }
   else{
-    itemText += 'Giá của Moon: '+ item.totalString +'.\n';
+    var itemText;
     if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN')
       // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
-      itemText += 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
+      itemText = 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
     else
-      itemText += 'Loại mặt hàng: ' + CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE +'.\n'
+      itemText = 'Loại mặt hàng: ' + CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE +'.\n'
       +'(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
+    response = {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": [{
+            "title": "Giá của Moon: "+item.totalString,
+            "subtitle": itemText,
+            "buttons": [
+              {
+                "type": "web_url",
+                "url": "https://m.me/moonhangmy",
+                "title": "Chat với Moon",
+              }
+            ],
+          }]
+        }
+      }
+    }
   }
-  return itemText;
+  return response;
 }
 
 
