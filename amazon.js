@@ -21,7 +21,7 @@ const PRICEBLOCK = [
   "#priceblock_dealprice",
   "#priceblock_ourprice",
   "#priceblock_saleprice",
-  ".guild_priceblock_ourprice:first",
+  ".guild_priceblock_ourprice",
   ".offer-price"
 ];
 const SHIPPINGBLOCK = [
@@ -258,7 +258,7 @@ function getMoonPrice(url, htmlraw){
   parser.parseComplete(htmlraw);
   
   item.total = moon.calculateMoonPrice("AMAZON", item);
-  item.totalString=(item.total===0?"Ko xác định":moon.toVND(item.total));
+  item.totalString=(item.total===0?"":moon.toVND(item.total));
   
   if (item.weight===0||item.category === "UNKNOWN"){
     logger.log('error','{\n"URL":"%s",\n"PRICE":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', url, item.price,item.weightString,item.category,item.totalString,item.categoryString);

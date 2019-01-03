@@ -117,8 +117,9 @@ const CATEGORIES = {
     NOTE: "Giá đã bao gồm Phí ship $12/kg + Phụ thu $40/cái",
     KEYWORD: [
       "amazon devices",
-      " > unlocked cell phones ",
-      "laptops >"
+      "> unlocked cell phones",
+      "laptops >",
+      "> carrier cell phones"
     ],
     NOTKEYWORD: ["computer components","laptop accessories","tablet accessories","computer accessories"]
   },
@@ -207,7 +208,8 @@ const CATEGORIES = {
     HQANCHOR: 500,
     NAME: "Phụ kiện xe hơi",
     NOTE: "Giá đã bao gồm Phí ship $11/kg",
-    KEYWORD: ["automotive"],
+    KEYWORD: ["> wheels & tires >",
+             "> engine & chassis parts"],
     NOTKEYWORD: []
   },
   MILK: {
@@ -254,7 +256,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Không xác định",
-    NOTE: "Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.",
+    NOTE: "Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về",
     KEYWORD: [],
     NOTKEYWORD: []
   }
@@ -502,9 +504,19 @@ function calculateMoonPrice(website, item){
   return itemTotal;
 }
 function printMoonPrice(item){
-  var itemText='[Auto Reply] Giá của Moon: '+item.totalString +'.\n'
-+(item.total>0?(item.weight==0 && CATEGORIES[item.category].SHIP!==0?'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về':'Loại mặt hàng: '+CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE) +'.\n'
-+'(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)':'');
+  var itemText = '[Auto Reply] ';
+  if (item.totalString ==""){
+    itemText += 'Ko xác định được giá sản phẩm. Vui lòng liên hệ để được báo giá chính xác.';
+  }
+  else{
+    itemText += 'Giá của Moon: '+ item.totalString +'.\n';
+    if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN')
+      // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
+      itemText += 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
+    else
+      itemText += 'Loại mặt hàng: ' + CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE +'.\n'
+      +'(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
+  }
   return itemText;
 }
 

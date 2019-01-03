@@ -54,3 +54,67 @@ error: {
 "TOTAL":"Ko xác định",
 "CATEGORYSTRING":"  health & household ( health & household)   health & household > health care > medications & treatments > pain relievers > aspirin"
 }
+error: {
+"URL":"https://www.amazon.com/gp/offer-listing/B07H5S1YNP/ref=dp_olp_0?ie=UTF8&condition=all",
+"PRICE":"0",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"Ko xác định",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/gp/product/B01K4LUDB0?pf_rd_p=c2945051-950f-485c-b4df-15aac5223b10&pf_rd_r=5QS5T84GV5R2E3H1ANF4",
+"PRICE":"0",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"Ko xác định",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/gp/product/B01K4LUDB0?pf_rd_p=c2945051-950f-485c-b4df-15aac5223b10&pf_rd_r=5QS5T84GV5R2E3H1ANF4",
+"PRICE":"169",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"4,715,000 VND",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/gp/product/B01K4LUDB0?pf_rd_p=c2945051-950f-485c-b4df-15aac5223b10&pf_rd_r=5QS5T84GV5R2E3H1ANF4&fbclid=IwAR0J4dohcvQOdmYZXDEbHPvUSS4ePBsQAkaQo6RKOnpnATo7zdex6pVsbSA",
+"PRICE":"169",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"4,715,000 VND",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/Stevie-Ray-Vaughan-1984-1989-Lonestar/dp/B078TLSVG2/ref=sr_1_9?s=movies-tv&ie=UTF8&qid=1546486381&sr=1-9&keywords=music",
+"PRICE":"0",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"Ko xác định",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/AGV-Trofeo-Motorcycle-Helmet-Chocolate/dp/B07BZ1Z74V/ref=sr_1_9?s=automotive&ie=UTF8&qid=1546487719&sr=1-9&keywords=agv+helmet",
+"PRICE":"229.95",
+"WEIGHT":"3.6 pound",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"6,415,000 VND",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/AGV-Trofeo-Motorcycle-Helmet-Chocolate/dp/B07BZ1Z74V/ref=sr_1_9?s=automotive&ie=UTF8&qid=1546487719&sr=1-9&keywords=agv+helmet",
+"PRICE":"229.95",
+"WEIGHT":"3.6 pound",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"6,415,000 VND",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/AGV-Trofeo-Motorcycle-Helmet-Chocolate/dp/B07BZ1Z74V/ref=sr_1_9?s=automotive&ie=UTF8&qid=1546487719&sr=1-9&keywords=agv+helmet",
+"PRICE":"229.95",
+"WEIGHT":"3.6 pound",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"6,415,000 VND",
+"CATEGORYSTRING":""
+}

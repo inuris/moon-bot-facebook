@@ -190,3 +190,131 @@ info: {
 "TOTAL":"26,145,000 VND",
 "CATEGORYSTRING":"best sellers rank  computers & accessories ()  computers & accessories > laptops > 2 1 laptops"
 }
+info: {
+"URL":"https://www.amazon.com/dp/B07L9H46G3/ref=sspa_dk_detail_8?psc=1&pd_rd_i=B07L9H46G3&pd_rd_w=upJIM&pf_rd_p=21517efd-b385-405b-a405-9a37af61b5b4&pd_rd_wg=G20zZ&pf_rd_r=RPJHN8K02DZ67ZS077Q7&pd_rd_r=6406826b-0ed2-11e9-b62b-4defc69ef940",
+"PRICE":"8.99",
+"WEIGHT":"4.6 ounce",
+"CATEGORY":"DIGITAL",
+"TOTAL":"315,000 VND",
+"CATEGORYSTRING":"best sellers rank  computers & accessories > computer accessories > hard drive accessories > hard drive enclosures"
+}
+info: {
+"URL":"https://www.amazon.com/gp/product/B07H5S1YNP?pf_rd_p=1581d9f4-062f-453c-b69e-0f3e00ba2652&pf_rd_r=J0VHZ4C930M97F3YKQWC",
+"PRICE":"0",
+"WEIGHT":"1.1 pound",
+"CATEGORY":"GENERAL",
+"TOTAL":"Ko xác định",
+"CATEGORYSTRING":"best sellers rank  cell phones & accessories ( cell phones & accessories)  cell phones & accessories > unlocked cell phones"
+}
+error: {
+"URL":"https://www.amazon.com/gp/offer-listing/B07H5S1YNP/ref=dp_olp_0?ie=UTF8&condition=all",
+"PRICE":"0",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"Ko xác định",
+"CATEGORYSTRING":""
+}
+info: {
+"URL":"https://www.amazon.com/ZOTAC-GAMING-GeForce-Intel-Windows/dp/B079VZMG33?ref_=fsclp_pl_dp_1",
+"PRICE":"1270.07",
+"WEIGHT":"28.1 pound",
+"CATEGORY":"DIGITAL",
+"TOTAL":"40,295,000 VND",
+"CATEGORYSTRING":"best sellers rank  computers & accessories ()  computers & accessories > desktops > towers"
+}
+info: {
+"URL":"https://www.amazon.com/ZOTAC-GAMING-GeForce-Intel-Windows/dp/B079VZMG33?ref_=fsclp_pl_dp_1",
+"PRICE":"1270.07",
+"WEIGHT":"28.1 pound",
+"CATEGORY":"DIGITAL",
+"TOTAL":"40,295,000 VND",
+"CATEGORYSTRING":"best sellers rank  computers & accessories ()  computers & accessories > desktops > towers"
+}
+error: {
+"URL":"https://www.amazon.com/gp/product/B01K4LUDB0?pf_rd_p=c2945051-950f-485c-b4df-15aac5223b10&pf_rd_r=5QS5T84GV5R2E3H1ANF4",
+"PRICE":"0",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"Ko xác định",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/gp/product/B01K4LUDB0?pf_rd_p=c2945051-950f-485c-b4df-15aac5223b10&pf_rd_r=5QS5T84GV5R2E3H1ANF4",
+"PRICE":"169",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"4,715,000 VND",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/gp/product/B01K4LUDB0?pf_rd_p=c2945051-950f-485c-b4df-15aac5223b10&pf_rd_r=5QS5T84GV5R2E3H1ANF4&fbclid=IwAR0J4dohcvQOdmYZXDEbHPvUSS4ePBsQAkaQo6RKOnpnATo7zdex6pVsbSA",
+"PRICE":"169",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"4,715,000 VND",
+"CATEGORYSTRING":""
+}
+info: {
+"URL":"https://www.amazon.com/AGV-Blade-Solid-Helmet-Size/dp/B00304YGLM/ref=sr_1_1?ie=UTF8&qid=1546486268&sr=8-1&keywords=agv+blade+helmet",
+"PRICE":"109.95",
+"WEIGHT":"4.3 pound",
+"CATEGORY":"AUTOMOTIVE",
+"TOTAL":"3,600,000 VND",
+"CATEGORYSTRING":"best sellers rank ,810 automotive ()  automotive > motorcycle & atv > protective gear > helmets"
+}
+info: {
+"URL":"https://www.amazon.com/Fiskars-Steel-Bypass-Pruning-Shears/dp/B00002N66H/ref=pd_rhf_gw_s_bmx_0_7?_encoding=UTF8&ie=UTF8&pd_rd_i=B00002N66H&pd_rd_r=AKD21P1MGSXC198PHRF2&pd_rd_w=cIYtq&pd_rd_wg=0HauT&pf_rd_p=b3fcf054-e7b3-4efc-aa2d-5f9d76e7f081&pf_rd_r=AKD21P1MGSXC198PHRF2&pf_rd_r=AKD21P1MGSXC198PHRF2&pf_rd_s=recent-history-footer&pf_rd_t=gateway&psc=1&refRID=AKD21P1MGSXC198PHRF2",
+"PRICE":"11.98",
+"WEIGHT":"11.2 ounce",
+"CATEGORY":"GENERAL",
+"TOTAL":"420,000 VND",
+"CATEGORYSTRING":"best sellers rank  patio, lawn & garden ( patio, lawn & garden)"
+}
+info: {
+"URL":"https://www.amazon.com/dp/B073H36KDH/ref=sspa_dk_detail_4?psc=1&pd_rd_i=B073H36KDH&pd_rd_w=ciROU&pf_rd_p=21517efd-b385-405b-a405-9a37af61b5b4&pd_rd_wg=iAYCi&pf_rd_r=K514YQE08WJZNM4J0QTY&pd_rd_r=2bfcbedc-0f08-11e9-9896-b37a37a2ddee",
+"PRICE":"19.59",
+"WEIGHT":"1.5 pound",
+"CATEGORY":"GENERAL",
+"TOTAL":"690,000 VND",
+"CATEGORYSTRING":"best sellers rank  tools & home improvement ()  tools & home improvement > safety & security > personal protective equipment > ergonomic supports > kneepads"
+}
+error: {
+"URL":"https://www.amazon.com/Stevie-Ray-Vaughan-1984-1989-Lonestar/dp/B078TLSVG2/ref=sr_1_9?s=movies-tv&ie=UTF8&qid=1546486381&sr=1-9&keywords=music",
+"PRICE":"0",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"Ko xác định",
+"CATEGORYSTRING":""
+}
+info: {
+"URL":"https://www.amazon.com/Kodak-UltraMax-Speed-35mm-Exposures/dp/B003ZH40QU/ref=sr_1_9?s=photo&ie=UTF8&qid=1546486439&sr=1-9&keywords=film",
+"PRICE":"19.95",
+"WEIGHT":"6.4 ounce",
+"CATEGORY":"DIGITAL",
+"TOTAL":"620,000 VND",
+"CATEGORYSTRING":"best sellers rank  camera & photo ( camera & photo)  electronics > camera & photo > film photography > film"
+}
+error: {
+"URL":"https://www.amazon.com/AGV-Trofeo-Motorcycle-Helmet-Chocolate/dp/B07BZ1Z74V/ref=sr_1_9?s=automotive&ie=UTF8&qid=1546487719&sr=1-9&keywords=agv+helmet",
+"PRICE":"229.95",
+"WEIGHT":"3.6 pound",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"6,415,000 VND",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/AGV-Trofeo-Motorcycle-Helmet-Chocolate/dp/B07BZ1Z74V/ref=sr_1_9?s=automotive&ie=UTF8&qid=1546487719&sr=1-9&keywords=agv+helmet",
+"PRICE":"229.95",
+"WEIGHT":"3.6 pound",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"6,415,000 VND",
+"CATEGORYSTRING":""
+}
+error: {
+"URL":"https://www.amazon.com/AGV-Trofeo-Motorcycle-Helmet-Chocolate/dp/B07BZ1Z74V/ref=sr_1_9?s=automotive&ie=UTF8&qid=1546487719&sr=1-9&keywords=agv+helmet",
+"PRICE":"229.95",
+"WEIGHT":"3.6 pound",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"6,415,000 VND",
+"CATEGORYSTRING":""
+}
