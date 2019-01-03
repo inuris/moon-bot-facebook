@@ -1,10 +1,10 @@
-export default {
-  getMoonPrice
+module.exports = {
+  getMoonPrice //getMoonPrice(url, htmlraw)
 };
-import { CATEGORIES, checkKeyword, calculateMoonPrice, toVND, printMoonPrice } from "./moon.js";
-import { select } from "soupselect-update";
-import { DomUtils, DomHandler, Parser } from "htmlparser2";
-import { logger } from './logger.js';
+const moon = require("./moon.js");
+const select = require("soupselect-update").select;
+const htmlparser = require("htmlparser2");
+const logger = require('./logger.js').logger;
 // Danh sách các loại detail block của Amazon
 const DETAILBLOCK = [
   "#productDetails_detailBullets_sections1 tr",
@@ -21,7 +21,7 @@ const PRICEBLOCK = [
   "#priceblock_dealprice",
   "#priceblock_ourprice",
   "#priceblock_saleprice",
-  ".guild_priceblock_ourprice:first",
+  ".guild_priceblock_ourprice",
   ".offer-price"
 ];
 const SHIPPINGBLOCK = [
@@ -40,7 +40,7 @@ function getAmazonPrice(dom) {
     var itemPriceBlock = select(dom, PRICEBLOCK[i]);   
     //console.log(htmlparser.DomUtils.getText(itemPriceBlock));
     if (itemPriceBlock.length > 0) {        
-      priceString = DomUtils.getText(itemPriceBlock[0])
+      priceString = htmlparser.DomUtils.getText(itemPriceBlock[0])
         .replace(/\s+/gm," ")
         .trim()        
         .replace(/\$\s*|,/gm, "")
@@ -103,7 +103,7 @@ function getAmazonDetailString(dom, block) {
       // catch(e){};
       // row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
       try {
-        var rowText=DomUtils.getText(row).trim().toLowerCase();
+        var rowText=htmlparser.DomUtils.getText(row).trim().toLowerCase();
         if (
             rowText.indexOf("weight") >= 0 ||
             rowText.indexOf("dimensions") >= 0
@@ -194,12 +194,12 @@ function handleAmazonCategory(categoryString) {
   }
   
   // Query từng KEYWORD trong category
-  for (var category in CATEGORIES) {
+  for (var category in moon.CATEGORIES) {
     if (
-      checkKeyword(
+      moon.checkKeyword(
         categoryString,
-        CATEGORIES[category].KEYWORD,
-        CATEGORIES[category].NOTKEYWORD
+        moon.CATEGORIES[category].KEYWORD,
+        moon.CATEGORIES[category].NOTKEYWORD
       ) === true
     )
       return category;
@@ -240,7 +240,7 @@ function getMoonPrice(url, htmlraw){
     total:0,
     totalString:""
   };
-  var handler = new DomHandler((error, dom) => {
+  var handler = new htmlparser.DomHandler((error, dom) => {
     if (error) {
       console.log(error);
     } else {
@@ -254,11 +254,11 @@ function getMoonPrice(url, htmlraw){
       item.categoryString = itemDetail.categoryString;
     }
   });
-  var parser = new Parser(handler, { decodeEntities: true });
+  var parser = new htmlparser.Parser(handler, { decodeEntities: true });
   parser.parseComplete(htmlraw);
   
-  item.total = calculateMoonPrice("AMAZON", item);
-  item.totalString=(item.total===0?"Ko xác định":toVND(item.total));
+  item.total = moon.calculateMoonPrice("AMAZON", item);
+  item.totalString=(item.total===0?"":moon.toVND(item.total));
   
   if (item.weight===0||item.category === "UNKNOWN"){
     logger.log('error','{\n"URL":"%s",\n"PRICE":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', url, item.price,item.weightString,item.category,item.totalString,item.categoryString);
@@ -266,6 +266,6 @@ function getMoonPrice(url, htmlraw){
   else{
     logger.log('info','{\n"URL":"%s",\n"PRICE":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', url, item.price,item.weightString,item.category,item.totalString,item.categoryString);
   }
-  return printMoonPrice(item);
+  return moon.printMoonPrice(item);
 }
 
