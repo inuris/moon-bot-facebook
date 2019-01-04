@@ -549,7 +549,7 @@ function printMoonPrice(item){
       itemSubtitle = 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về';
     }
     else{
-      itemSubtitle = 'Giá tham khảo đã bao gồm ' + CATEGORIES[item.category].NOTE + ' mặt hàng ' + CATEGORIES[item.category].NAME;      
+      itemSubtitle = 'Đã bao gồm ' + CATEGORIES[item.category].NOTE + ' mặt hàng ' + CATEGORIES[item.category].NAME;      
     };
     response = {
       "attachment": {
