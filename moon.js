@@ -542,7 +542,7 @@ function printMoonPrice(item){
   }
   else{
     var itemTitle, itemSubtitle;
-    itemTitle='Giá Moon: ' + item.totalString;
+    itemTitle='[Auto] Giá Moon: ' + item.totalString;
     //itemTitle+='(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
     // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
     if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN'){
