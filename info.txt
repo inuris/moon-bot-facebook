@@ -318,3 +318,59 @@ error: {
 "TOTAL":"6,415,000 VND",
 "CATEGORYSTRING":""
 }
+info: {
+"URL":"https://www.amazon.com/Google-Pixelbook-i5-RAM-128GB/dp/B075JSK7TR/ref=sm_n_ma_dka_US_pr_ran?adId=B075JSK7TR&creativeASIN=B075JSK7TR&linkId=f7190e2a123b4bcd0a9c5b4690901e9b&tag=chrome09d-20&linkCode=w58&ref-refURL=https%3A%2F%2Fchromeunboxed.com%2Fgoogle-pixelbook-available-for-pre-order-on-amazon%2F&slotNum=0&imprToken=O.jSqmTOZfm915JXWuwUHg",
+"PRICE":"754.99",
+"WEIGHT":"6.7 pound",
+"CATEGORY":"PHONE_TABLET_LAPTOP",
+"TOTAL":"26,025,000 VND",
+"CATEGORYSTRING":"best sellers rank  computers & accessories ()  computers & accessories > laptops > 2 1 laptops"
+}
+info: {
+"URL":"https://www.amazon.com/Hudson-Baby-Animal-Hooded-Elephant/dp/B00X22L0AC?pd_rd_wg=s8RKM&pd_rd_r=8e1c4276-7369-4dd4-974e-74fd880eea7b&pd_rd_w=M6PYT&ref_=pd_gw_cartx&pf_rd_r=YAF3WG57EENSCF6BYJWT&pf_rd_p=c76a0c82-37bc-509a-a475-f183166f4a51&th=1",
+"PRICE":"6.99",
+"WEIGHT":"11.2 ounce",
+"CATEGORY":"GENERAL",
+"TOTAL":"280,000 VND",
+"CATEGORYSTRING":"best sellers rank  baby ()  baby > baby care > bathing > washcloths & towels > bath & hooded towels"
+}
+info: {
+"URL":"https://www.amazon.com/Hudson-Baby-Animal-Hooded-Elephant/dp/B00X22L0AC?pd_rd_wg=s8RKM&pd_rd_r=8e1c4276-7369-4dd4-974e-74fd880eea7b&pd_rd_w=M6PYT&ref_=pd_gw_cartx&pf_rd_r=YAF3WG57EENSCF6BYJWT&pf_rd_p=c76a0c82-37bc-509a-a475-f183166f4a51&th=1",
+"PRICE":"6.99",
+"WEIGHT":"11.2 ounce",
+"CATEGORY":"GENERAL",
+"TOTAL":"280,000 VND",
+"CATEGORYSTRING":"best sellers rank  baby ()  baby > baby care > bathing > washcloths & towels > bath & hooded towels"
+}
+info: {
+"URL":"https://www.amazon.com/Hudson-Baby-Animal-Hooded-Elephant/dp/B00X22L0AC?pd_rd_wg=s8RKM&pd_rd_r=8e1c4276-7369-4dd4-974e-74fd880eea7b&pd_rd_w=M6PYT&ref_=pd_gw_cartx&pf_rd_r=YAF3WG57EENSCF6BYJWT&pf_rd_p=c76a0c82-37bc-509a-a475-f183166f4a51&th=1",
+"PRICE":"6.99",
+"WEIGHT":"11.2 ounce",
+"CATEGORY":"GENERAL",
+"TOTAL":"280,000 VND",
+"CATEGORYSTRING":"best sellers rank  baby ()  baby > baby care > bathing > washcloths & towels > bath & hooded towels"
+}
+info: {
+"URL":"https://www.amazon.com/Hudson-Baby-Animal-Hooded-Elephant/dp/B00X22L0AC?pd_rd_wg=s8RKM&pd_rd_r=8e1c4276-7369-4dd4-974e-74fd880eea7b&pd_rd_w=M6PYT&ref_=pd_gw_cartx&pf_rd_r=YAF3WG57EENSCF6BYJWT&pf_rd_p=c76a0c82-37bc-509a-a475-f183166f4a51&th=1",
+"PRICE":"6.99",
+"WEIGHT":"11.2 ounce",
+"CATEGORY":"GENERAL",
+"TOTAL":"280,000 VND",
+"CATEGORYSTRING":"best sellers rank  baby ()  baby > baby care > bathing > washcloths & towels > bath & hooded towels"
+}
+info: {
+"URL":"https://www.amazon.com/Sennheiser-Open-Back-Professional-Headphone/dp/B00004SY4H?pd_rd_wg=s8RKM&pd_rd_r=8e1c4276-7369-4dd4-974e-74fd880eea7b&pd_rd_w=yYo5G&ref_=pd_gw_wsim&pf_rd_r=YAF3WG57EENSCF6BYJWT&pf_rd_p=ca24908f-d68f-5819-b86a-2188960ed451",
+"PRICE":"299",
+"WEIGHT":"2.95 pound",
+"CATEGORY":"DIGITAL",
+"TOTAL":"8,625,000 VND",
+"CATEGORYSTRING":"best sellers rank  musicalstruments ( musicalstruments)  electronics > accessories & supplies > cell phone accessories > headphones > over-ear headphones  electronics > home audio & theater  electronics > portable audio & video > mp3 & mp4 player accessories"
+}
+info: {
+"URL":"https://www.amazon.com/Hudson-Baby-Animal-Hooded-Elephant/dp/B00X22L0AC?pd_rd_wg=s8RKM&pd_rd_r=8e1c4276-7369-4dd4-974e-74fd880eea7b&pd_rd_w=M6PYT&ref_=pd_gw_cartx&pf_rd_r=YAF3WG57EENSCF6BYJWT&pf_rd_p=c76a0c82-37bc-509a-a475-f183166f4a51&th=1",
+"PRICE":"6.99",
+"WEIGHT":"11.2 ounce",
+"CATEGORY":"GENERAL",
+"TOTAL":"280,000 VND",
+"CATEGORYSTRING":"best sellers rank  baby ()  baby > baby care > bathing > washcloths & towels > bath & hooded towels"
+}

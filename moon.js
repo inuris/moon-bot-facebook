@@ -9,7 +9,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Kính mát",
-    NOTE: "Giá đã bao gồm Phụ thu $5/cái",
+    NOTE: "Phụ thu $5/cái",
     KEYWORD: ["sunglasses", "eyewear accessories"],
     NOTKEYWORD: []
   },
@@ -21,7 +21,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Dây nịt",
-    NOTE: "Giá đã bao gồm Phí ship $11/kg",
+    NOTE: "Phí ship $11/kg",
     KEYWORD: ["belt"],
     NOTKEYWORD: []
   },
@@ -33,7 +33,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Đồng hồ",
-    NOTE: "Giá đã bao gồm Phụ thu $15/cái",
+    NOTE: "Phụ thu $15/cái",
     KEYWORD: ["watches"],
     NOTKEYWORD: []
   },
@@ -45,7 +45,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Trang sức",
-    NOTE: "Giá đã bao gồm Phụ thu $5/cái",
+    NOTE: "Phụ thu $5/cái",
     KEYWORD: ["> jewelry"],
     NOTKEYWORD: ["> shoes", "cleaning", "care"]
   },
@@ -57,7 +57,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Xe đạp",
-    NOTE: "Giá đã bao gồm Phí ship $12/kg + Phụ thu $40/chiếc",
+    NOTE: "Phí ship $12/kg + Phụ thu $40/chiếc",
     KEYWORD: ["bike", "walker", "rollator","cycling"],
     NOTKEYWORD: ["accessories"]
   },
@@ -69,7 +69,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Dụng cụ nhà bếp",
-    NOTE: "Giá đã bao gồm Phí ship $12/kg",
+    NOTE: "Phí ship $12/kg",
     KEYWORD: ["coffee machine", "blender", "brewer", "appliance"],
     NOTKEYWORD: ["> paper & plastic"]
   },
@@ -81,7 +81,7 @@ const CATEGORIES = {
     HQEXTRA: 0,
     HQANCHOR: 500,
     NAME: "Đĩa nhạc, game",
-    NOTE: "Giá đã bao gồm Phí ship $10/kg",
+    NOTE: "Phí ship $10/kg",
     KEYWORD: ["video games", " > games","blu-ray >", "dvd >"],
     NOTKEYWORD: ["accessories", "controllers", " > consoles", "cards"]
   },
@@ -93,7 +93,7 @@ const CATEGORIES = {
     HQEXTRA: 0,
     HQANCHOR: 500,
     NAME: "Thuốc - Vitamin - Hóa chất",
-    NOTE: "Giá đã bao gồm Phí ship $11/kg",
+    NOTE: "Phí ship $11/kg",
     KEYWORD: [
       "beauty & grooming",
       "oil",
@@ -114,7 +114,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Điện thoại - Laptop",
-    NOTE: "Giá đã bao gồm Phí ship $12/kg + Phụ thu $40/cái",
+    NOTE: "Phí ship $12/kg + Phụ thu $40/cái",
     KEYWORD: [
       "amazon devices",
       "> unlocked cell phones",
@@ -131,7 +131,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 0,
     NAME: "Máy chơi game",
-    NOTE: "Giá đã bao gồm Phí ship $13/kg",
+    NOTE: "Phí ship $13/kg",
     KEYWORD: [" > consoles"],
     NOTKEYWORD: []
   },
@@ -143,7 +143,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Camera",
-    NOTE: "Giá đã bao gồm Phụ thu $35/chiếc",
+    NOTE: "Phụ thu $35/chiếc",
     KEYWORD: ["camera & photo > video >", "camera & photo > dslr cameras"],
     NOTKEYWORD: ["accessories"]
   },
@@ -155,7 +155,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Golf",
-    NOTE: "Giá đã bao gồm Phí ship $12/kg",
+    NOTE: "Phí ship $12/kg",
     KEYWORD: ["golf club", " > racquets"],
     NOTKEYWORD: []
   },
@@ -166,8 +166,8 @@ const CATEGORIES = {
     PRICEANCHOR: 0,
     HQEXTRA: 0.05,
     HQANCHOR: 500,
-    NAME: "Hàng điện tử",
-    NOTE: "Giá đã bao gồm Phí ship $13/kg",
+    NAME: "Điện tử",
+    NOTE: "Phí ship $13/kg",
     KEYWORD: [
       "electronics",
       "machines",
@@ -207,7 +207,7 @@ const CATEGORIES = {
     HQEXTRA: 0.05,
     HQANCHOR: 500,
     NAME: "Phụ kiện xe hơi",
-    NOTE: "Giá đã bao gồm Phí ship $11/kg",
+    NOTE: "Phí ship $11/kg",
     KEYWORD: ["> wheels & tires >",
              "> engine & chassis parts"],
     NOTKEYWORD: []
@@ -220,7 +220,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Sữa",
-    NOTE: "Giá đã bao gồm Phí ship $7.5/kg",
+    NOTE: "Phí ship $7.5/kg",
     KEYWORD: ["bottled beverages, water & drink mixes"],
     NOTKEYWORD: []
   },
@@ -232,7 +232,7 @@ const CATEGORIES = {
     HQEXTRA: 0.1,
     HQANCHOR: 500,
     NAME: "Quần áo, giày dép",
-    NOTE: "Giá đã bao gồm Phí ship $8.5/kg",
+    NOTE: "Phí ship $8.5/kg",
     KEYWORD: ["clothing, shoes & jewelry >"],
     NOTKEYWORD: []
   },
@@ -243,8 +243,8 @@ const CATEGORIES = {
     PRICEANCHOR: 0,
     HQEXTRA: 0.1,
     HQANCHOR: 500,
-    NAME: "Mặt hàng thông thường",
-    NOTE: "Giá đã bao gồm Phí ship $8.5/kg",
+    NAME: "thông thường",
+    NOTE: "Phí ship $8.5/kg",
     KEYWORD: [],
     NOTKEYWORD: []
   },
@@ -255,7 +255,7 @@ const CATEGORIES = {
     PRICEANCHOR: 0,
     HQEXTRA: 0.1,
     HQANCHOR: 500,
-    NAME: "Không xác định",
+    NAME: "Chưa xác định",
     NOTE: "Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về",
     KEYWORD: [],
     NOTKEYWORD: []
@@ -504,20 +504,74 @@ function calculateMoonPrice(website, item){
   return itemTotal;
 }
 function printMoonPrice(item){
-  var itemText = '[Auto Reply] ';
+  // var itemText = '[Auto Reply] ';
+  // if (item.totalString ==""){
+  //   itemText += 'Ko xác định được giá sản phẩm. Vui lòng liên hệ để được báo giá chính xác.';
+  // }
+  // else{
+  //   itemText += 'Giá của Moon: '+ item.totalString +'.\n';
+  //   if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN')
+  //     // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
+  //     itemText += 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
+  //   else
+  //     itemText += 'Loại mặt hàng: ' + CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE +'.\n'
+  //     +'(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
+  // }
+
+  var response;
   if (item.totalString ==""){
-    itemText += 'Ko xác định được giá sản phẩm. Vui lòng liên hệ để được báo giá chính xác.';
+    response= {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": [{
+            "title": "Ko xác định được giá sản phẩm",
+            "subtitle": "Vui lòng chat với Moon để được báo giá chính xác",
+            "buttons": [
+              {
+                "type": "web_url",
+                "url": "https://m.me/moonhangmy",
+                "title": "Chat với Moon",
+              }
+            ],
+          }]
+        }
+      }
+    }
   }
   else{
-    itemText += 'Giá của Moon: '+ item.totalString +'.\n';
-    if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN')
-      // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
-      itemText += 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
-    else
-      itemText += 'Loại mặt hàng: ' + CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE +'.\n'
-      +'(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
+    var itemTitle, itemSubtitle;
+    itemTitle='[Auto] Giá Moon: ' + item.totalString;
+    //itemTitle+='(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
+    // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
+    if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN'){
+      itemSubtitle = 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về';
+    }
+    else{
+      itemSubtitle = 'Đã bao gồm ' + CATEGORIES[item.category].NOTE + ' mặt hàng ' + CATEGORIES[item.category].NAME;      
+    };
+    response = {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": [{
+            "title": itemTitle,
+            "subtitle": itemSubtitle,
+            "buttons": [
+              {
+                "type": "web_url",
+                "url": "https://m.me/moonhangmy",
+                "title": "Chat với Moon",
+              }
+            ],
+          }]
+        }
+      }
+    }
   }
-  return itemText;
+  return response;
 }
 
 
