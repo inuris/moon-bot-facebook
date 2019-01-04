@@ -160,7 +160,7 @@ function handleAmazonWeight(weightArray) {
   } else {
     for (var i = 0; i < weightArray.length; i++) {
       var weightReg = weightArray[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
-      console.log(weightReg);
+      //console.log(weightReg);
       if (weightReg !== null) {
         var weight = parseFloat(weightReg[1]);
         var weightKg = weight;

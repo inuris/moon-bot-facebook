@@ -166,7 +166,7 @@ const CATEGORIES = {
     PRICEANCHOR: 0,
     HQEXTRA: 0.05,
     HQANCHOR: 500,
-    NAME: "Hàng điện tử",
+    NAME: "Điện tử",
     NOTE: "Phí ship $13/kg",
     KEYWORD: [
       "electronics",
@@ -243,7 +243,7 @@ const CATEGORIES = {
     PRICEANCHOR: 0,
     HQEXTRA: 0.1,
     HQANCHOR: 500,
-    NAME: "Thông thường",
+    NAME: "thông thường",
     NOTE: "Phí ship $8.5/kg",
     KEYWORD: [],
     NOTKEYWORD: []
@@ -542,7 +542,7 @@ function printMoonPrice(item){
   }
   else{
     var itemTitle, itemSubtitle;
-    itemTitle='[Auto]\nGiá Moon: ' + item.totalString;
+    itemTitle='[Auto] Giá Moon: ' + item.totalString;
     //itemTitle+='(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
     // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
     if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN'){
