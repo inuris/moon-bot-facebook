@@ -1,6 +1,6 @@
 const PAGE_ACCESS_TOKEN = {
-  573537602700846:process.env.PAGE_ACCESS_TOKEN_573537602700846,
-  949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938
+  573537602700846:process.env.PAGE_ACCESS_TOKEN_573537602700846, // Moon Hàng Mỹ
+  949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938 // Rôm Rốp
 };
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
 const amazon = require("./amazon.js");
@@ -79,11 +79,11 @@ function handleMessage(page_id, sender_psid, received_message) {
   // Check if the message contains text
   if (received_message.text) {
     
+    // Regex url Amazon
     var reg=/(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?(amazon.com\/\S+)/gm;
     var matchurl=received_message.text.match(reg);
     if (matchurl!==null){
       
-      // Create the payload for a basic text message
       var requestOptions = {
         method: "GET",
         url: matchurl[0],
