@@ -89,7 +89,7 @@ function handleMessage(sender_psid, received_message) {
         // response = {
         // "text": price
         // }
-        
+
         callSendAPI(sender_psid, response);
       });           
     }
@@ -97,7 +97,19 @@ function handleMessage(sender_psid, received_message) {
 }
 
 // Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {}
+function handlePostback(sender_psid, received_postback) {
+  let response;
+  
+  // Get the payload for the postback
+  let payload = received_postback.payload;
+
+  // Set the response based on the postback payload
+  if (payload === 'chat') {
+    response = { "text": "Vui lòng chờ giây lát..." }
+  } 
+  // Send the message to acknowledge the postback
+  callSendAPI(sender_psid, response);
+}
 
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {

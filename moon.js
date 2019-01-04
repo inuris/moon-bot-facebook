@@ -530,8 +530,8 @@ function printMoonPrice(item){
             "subtitle": "Vui lòng chat với Moon để được báo giá chính xác",
             "buttons": [
               {
-                "type": "web_url",
-                "url": "https://m.me/moonhangmy",
+                "type": "postback",
+                "payload": "chat",
                 "title": "Chat với Moon",
               }
             ],
@@ -542,7 +542,7 @@ function printMoonPrice(item){
   }
   else{
     var itemTitle, itemSubtitle;
-    itemTitle='[Auto] Giá Moon: ' + item.totalString;
+    itemTitle='[Auto] Giá dự kiến: ' + item.totalString;
     //itemTitle+='(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
     // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
     if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN'){
@@ -561,8 +561,8 @@ function printMoonPrice(item){
             "subtitle": itemSubtitle,
             "buttons": [
               {
-                "type": "web_url",
-                "url": "https://m.me/moonhangmy",
+                "type": "postback",
+                "payload": "chat",
                 "title": "Chat với Moon",
               }
             ],
