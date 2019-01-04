@@ -105,7 +105,7 @@ function handlePostback(sender_psid, received_postback) {
 
   // Set the response based on the postback payload
   if (payload === 'chat') {
-    response = { "text": "Vui lòng chờ giây lát..." }
+    response = { "text": "[Auto] Vui lòng chờ giây lát, nhân viên Moon sẽ liên hệ lại ngay" }
   } 
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
