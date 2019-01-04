@@ -1,4 +1,7 @@
-const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+const PAGE_ACCESS_TOKEN = {
+  573537602700846:process.env.PAGE_ACCESS_TOKEN_573537602700846,
+  949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938
+};
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
 const amazon = require("./amazon.js");
 const select = require("soupselect-update").select;
@@ -19,21 +22,23 @@ app.post("/webhook", (req, res) => {
   // Check the webhook event is from a Page subscription
   if (body.object === "page") {
     // Iterate over each entry - there may be multiple if batched
-    body.entry.forEach(function(entry) {
+    body.entry.forEach((entry)=> {
       // Get the webhook event. entry.messaging is an array, but
       // will only ever contain one event, so we get index 0
       let webhook_event = entry.messaging[0];
-      
 
-      // Get the sender PSID
+      // Lấy Page ID của page nhận msg
+      let page_id= entry.id;
+
+      // Lấy Sender ID
       let sender_psid = webhook_event.sender.id;
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        handleMessage(sender_psid, webhook_event.message);
+        handleMessage(page_id, sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-        handlePostback(sender_psid, webhook_event.postback);
+        handlePostback(page_id, sender_psid, webhook_event.postback);
       }
     });
 
@@ -68,7 +73,7 @@ app.get("/webhook", (req, res) => {
 });
 
 // Handles messages events
-function handleMessage(sender_psid, received_message) {
+function handleMessage(page_id, sender_psid, received_message) {
   let response;
 
   // Check if the message contains text
@@ -90,14 +95,14 @@ function handleMessage(sender_psid, received_message) {
         // "text": price
         // }
 
-        callSendAPI(sender_psid, response);
+        callSendAPI(page_id, sender_psid, response);
       });           
     }
   }
 }
 
 // Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {
+function handlePostback(page_id, sender_psid, received_postback) {
   let response;
   
   // Get the payload for the postback
@@ -108,11 +113,11 @@ function handlePostback(sender_psid, received_postback) {
     response = { "text": "[Auto] Vui lòng chờ giây lát, nhân viên Moon sẽ liên hệ lại ngay" }
   } 
   // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
+  callSendAPI(page_id, sender_psid, response);
 }
 
 // Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
+function callSendAPI(page_id, sender_psid, response) {
   // Construct the message body
   let request_body = {
     recipient: {
@@ -125,7 +130,7 @@ function callSendAPI(sender_psid, response) {
   request(
     {
       uri: "https://graph.facebook.com/v2.6/me/messages",
-      qs: { access_token: PAGE_ACCESS_TOKEN },
+      qs: { access_token: PAGE_ACCESS_TOKEN[page_id] },
       method: "POST",
       json: request_body
     },
