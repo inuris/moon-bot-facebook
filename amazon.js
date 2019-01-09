@@ -22,7 +22,8 @@ const PRICEBLOCK = [
   "#priceblock_ourprice",
   "#priceblock_saleprice",
   ".guild_priceblock_ourprice",
-  ".offer-price"
+  ".offer-price",
+  "#alohaPricingWidget .a-color-price"
 ];
 const SHIPPINGBLOCK = [
   "#ourprice_shippingmessage"
@@ -48,21 +49,7 @@ function getAmazonPrice(dom) {
       break;
     }
   }  
-  //console.log(priceString);
-  // Block đặc biệt chứa giá kèm text
-  if (priceString === "") {
-    var itemPriceWidget = select(
-      dom,
-      "#alohaPricingWidget .a-color-price:first"
-    );
-    if (itemPriceWidget.length > 0) {
-      priceString = itemPriceWidget[0].children[0].data
-        .replace(/\s+/gm," ")
-        .trim()        
-        .replace(/\$\s*|,/gm, "")
-        .replace(" ", ".") 
-    }
-  }
+  
   // Duyệt các block chứa ship
   for (var i = 0; i < SHIPPINGBLOCK.length; i++) {
     var itemShippingBlock = select(dom, SHIPPINGBLOCK[i]); 

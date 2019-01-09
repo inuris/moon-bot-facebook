@@ -265,148 +265,188 @@ const WEBSITES = {
   ALDO: {
     TAX: 0.083,
     URL: "www.aldoshoes.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   AMAZON: {
     TAX: 0.083,
     URL: "www.amazon.com",
-    PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    DETAILBLOCK: [
+      "#productDetails_detailBullets_sections1 tr",
+      "#detailBullets_feature_div span.a-list-item",
+      "#detailBulletsWrapper_feature_div li",
+      "#prodDetails tr",
+      "#detail-bullets .content li",
+      "#technical-details-table tr",
+      "#tech-specs-desktop tr"
+    ],
+    PRICEBLOCK: [
+      "#priceblock_dealprice",
+      "#priceblock_ourprice",
+      "#priceblock_saleprice",
+      ".guild_priceblock_ourprice",
+      ".offer-price",
+      "#alohaPricingWidget .a-color-price"
+    ],
+    SHIPPINGBLOCK: [
+      "#ourprice_shippingmessage"
+    ]
   },
   BATHBODYWORKS: {
     TAX: 0.083,
     URL: "www.bathandbodyworks.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   BHCOSMETICS: {
     TAX: 0,
     URL: "www.bhcosmetics.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   CARTERS: {
     TAX: 0.083,
     URL: "www.carters.com",
+    DETAILBLOCK: "",
     PRICEBLOCK:
       'document.getElementsByClassName("product-price-container desktopvisible")[0].getElementsByClassName("price-sales-usd")[0]',
-    WRITEBLOCK:
-      'document.getElementsByClassName("product-price-container desktopvisible")[0]'
+    SHIPPINGBLOCK:
+      ''
   },
   CLINIQUE: {
     TAX: 0.083,
     URL: "www.clinique.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   FOREVER21: {
     TAX: 0.083,
     URL: "www.forever21.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: 'document.getElementById("ItemPrice")',
-    WRITEBLOCK: 'document.getElementById("ItemPrice")'
+    SHIPPINGBLOCK: ''
   },
   FRAGRANCENET: {
     TAX: 0,
     URL: "www.fragrancenet.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   GAP: {
     TAX: 0.083,
     URL: "www.gap.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
-  "H&M": {
+  HM: {
     TAX: 0.083,
     URL: "www.hm.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   JOMASHOP: {
     TAX: 0,
     URL: "www.jomashop.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   LOFT: {
     TAX: 0.083,
     URL: "www.loft.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   NINEWEST: {
     TAX: 0.083,
     URL: "www.ninewest.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   OLDNAVY: {
     TAX: 0.083,
     URL: "www.oldnavy.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   OSHKOSH: {
     TAX: 0.083,
     URL: "www.oshkosh.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   RALPHLAUREN: {
     TAX: 0.083,
     URL: "www.ralphlauren.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   RUELALA: {
     TAX: 0,
     URL: "www.reulala.com",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   THEBODYSHOP: {
     TAX: 0.083,
     URL: "www.thebodyshop.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   TOYSRUS: {
     TAX: 0.083,
     URL: "www.toysrus.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   BABIESRUS: {
     TAX: 0.083,
     URL: "babiesrus.toysrus.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   VICTORIASSECRET: {
     TAX: 0.083,
     URL: "www.victoriassecret.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   WALGREENS: {
     TAX: 0.083,
     URL: "www.walgreens.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
   VITACOST: {
     TAX: 0,
     URL: "www.vitacost.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   },
-  "ZULILY    ": {
+  ZULILY: {
     TAX: 0,
     URL: "www.zulily.com",
+    DETAILBLOCK: "",
     PRICEBLOCK: "",
-    WRITEBLOCK: ""
+    SHIPPINGBLOCK: ""
   }
 };
 module.exports = {
@@ -416,8 +456,7 @@ module.exports = {
   calculateMoonPrice,
   printMoonPrice,
   toVND
-}
-
+};
 // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
 Number.prototype.formatMoney = function(c, d, t) {
   var n = this,
@@ -439,6 +478,139 @@ Number.prototype.formatMoney = function(c, d, t) {
       : "")
   );
 };
+// Đổi USD sang VND, làm tròn 5000
+Number.prototype.toVND = function(rate){
+  var priceNew = Math.ceil((this * rate) / 5000) * 5000; //Làm tròn lên 5000  
+  return priceNew.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
+};
+
+class Category{
+  constructor(categoryString){
+    this.categoryString=categoryString;
+    if (categoryString === "") {
+      this.category= "UNKNOWN";
+    }    
+    // Query từng KEYWORD trong category
+    for (var cat in CATEGORIES) {
+      if (
+        checkKeyword(
+          categoryString,
+          CATEGORIES[cat].KEYWORD,
+          CATEGORIES[cat].NOTKEYWORD
+        ) === true
+      )
+      this.category= cat;
+    }
+    this.category= "GENERAL";  
+  }  
+  static checkKeyword(keyString, include, exclude){  
+    for (var i = 0; i < include.length; i++) {
+      if (keyString.indexOf(include[i]) >= 0) {
+        for (var j = 0; j < exclude.length; j++) {
+          if (keyString.indexOf(exclude[j]) >= 0) {
+            return false;
+          }
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+}
+class Weight{
+  constructor(weightArray){
+    var current= "",
+      kg= 0,
+      unit= "";
+    //console.log(weightArray);
+    var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/;
+    if (weightArray.length > 0) {
+      for (var i = 0; i < weightArray.length; i++) {
+        var weightReg = weightArray[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
+        //console.log(weightReg);
+        if (weightReg !== null) {
+          var weight = parseFloat(weightReg[1]);
+          var weightKg = weight;
+          
+          var weightUnit = weightReg[2];
+          if (weightUnit.indexOf("ounce") >= 0 || weightUnit.indexOf("oz") >= 0)
+            weightKg = weight / 35.274;
+          else if (weightUnit.indexOf("pound") >= 0) weightKg = weight / 2.2;
+          // Tìm weight lớn nhất
+          if (
+            kg < weightKg ||
+            weightArray[i].indexOf("shipping weight") >= 0
+          ) {
+            current = weight.toString();
+            kg = weightKg;
+            unit = weightUnit;
+          }
+        }
+      }      
+    }
+    this.current=current;
+    this.kg=kg;
+    this.unit=weightUnit;
+  }
+}
+class Price{
+  constructor(priceString,shippingString){
+    
+    this.priceString=priceString.replace(/\s+/gm," ")
+                                .trim()        
+                                .replace(/\$\s*|,/gm, "")
+                                .replace(" ", ".");
+    this.shippingString                            
+
+  }
+}
+class Item{
+  constructor(dom){
+    this.price=price;
+    this.weight=new Weight(weightArray);
+    this.category=new Category(categoryString);
+  }
+  static calculatePrice(website){
+    var itemPrice = this.price;
+    var category=this.category;
+    var itemTax = itemPrice * WEBSITES[website].TAX; // Thuế tại Mỹ
+    var itemPriceAfterTax = itemPrice + itemTax; // Giá Sau Thuế
+    //console.log("tax: " + itemTax + " (" + WEBSITES[website].TAX * 100 + "%)");
+  
+    var itemMoon = itemPriceAfterTax * (itemPriceAfterTax < 300 ? 0.07 : 0.05); // Công mua tính theo Giá Sau Thuế
+    //console.log("moon: " + itemMoon);
+  
+    var itemWeight = Math.ceil(this.weight * 10) / 10;
+    var itemShip = itemWeight * CATEGORIES[category].SHIP; // Giá ship theo cân nặng
+    //console.log("ship: $" + CATEGORIES[category].SHIP + "/kg x " + itemWeight + "kg");
+  
+    var itemPriceExtra =
+      CATEGORIES[category].EXTRA +
+      (itemPrice >= CATEGORIES[category].PRICEANCHOR
+        ? CATEGORIES[category].PRICEEXTRA
+        : 0); /// Phụ thu theo cái
+    //console.log("extra: " + CATEGORIES[category].EXTRA);
+  
+    var itemHQEXTRA =
+      itemPrice *
+      (itemPrice >= CATEGORIES[category].HQANCHOR
+        ? CATEGORIES[category].HQEXTRA
+        : 0); // Phụ thu giá trị cao (HQANCHOR)
+    //console.log("high price extra: " + itemHQEXTRA);
+  
+    var itemTotal =
+      itemPrice > 0
+        ? itemPriceAfterTax + itemMoon + itemShip + itemPriceExtra + itemHQEXTRA
+        : 0;
+    //console.log("total: " + itemTotal);
+    return itemTotal;
+  }  
+  static toVND(price){
+    var priceNew = Math.ceil((price * RATE_USD_VND) / 5000) * 5000; //Làm tròn lên 5000  
+    return num.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
+  }
+}
+
 
 // Đổi USD sang VND, làm tròn 5000
 function toVND(price){
@@ -454,6 +626,7 @@ function formatMoney(num){
 // Kiểm tra keyword có tồn tại trong array include và không tồn tại trong exclude
 // checkkeyword(string,array,array)
 function checkKeyword(keyString, include, exclude){
+  
   for (var i = 0; i < include.length; i++) {
     if (keyString.indexOf(include[i]) >= 0) {
       for (var j = 0; j < exclude.length; j++) {
