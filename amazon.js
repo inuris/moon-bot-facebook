@@ -6,28 +6,7 @@ const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
 const logger = require('./logger.js').logger;
 // Danh sách các loại detail block của Amazon
-const DETAILBLOCK = [
-  "#productDetails_detailBullets_sections1 tr",
-  "#detailBullets_feature_div span.a-list-item",
-  "#detailBulletsWrapper_feature_div li",
-  "#prodDetails tr",
-  "#detail-bullets .content li",
-  "#technical-details-table tr",
-  "#tech-specs-desktop tr"
-];
 
-// Danh sách các block chứa giá của Amazon
-const PRICEBLOCK = [
-  "#priceblock_dealprice",
-  "#priceblock_ourprice",
-  "#priceblock_saleprice",
-  ".guild_priceblock_ourprice",
-  ".offer-price",
-  "#alohaPricingWidget .a-color-price"
-];
-const SHIPPINGBLOCK = [
-  "#ourprice_shippingmessage"
-];
 // Lấy Giá web sau sale, return Float;
 function getAmazonPrice(dom) {
   var priceString = "";

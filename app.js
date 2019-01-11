@@ -78,24 +78,22 @@ function handleMessage(page_id, sender_psid, received_message) {
 
   // Check if the message contains text
   if (received_message.text) {
-    
-    // Regex url Amazon
-    var reg=/(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?(amazon.com\/\S+)/gm;
-    var matchurl=received_message.text.match(reg);
-    if (matchurl!==null){
-      
+    var website= new Moon.Website(received_message.text);
+    if (website.name!==null){      
       var requestOptions = {
         method: "GET",
-        url: matchurl[0],
+        url: website.url,
         gzip: true
       };
       request(requestOptions, function(error, response, body) {
-        var response = amazon.getMoonPrice(matchurl[0],body);    
+        website.setHtmlRaw(body);
+        var item = Moon.Item(website);
+        response=item.toFBResponse;
         // response = {
         // "text": price
         // }
 
-        callSendAPI(page_id, sender_psid, response);
+        //callSendAPI(page_id, sender_psid, response);
       });           
     }
   }
@@ -145,18 +143,22 @@ function callSendAPI(page_id, sender_psid, response) {
 }
 // For Test only
 
-// function getAmazonPrice() {
-//   var url="https://www.amazon.com/Subwoofer-meidong-Bluetooth-KY-2022/dp/B07J64XH1S/ref=br_msw_pdt-3?_encoding=UTF8&smid=A1DD8WAGHSJ7M5&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=ZFK2XXAHP42WTY2E7Z4Q&pf_rd_t=36701&pf_rd_p=28b04fc5-b068-4db7-9f75-c6ec32ddbd9a&pf_rd_i=desktop";
-//   var requestOptions = {
-//     method: "GET",
-//     url: url,
-//     gzip: true
-//   };
-//   var price=0;
-//   request(requestOptions, function(error, response, body) {
-//     price = amazon.getPrice(body);    
-//   });
-//   console.log(price);
-//   return price;
-// }
-// getAmazonPrice();
+function getAmazonPrice() {
+  var url="https://www.amazon.com/Subwoofer-meidong-Bluetooth-KY-2022/dp/B07J64XH1S/ref=br_msw_pdt-3?_encoding=UTF8&smid=A1DD8WAGHSJ7M5&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=ZFK2XXAHP42WTY2E7Z4Q&pf_rd_t=36701&pf_rd_p=28b04fc5-b068-4db7-9f75-c6ec32ddbd9a&pf_rd_i=desktop";
+  var website= new Moon.Website(url);
+    if (website.name!==null){      
+      var requestOptions = {
+        method: "GET",
+        url: website.url,
+        gzip: true
+      };
+      request(requestOptions, function(error, response, body) {
+        website.setHtmlRaw(body);
+        var item = Moon.Item(website);
+        response=item.toFBResponse;
+      });           
+    }
+  console.log(price);
+  return price;
+}
+getAmazonPrice();

@@ -1,7 +1,10 @@
 const select = require("soupselect-update").select;
-const RATE_USD_VND = 24066;
+const htmlparser = require("htmlparser2");
+const logger = require('./logger.js').logger;
+const RATE_USD_VND = 24000;
 const CATEGORIES = {
   GLASSES: {
+    NAME: "GLASSES",
     SHIP: 0,
     EXTRA: 5,
     PRICEEXTRA: 0,
@@ -14,6 +17,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   BELT: {
+    NAME: "BELT",
     SHIP: 11,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -26,6 +30,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   WATCH: {
+    NAME: "WATCH",
     SHIP: 0,
     EXTRA: 15,
     PRICEEXTRA: 0,
@@ -38,6 +43,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   JEWELRY: {
+    NAME: "JEWELRY",
     SHIP: 0,
     EXTRA: 5,
     PRICEEXTRA: 0,
@@ -50,6 +56,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["> shoes", "cleaning", "care"]
   },
   BIKE: {
+    NAME: "BIKE",
     SHIP: 12,
     EXTRA: 40,
     PRICEEXTRA: 0,
@@ -62,6 +69,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["accessories"]
   },
   KITCHENAPPLIANCE: {
+    NAME: "KITCHENAPPLIANCE",
     SHIP: 12,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -74,6 +82,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["> paper & plastic"]
   },
   DVD: {
+    NAME: "DVD",
     SHIP: 10,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -86,6 +95,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["accessories", "controllers", " > consoles", "cards"]
   },
   CHEMICAL_VITAMIN: {
+    NAME: "CHEMICAL_VITAMIN",
     SHIP: 11,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -107,6 +117,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["> professional dental supplies", "> toothbrushes","diffusers", "candles"]
   },
   PHONE_TABLET_LAPTOP: {
+    NAME: "PHONE_TABLET_LAPTOP",
     SHIP: 12,
     EXTRA: 40,
     PRICEEXTRA: 70,
@@ -124,6 +135,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["computer components","laptop accessories","tablet accessories","computer accessories"]
   },
   CONSOLE: {
+    NAME: "CONSOLE",
     SHIP: 13,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -136,6 +148,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   CAMERA: {
+    NAME: "CAMERA",
     SHIP: 0,
     EXTRA: 35,
     PRICEEXTRA: 0,
@@ -148,6 +161,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["accessories"]
   },
   GOLF: {
+    NAME: "GOLF",
     SHIP: 12,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -160,6 +174,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   DIGITAL: {
+    NAME: "DIGITAL",
     SHIP: 13,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -200,6 +215,7 @@ const CATEGORIES = {
     ]
   },
   AUTOMOTIVE: {
+    NAME: "AUTOMOTIVE",
     SHIP: 11,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -213,6 +229,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   MILK: {
+    NAME: "MILK",
     SHIP: 7.5,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -225,6 +242,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   CLOTHES: {
+    NAME: "CLOTHES",
     SHIP: 8.5,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -237,6 +255,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   GENERAL: {
+    NAME: "GENERAL",
     SHIP: 8.5,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -249,6 +268,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   UNKNOWN: {
+    NAME: "UNKNOWN",
     SHIP: 0,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -264,14 +284,14 @@ const CATEGORIES = {
 const WEBSITES = {
   ALDO: {
     TAX: 0.083,
-    URL: "www.aldoshoes.com",
+    MATCH: "aldoshoes",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   AMAZON: {
     TAX: 0.083,
-    URL: "www.amazon.com",
+    MATCH: "amazon",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
       "#detailBullets_feature_div span.a-list-item",
@@ -295,21 +315,21 @@ const WEBSITES = {
   },
   BATHBODYWORKS: {
     TAX: 0.083,
-    URL: "www.bathandbodyworks.com",
+    MATCH: "bathandbodyworks",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   BHCOSMETICS: {
     TAX: 0,
-    URL: "www.bhcosmetics.com",
+    MATCH: "bhcosmetics",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   CARTERS: {
     TAX: 0.083,
-    URL: "www.carters.com",
+    MATCH: "carters",
     DETAILBLOCK: "",
     PRICEBLOCK:
       'document.getElementsByClassName("product-price-container desktopvisible")[0].getElementsByClassName("price-sales-usd")[0]',
@@ -318,144 +338,140 @@ const WEBSITES = {
   },
   CLINIQUE: {
     TAX: 0.083,
-    URL: "www.clinique.com",
+    MATCH: "clinique",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   FOREVER21: {
     TAX: 0.083,
-    URL: "www.forever21.com",
+    MATCH: "forever21",
     DETAILBLOCK: "",
-    PRICEBLOCK: 'document.getElementById("ItemPrice")',
+    PRICEBLOCK: ['#ItemPrice'],
     SHIPPINGBLOCK: ''
   },
   FRAGRANCENET: {
     TAX: 0,
-    URL: "www.fragrancenet.com",
+    MATCH: "fragrancenet",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   GAP: {
     TAX: 0.083,
-    URL: "www.gap.com",
+    MATCH: "www.gap.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   HM: {
     TAX: 0.083,
-    URL: "www.hm.com",
+    MATCH: "www.hm.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   JOMASHOP: {
     TAX: 0,
-    URL: "www.jomashop.com",
+    MATCH: "www.jomashop.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   LOFT: {
     TAX: 0.083,
-    URL: "www.loft.com",
+    MATCH: "www.loft.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   NINEWEST: {
     TAX: 0.083,
-    URL: "www.ninewest.com",
+    MATCH: "www.ninewest.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   OLDNAVY: {
     TAX: 0.083,
-    URL: "www.oldnavy.com",
+    MATCH: "www.oldnavy.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   OSHKOSH: {
     TAX: 0.083,
-    URL: "www.oshkosh.com",
+    MATCH: "www.oshkosh.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   RALPHLAUREN: {
     TAX: 0.083,
-    URL: "www.ralphlauren.com",
+    MATCH: "www.ralphlauren.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   RUELALA: {
     TAX: 0,
-    URL: "www.reulala.com",
+    MATCH: "www.reulala.com",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   THEBODYSHOP: {
     TAX: 0.083,
-    URL: "www.thebodyshop.com",
+    MATCH: "www.thebodyshop.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   TOYSRUS: {
     TAX: 0.083,
-    URL: "www.toysrus.com",
+    MATCH: "www.toysrus.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   BABIESRUS: {
     TAX: 0.083,
-    URL: "babiesrus.toysrus.com",
+    MATCH: "babiesrus.toysrus.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   VICTORIASSECRET: {
     TAX: 0.083,
-    URL: "www.victoriassecret.com",
+    MATCH: "www.victoriassecret.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   WALGREENS: {
     TAX: 0.083,
-    URL: "www.walgreens.com",
+    MATCH: "www.walgreens.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   VITACOST: {
     TAX: 0,
-    URL: "www.vitacost.com",
+    MATCH: "www.vitacost.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   },
   ZULILY: {
     TAX: 0,
-    URL: "www.zulily.com",
+    MATCH: "www.zulily.com",
     DETAILBLOCK: "",
     PRICEBLOCK: "",
     SHIPPINGBLOCK: ""
   }
 };
 module.exports = {
-  RATE_USD_VND,
-  CATEGORIES,
-  checkKeyword,
-  calculateMoonPrice,
-  printMoonPrice,
-  toVND
+  Website,
+  Item
 };
 // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
 Number.prototype.formatMoney = function(c, d, t) {
@@ -483,27 +499,75 @@ Number.prototype.toVND = function(rate){
   var priceNew = Math.ceil((this * rate) / 5000) * 5000; //Làm tròn lên 5000  
   return priceNew.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
 };
-
-class Category{
-  constructor(categoryString){
-    this.categoryString=categoryString;
-    if (categoryString === "") {
-      this.category= "UNKNOWN";
-    }    
-    // Query từng KEYWORD trong category
-    for (var cat in CATEGORIES) {
-      if (
-        checkKeyword(
-          categoryString,
-          CATEGORIES[cat].KEYWORD,
-          CATEGORIES[cat].NOTKEYWORD
-        ) === true
-      )
-      this.category= cat;
+class Parser{
+  constructor(dom){
+    this.dom=dom;
+  }
+  getText(blockElementArray, index = 0){
+    for (var i = 0; i < blockElementArray.length; i++) {
+        var text = select(this.dom, blockElementArray[i]);   
+        //console.log(htmlparser.DomUtils.getText(text));
+        if (text != null) {        
+          return htmlparser.DomUtils.getText(text[index]);
+        }
+    }  
+    return "";
+  }
+  getTextArray(blockElementArray){
+    var textArray=[];
+    for (var i = 0; i < blockElementArray.length; i++) {
+      // Nguyên table data
+      var textTable = select(this.dom, blockElementArray[i]);   
+      for (var e of detailTable){
+        if (e.type === "tag") {
+          //row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
+          var row = e.children;
+          try{
+            var rowText=htmlparser.DomUtils.getText(row).replace(/\s+/gm," ")
+                                                        .trim()
+                                                        .toLowerCase();
+            textArray.push(rowText);
+          }
+          catch (err) {}
+        }
+      }
+      if (textArray.length>0)
+        return textArray;
+    }  
+    return null;
+  }
+}
+class AmazonCategory{
+  constructor(detailArray){
+    var found=false;
+    for(var i =0;i<detailArray.length;i++){
+      if (detailArray[i].indexOf("sellers rank")>=0){
+        this.string=detailArray[i].replace(/\s{2,}|\..+ {.+}|see top 100| in|(amazon )*best sellers rank:|#\d*,?\d*/gm, "");;
+        found=true;
+        // Query từng KEYWORD trong category
+        for (var cat in CATEGORIES) {
+          if (
+            checkKeyword(
+              detailArray[i],
+              CATEGORIES[cat].KEYWORD,
+              CATEGORIES[cat].NOTKEYWORD
+            ) === true
+          ){
+            this.category = CATEGORIES[cat];            
+            break;
+          }          
+        }
+        this.category= CATEGORIES["GENERAL"];
+      }            
     }
-    this.category= "GENERAL";  
+    if (found===false){
+      this.string="";
+      this.category= CATEGORIES["UNKNOWN"];
+    }    
   }  
-  static checkKeyword(keyString, include, exclude){  
+  // Kiểm tra keyword có tồn tại trong array include và không tồn tại trong exclude
+  // checkkeyword(string,array,array)
+  checkKeyword(keyString, include, exclude){  
     for (var i = 0; i < include.length; i++) {
       if (keyString.indexOf(include[i]) >= 0) {
         for (var j = 0; j < exclude.length; j++) {
@@ -517,16 +581,16 @@ class Category{
     return false;
   }
 }
-class Weight{
-  constructor(weightArray){
+class AmazonWeight{
+  constructor(detailArray){
     var current= "",
       kg= 0,
       unit= "";
-    //console.log(weightArray);
-    var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/;
-    if (weightArray.length > 0) {
-      for (var i = 0; i < weightArray.length; i++) {
-        var weightReg = weightArray[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
+    //console.log(detailArray);
+    var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/;    
+    for (var i = 0; i < detailArray.length; i++) {
+      if (detailArray[i].indexOf("weight") >= 0 || detailArray[i].indexOf("dimensions") >= 0){
+        var weightReg = detailArray[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
         //console.log(weightReg);
         if (weightReg !== null) {
           var weight = parseFloat(weightReg[1]);
@@ -539,41 +603,109 @@ class Weight{
           // Tìm weight lớn nhất
           if (
             kg < weightKg ||
-            weightArray[i].indexOf("shipping weight") >= 0
+            detailArray[i].indexOf("shipping weight") >= 0
           ) {
             current = weight.toString();
             kg = weightKg;
             unit = weightUnit;
           }
         }
-      }      
-    }
+      }
+    }   
     this.current=current;
     this.kg=kg;
     this.unit=weightUnit;
   }
 }
 class Price{
-  constructor(priceString,shippingString){
-    
-    this.priceString=priceString.replace(/\s+/gm," ")
+  constructor(priceString, reg){
+    this.string = priceString;
+    var tempString = priceString.replace(/\s+/gm," ")
                                 .trim()        
                                 .replace(/\$\s*|,/gm, "")
                                 .replace(" ", ".");
-    this.shippingString                            
+    if (reg !== null){      
+        var tempMatch = tempString.match(reg)
+        if (tempMatch!=null){
+          tempString=tempMatch[0];
+        }   
+    }
+    this.value=parseFloat(tempString);
+  }
+  static getPriceShipping(price, ship){
+    return price.value + ship.value;
+  }
+}
+class Website{
+  constructor(url){
+    this.url=url;
+    var reg=/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/igm;
+    var tempName="";
+    var tempMatch = url.match(reg);
+    if (tempMatch!==null){
+      for (var web in WEBSITES){
+        if(WEBSITES[web].MATCH.indexOf(tempMatch[1])>=0){
+          tempName = web;
+        }          
+      }
+    }
+    if (tempName!==""){
+      this.name=tempName;
+      this.htmlraw="";
 
+      this.priceBlock=WEBSITE[tempName].PRICEBLOCK;
+      this.shippingBlock=WEBSITE[tempName].SHIPPINGBLOCK;
+      this.detailBlock=WEBSITE[tempName].DETAILBLOCK;
+    }        
+  }
+  setHtmlRaw(htmlraw){
+    this.htmlraw=htmlraw;
   }
 }
 class Item{
-  constructor(dom){
-    this.price=price;
-    this.weight=new Weight(weightArray);
-    this.category=new Category(categoryString);
+  constructor(website){   
+    if (website.name !==""){
+      var handler = new htmlparser.DomHandler((error, dom) => {
+        if (error) {
+          console.log(error);
+        } else {
+          var myparser = new Parser(dom);
+  
+          var priceString = myparser.getText(website.priceBlock);        
+          var price=new Price(priceString);
+  
+          var shippingString = myparser.getText(website.shippingBlock);
+          var regShipping=/\d+.?\d*/gm;
+          var shipping=new Price(shippingString, regShipping);
+  
+          this.price=price;
+          this.shipping=shipping;
+          this.priceshipping= Price.getPriceShipping(price, shipping);
+  
+          // detailArray gồm nhiều row trong table chứa Detail
+          var detailArray = myparser.getTextArray(website.detailBlock);
+          this.weight=new AmazonWeight(detailArray);
+          this.category=new AmazonCategory(detailArray); 
+
+          this.total=  calculatePrice();
+          this.totalString=(this.total===0?"":this.toVND(item.total));;
+
+          if (this.weight.value===0||item.category.NAME === "UNKNOWN"){
+            logger.log('error','{\n"URL":"%s",\n"PRICE":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', url, this.priceshipping,this.weight.string,this.category.NAME,this.totalString,this.category.string);
+          }
+          else{
+            logger.log('info','{\n"URL":"%s",\n"PRICE":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', url, this.priceshipping,this.weight.string,this.category.NAME,this.totalString,this.category.string);
+          }
+        }
+      });
+      var parser = new htmlparser.Parser(handler, { decodeEntities: true });
+      parser.parseComplete(website.htmlraw);      
+    }    
   }
-  static calculatePrice(website){
-    var itemPrice = this.price;
-    var category=this.category;
-    var itemTax = itemPrice * WEBSITES[website].TAX; // Thuế tại Mỹ
+  calculatePrice(){
+    var itemPrice = this.priceshipping;
+    var category= this.category;
+    var itemTax = itemPrice * website.tax; // Thuế tại Mỹ
     var itemPriceAfterTax = itemPrice + itemTax; // Giá Sau Thuế
     //console.log("tax: " + itemTax + " (" + WEBSITES[website].TAX * 100 + "%)");
   
@@ -581,20 +713,20 @@ class Item{
     //console.log("moon: " + itemMoon);
   
     var itemWeight = Math.ceil(this.weight * 10) / 10;
-    var itemShip = itemWeight * CATEGORIES[category].SHIP; // Giá ship theo cân nặng
+    var itemShip = itemWeight * category.SHIP; // Giá ship theo cân nặng
     //console.log("ship: $" + CATEGORIES[category].SHIP + "/kg x " + itemWeight + "kg");
   
     var itemPriceExtra =
-      CATEGORIES[category].EXTRA +
-      (itemPrice >= CATEGORIES[category].PRICEANCHOR
-        ? CATEGORIES[category].PRICEEXTRA
+    category.EXTRA +
+      (itemPrice >= category.PRICEANCHOR
+        ? category.PRICEEXTRA
         : 0); /// Phụ thu theo cái
     //console.log("extra: " + CATEGORIES[category].EXTRA);
   
     var itemHQEXTRA =
       itemPrice *
-      (itemPrice >= CATEGORIES[category].HQANCHOR
-        ? CATEGORIES[category].HQEXTRA
+      (itemPrice >= category.HQANCHOR
+        ? category.HQEXTRA
         : 0); // Phụ thu giá trị cao (HQANCHOR)
     //console.log("high price extra: " + itemHQEXTRA);
   
@@ -605,182 +737,78 @@ class Item{
     //console.log("total: " + itemTotal);
     return itemTotal;
   }  
-  static toVND(price){
+  toFBResponse(){
+    // var itemText = '[Auto Reply] ';
+    // if (item.totalString ==""){
+    //   itemText += 'Ko xác định được giá sản phẩm. Vui lòng liên hệ để được báo giá chính xác.';
+    // }
+    // else{
+    //   itemText += 'Giá của Moon: '+ item.totalString +'.\n';
+    //   if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN')
+    //     // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
+    //     itemText += 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
+    //   else
+    //     itemText += 'Loại mặt hàng: ' + CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE +'.\n'
+    //     +'(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
+    // }
+  
+    var response;
+    if (item.totalString ==""){
+      response= {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": [{
+              "title": "Ko xác định được giá sản phẩm",
+              "subtitle": "Vui lòng chat với Moon để được báo giá chính xác",
+              "buttons": [
+                {
+                  "type": "postback",
+                  "payload": "chat",
+                  "title": "Chat với Moon",
+                }
+              ],
+            }]
+          }
+        }
+      }
+    }
+    else{
+      var itemTitle, itemSubtitle;
+      itemTitle='[Auto] Giá dự kiến: ' + item.totalString;
+      //itemTitle+='(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
+      // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
+      if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN'){
+        itemSubtitle = 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về';
+      }
+      else{
+        itemSubtitle = 'Đã bao gồm ' + CATEGORIES[item.category].NOTE + ' mặt hàng ' + CATEGORIES[item.category].NAME;      
+      };
+      response = {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": [{
+              "title": itemTitle,
+              "subtitle": itemSubtitle,
+              "buttons": [
+                {
+                  "type": "postback",
+                  "payload": "chat",
+                  "title": "Chat với Moon",
+                }
+              ],
+            }]
+          }
+        }
+      }
+    }
+    return response;
+  }
+  toVND(price){
     var priceNew = Math.ceil((price * RATE_USD_VND) / 5000) * 5000; //Làm tròn lên 5000  
     return num.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
   }
 }
-
-
-// Đổi USD sang VND, làm tròn 5000
-function toVND(price){
-  var priceNew = Math.ceil((price * RATE_USD_VND) / 5000) * 5000; //Làm tròn lên 5000  
-  return formatMoney(priceNew)+" VND"; // Thêm VND vào
-}
-
-// Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
-function formatMoney(num){
-  return num.formatMoney(0, '.', ',');
-}
-
-// Kiểm tra keyword có tồn tại trong array include và không tồn tại trong exclude
-// checkkeyword(string,array,array)
-function checkKeyword(keyString, include, exclude){
-  
-  for (var i = 0; i < include.length; i++) {
-    if (keyString.indexOf(include[i]) >= 0) {
-      for (var j = 0; j < exclude.length; j++) {
-        if (keyString.indexOf(exclude[j]) >= 0) {
-          return false;
-        }
-      }
-      return true;
-    }
-  }
-  return false;
-}
-
-// Tính giá USD tổng dựa trên [tên website, giá web, cân nặng, danh mục], return int
-function calculateMoonPrice(website, item){
-  var itemPrice = item.price;
-  var category=item.category;
-  var itemTax = itemPrice * WEBSITES[website].TAX; // Thuế tại Mỹ
-  var itemPriceAfterTax = itemPrice + itemTax; // Giá Sau Thuế
-  //console.log("tax: " + itemTax + " (" + WEBSITES[website].TAX * 100 + "%)");
-
-  var itemMoon = itemPriceAfterTax * (itemPriceAfterTax < 300 ? 0.07 : 0.05); // Công mua tính theo Giá Sau Thuế
-  //console.log("moon: " + itemMoon);
-
-  var itemWeight = Math.ceil(item.weight * 10) / 10;
-  var itemShip = itemWeight * CATEGORIES[category].SHIP; // Giá ship theo cân nặng
-  //console.log("ship: $" + CATEGORIES[category].SHIP + "/kg x " + itemWeight + "kg");
-
-  var itemPriceExtra =
-    CATEGORIES[category].EXTRA +
-    (itemPrice >= CATEGORIES[category].PRICEANCHOR
-      ? CATEGORIES[category].PRICEEXTRA
-      : 0); /// Phụ thu theo cái
-  //console.log("extra: " + CATEGORIES[category].EXTRA);
-
-  var itemHQEXTRA =
-    itemPrice *
-    (itemPrice >= CATEGORIES[category].HQANCHOR
-      ? CATEGORIES[category].HQEXTRA
-      : 0); // Phụ thu giá trị cao (HQANCHOR)
-  //console.log("high price extra: " + itemHQEXTRA);
-
-  var itemTotal =
-    itemPrice > 0
-      ? itemPriceAfterTax + itemMoon + itemShip + itemPriceExtra + itemHQEXTRA
-      : 0;
-  //console.log("total: " + itemTotal);
-  return itemTotal;
-}
-function printMoonPrice(item){
-  // var itemText = '[Auto Reply] ';
-  // if (item.totalString ==""){
-  //   itemText += 'Ko xác định được giá sản phẩm. Vui lòng liên hệ để được báo giá chính xác.';
-  // }
-  // else{
-  //   itemText += 'Giá của Moon: '+ item.totalString +'.\n';
-  //   if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN')
-  //     // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
-  //     itemText += 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
-  //   else
-  //     itemText += 'Loại mặt hàng: ' + CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE +'.\n'
-  //     +'(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
-  // }
-
-  var response;
-  if (item.totalString ==""){
-    response= {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "generic",
-          "elements": [{
-            "title": "Ko xác định được giá sản phẩm",
-            "subtitle": "Vui lòng chat với Moon để được báo giá chính xác",
-            "buttons": [
-              {
-                "type": "postback",
-                "payload": "chat",
-                "title": "Chat với Moon",
-              }
-            ],
-          }]
-        }
-      }
-    }
-  }
-  else{
-    var itemTitle, itemSubtitle;
-    itemTitle='[Auto] Giá dự kiến: ' + item.totalString;
-    //itemTitle+='(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
-    // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
-    if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN'){
-      itemSubtitle = 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về';
-    }
-    else{
-      itemSubtitle = 'Đã bao gồm ' + CATEGORIES[item.category].NOTE + ' mặt hàng ' + CATEGORIES[item.category].NAME;      
-    };
-    response = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "generic",
-          "elements": [{
-            "title": itemTitle,
-            "subtitle": itemSubtitle,
-            "buttons": [
-              {
-                "type": "postback",
-                "payload": "chat",
-                "title": "Chat với Moon",
-              }
-            ],
-          }]
-        }
-      }
-    }
-  }
-  return response;
-}
-
-
-// Lấy variable có sẵn trên website
-// function retrieveWebsiteVariables(variables) {
-//   var ret = {};
-
-//   var scriptContent = "";
-//   for (var i = 0; i < variables.length; i++) {
-//     var currVariable = variables[i];
-//     scriptContent +=
-//       "if (typeof " +
-//       currVariable +
-//       " !== 'undefined') document.body.setAttribute('tmp_" +
-//       currVariable +
-//       "', JSON.stringify(" +
-//       currVariable +
-//       "));\n";
-//   }
-
-//   var script = document.createElement("script");
-//   script.id = "tmpScript";
-//   script.appendChild(document.createTextNode(scriptContent));
-//   (document.body || document.head || document.documentElement).appendChild(
-//     script
-//   );
-
-//   for (var i = 0; i < variables.length; i++) {
-//     var currVariable = variables[i];
-//     ret[currVariable] = JSON.parse(
-//       document.body.getAttribute("tmp_" + currVariable)
-//     );
-//     document.body.removeAttribute("tmp_" + currVariable);
-//   }
-
-//   document.getElementById("tmpScript").remove();
-
-//   return ret;
-// }
