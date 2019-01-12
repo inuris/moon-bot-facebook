@@ -287,10 +287,7 @@ const CATEGORIES = {
 const WEBSITES = {
   ALDO: {
     TAX: 0.083,
-    MATCH: "aldoshoes",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "aldoshoes"
   },
   AMAZON: {
     TAX: 0.083,
@@ -318,158 +315,86 @@ const WEBSITES = {
   },
   BATHBODYWORKS: {
     TAX: 0.083,
-    MATCH: "bathandbodyworks",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "bathandbodyworks"
   },
   BHCOSMETICS: {
     TAX: 0,
-    MATCH: "bhcosmetics",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "bhcosmetics"
   },
   CARTERS: {
     TAX: 0.083,
     MATCH: "carters",
-    DETAILBLOCK: "",
     PRICEBLOCK:
-      '.product-price-container .price-sales-usd',
-    SHIPPINGBLOCK:
-      ''
+      '.product-price-container .price-sales-usd'
   },
   CLINIQUE: {
     TAX: 0.083,
-    MATCH: "clinique",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "clinique"
   },
   FOREVER21: {
     TAX: 0.083,
     MATCH: "forever21",
-    DETAILBLOCK: "",
-    PRICEBLOCK: ['#ItemPrice'],
-    SHIPPINGBLOCK: ''
+    PRICEBLOCK: ['#ItemPrice']
   },
   FRAGRANCENET: {
     TAX: 0,
-    MATCH: "fragrancenet",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "fragrancenet.com"
   },
   GAP: {
     TAX: 0.083,
-    MATCH: "www.gap.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "gap.com"
   },
   HM: {
     TAX: 0.083,
-    MATCH: "www.hm.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "hm.com"
   },
   JOMASHOP: {
     TAX: 0,
-    MATCH: "www.jomashop.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "jomashop.com"
   },
   LOFT: {
     TAX: 0.083,
-    MATCH: "www.loft.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "loft.com"
   },
   NINEWEST: {
     TAX: 0.083,
-    MATCH: "www.ninewest.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "ninewest.com"
   },
   OLDNAVY: {
     TAX: 0.083,
-    MATCH: "www.oldnavy.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "oldnavy.com"
   },
   OSHKOSH: {
     TAX: 0.083,
-    MATCH: "www.oshkosh.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "oshkosh.com"
   },
   RALPHLAUREN: {
     TAX: 0.083,
-    MATCH: "www.ralphlauren.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "ralphlauren.com"
   },
   RUELALA: {
     TAX: 0,
-    MATCH: "www.reulala.com",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "reulala.com"
   },
   THEBODYSHOP: {
     TAX: 0.083,
-    MATCH: "www.thebodyshop.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
-  },
-  TOYSRUS: {
-    TAX: 0.083,
-    MATCH: "www.toysrus.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
-  },
-  BABIESRUS: {
-    TAX: 0.083,
-    MATCH: "babiesrus.toysrus.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "thebodyshop.com"
   },
   VICTORIASSECRET: {
     TAX: 0.083,
-    MATCH: "www.victoriassecret.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "victoriassecret.com"
   },
   WALGREENS: {
     TAX: 0.083,
-    MATCH: "www.walgreens.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "walgreens.com"
   },
   VITACOST: {
     TAX: 0,
-    MATCH: "www.vitacost.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "vitacost.com"
   },
   ZULILY: {
     TAX: 0,
-    MATCH: "www.zulily.com",
-    DETAILBLOCK: "",
-    PRICEBLOCK: "",
-    SHIPPINGBLOCK: ""
+    MATCH: "zulily.com"
   }
 };
 
@@ -542,11 +467,15 @@ class Parser{
   }
 }
 class AmazonCategory{
-  constructor(detailArray){
+  constructor(){
+    this.string = "";
+    this.att = CATEGORIES["UNKNOWN"];
+  }
+  setCategory(detailArray){
     var found=false;
     var catString="";
     var catType="GENERAL"; 
-    if (detailArray!== null)
+    if (detailArray!== null){
       for(var i =0;i<detailArray.length;i++){
         if (detailArray[i].indexOf("sellers rank")>=0){ 
           catString=detailArray[i].replace(/\s{2,}|\..+ {.+}|see top 100| in |(amazon )?best sellers rank:?|#\d*,?\d*/gi, "|");
@@ -566,6 +495,7 @@ class AmazonCategory{
           }
         }            
       }
+    }
     if (found===false){
       catType= "UNKNOWN";
     }
@@ -589,10 +519,15 @@ class AmazonCategory{
   }
 }
 class AmazonWeight{
-  constructor(detailArray){
+  constructor(){ 
+    this.current="";
+    this.kg=0;
+    this.unit="";
+  }
+  setWeight(detailArray){
     var current= "",
-      kg= 0,
-      unit= "";
+        kg= 0,
+        unit= "";
     //console.log(detailArray);
     var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
     if (detailArray!== null)
@@ -624,10 +559,15 @@ class AmazonWeight{
     this.current=current;
     this.kg=kg;
     this.unit=weightUnit;
+
   }
 }
 class Price{
-  constructor(priceString, reg){
+  constructor(){
+    this.string = "";
+    this.value = 0;
+  }
+  setPrice(priceString, reg){
     this.string = priceString;
     var tempString = priceString.replace(/\s+/gm," ")
                                 .trim()        
@@ -679,23 +619,37 @@ class Item{
         console.log(error);
       } else {
         var myparser = new Parser(dom);
-        var priceString = myparser.getText(website.att.PRICEBLOCK);        
-        var price=new Price(priceString);
 
-        var shippingString = myparser.getText(website.att.SHIPPINGBLOCK);
-        var regShipping=/\d+.?\d*/gm;
-        var shipping=new Price(shippingString, regShipping);
+        var price=new Price();
+        if (website.att.PRICEBLOCK!==undefined){
+          var priceString = myparser.getText(website.att.PRICEBLOCK); 
+          price.setPrice(priceString);
+        }
 
+        var shipping=new Price();
+        if (website.att.SHIPPINGBLOCK!==undefined){
+          var shippingString = myparser.getText(website.att.SHIPPINGBLOCK);
+          var regShipping=/\d+.?\d*/gm;
+          shipping.setPrice(shippingString, regShipping);
+        }
+        
+        var weight = new AmazonWeight();
+        var category=new AmazonCategory();  
+        if (website.att.DETAILBLOCK!==undefined){
+          var detailArray = myparser.getTextArray(website.att.DETAILBLOCK);
+          weight.setWeight(detailArray);          
+          category.setCategory(detailArray); 
+        }
         // detailArray gồm nhiều row trong table chứa Detail
-        var detailArray = myparser.getTextArray(website.att.DETAILBLOCK);
-
+        
+              
         this.webtax = website.att.TAX; // Thuế tại Mỹ của từng web
         this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD']; // Quy đổi ngoại tệ
         this.price=price; // Giá item
         this.shipping=shipping; // Giá ship của web
         this.priceshipping= Price.getPriceShipping(price, shipping); // Tổng giá item và ship
-        this.weight=new AmazonWeight(detailArray);          
-        this.category=new AmazonCategory(detailArray); 
+        this.weight=weight;          
+        this.category=category; 
 
         this.total =  this.calculatePrice();
         this.totalString=(this.total===0?"":this.toVND(this.total));;
