@@ -3,13 +3,12 @@ const PAGE_ACCESS_TOKEN = {
   949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938 // Rôm Rốp
 };
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
-const amazon = require("./amazon.js");
-const select = require("soupselect-update").select;
+const Website = require("./moon.js").Website;
+const Item = require("./moon.js").Item;
 // Imports dependencies and set up http server
 const request = require("request"),
   express = require("express"),
   body_parser = require("body-parser"),
-  htmlparser = require("htmlparser2"),
   app = express().use(body_parser.json()); // creates express http server
 
 // Sets server port and logs message on success
@@ -78,8 +77,8 @@ function handleMessage(page_id, sender_psid, received_message) {
 
   // Check if the message contains text
   if (received_message.text) {
-    var website= new Moon.Website(received_message.text);
-    if (website.name!==null){      
+    var website= new Website(received_message.text);
+    if (website.found === true){      
       var requestOptions = {
         method: "GET",
         url: website.url,
@@ -87,13 +86,9 @@ function handleMessage(page_id, sender_psid, received_message) {
       };
       request(requestOptions, function(error, response, body) {
         website.setHtmlRaw(body);
-        var item = Moon.Item(website);
+        var item = new Item(website);
         response=item.toFBResponse;
-        // response = {
-        // "text": price
-        // }
-
-        //callSendAPI(page_id, sender_psid, response);
+        callSendAPI(page_id, sender_psid, response);
       });           
     }
   }
@@ -143,22 +138,22 @@ function callSendAPI(page_id, sender_psid, response) {
 }
 // For Test only
 
-function getAmazonPrice() {
-  var url="https://www.amazon.com/Subwoofer-meidong-Bluetooth-KY-2022/dp/B07J64XH1S/ref=br_msw_pdt-3?_encoding=UTF8&smid=A1DD8WAGHSJ7M5&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=ZFK2XXAHP42WTY2E7Z4Q&pf_rd_t=36701&pf_rd_p=28b04fc5-b068-4db7-9f75-c6ec32ddbd9a&pf_rd_i=desktop";
-  var website= new Moon.Website(url);
-    if (website.name!==null){      
-      var requestOptions = {
-        method: "GET",
-        url: website.url,
-        gzip: true
-      };
-      request(requestOptions, function(error, response, body) {
-        website.setHtmlRaw(body);
-        var item = Moon.Item(website);
-        response=item.toFBResponse;
-      });           
-    }
-  console.log(price);
-  return price;
-}
-getAmazonPrice();
+// function getAmazonPrice() {
+//   var url="https://www.amazon.com/%F0%9F%8D%92Jonerytime%F0%9F%8D%92Eye-Padded-Travel-Sleeping-Blindfold/dp/B07JNMGJS8/ref=bbp_bb_9ea285_st_9gcl_w_62?psc=1&smid=A1XSX0P82J8LUG&fbclid=IwAR08HFMeIcOaANSIgZ9GlwH_MEj2KzcxypE5isoYnhW4k0RjvE1bgrYv1GY";
+//   var response;
+//   var website= new Website(url);
+//     if (website.name!==null){      
+//       var requestOptions = {
+//         method: "GET",
+//         url: website.url,
+//         gzip: true
+//       };
+//       request(requestOptions, function(error, response, body) {
+//         website.setHtmlRaw(body);
+//         var item = new Item(website);
+//         response=item.toFBResponse;
+//       });           
+//     }
+//   return response;
+// }
+//getAmazonPrice();

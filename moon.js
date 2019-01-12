@@ -1,10 +1,14 @@
+"use strict"
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
 const logger = require('./logger.js').logger;
-const RATE_USD_VND = 24000;
+const RATE = {
+  'USD': 24000,
+  'EUR': 30000
+}
 const CATEGORIES = {
   GLASSES: {
-    NAME: "GLASSES",
+    ID: "GLASSES",
     SHIP: 0,
     EXTRA: 5,
     PRICEEXTRA: 0,
@@ -17,7 +21,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   BELT: {
-    NAME: "BELT",
+    ID: "BELT",
     SHIP: 11,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -30,7 +34,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   WATCH: {
-    NAME: "WATCH",
+    ID: "WATCH",
     SHIP: 0,
     EXTRA: 15,
     PRICEEXTRA: 0,
@@ -43,7 +47,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   JEWELRY: {
-    NAME: "JEWELRY",
+    ID: "JEWELRY",
     SHIP: 0,
     EXTRA: 5,
     PRICEEXTRA: 0,
@@ -56,7 +60,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["> shoes", "cleaning", "care"]
   },
   BIKE: {
-    NAME: "BIKE",
+    ID: "BIKE",
     SHIP: 12,
     EXTRA: 40,
     PRICEEXTRA: 0,
@@ -69,7 +73,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["accessories"]
   },
   KITCHENAPPLIANCE: {
-    NAME: "KITCHENAPPLIANCE",
+    ID: "KITCHENAPPLIANCE",
     SHIP: 12,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -82,7 +86,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["> paper & plastic"]
   },
   DVD: {
-    NAME: "DVD",
+    ID: "DVD",
     SHIP: 10,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -95,7 +99,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["accessories", "controllers", " > consoles", "cards"]
   },
   CHEMICAL_VITAMIN: {
-    NAME: "CHEMICAL_VITAMIN",
+    ID: "CHEMICAL_VITAMIN",
     SHIP: 11,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -117,7 +121,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["> professional dental supplies", "> toothbrushes","diffusers", "candles"]
   },
   PHONE_TABLET_LAPTOP: {
-    NAME: "PHONE_TABLET_LAPTOP",
+    ID: "PHONE_TABLET_LAPTOP",
     SHIP: 12,
     EXTRA: 40,
     PRICEEXTRA: 70,
@@ -135,7 +139,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["computer components","laptop accessories","tablet accessories","computer accessories"]
   },
   CONSOLE: {
-    NAME: "CONSOLE",
+    ID: "CONSOLE",
     SHIP: 13,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -148,7 +152,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   CAMERA: {
-    NAME: "CAMERA",
+    ID: "CAMERA",
     SHIP: 0,
     EXTRA: 35,
     PRICEEXTRA: 0,
@@ -161,7 +165,7 @@ const CATEGORIES = {
     NOTKEYWORD: ["accessories"]
   },
   GOLF: {
-    NAME: "GOLF",
+    ID: "GOLF",
     SHIP: 12,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -174,7 +178,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   DIGITAL: {
-    NAME: "DIGITAL",
+    ID: "DIGITAL",
     SHIP: 13,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -215,7 +219,7 @@ const CATEGORIES = {
     ]
   },
   AUTOMOTIVE: {
-    NAME: "AUTOMOTIVE",
+    ID: "AUTOMOTIVE",
     SHIP: 11,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -229,7 +233,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   MILK: {
-    NAME: "MILK",
+    ID: "MILK",
     SHIP: 7.5,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -242,7 +246,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   CLOTHES: {
-    NAME: "CLOTHES",
+    ID: "CLOTHES",
     SHIP: 8.5,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -255,7 +259,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   GENERAL: {
-    NAME: "GENERAL",
+    ID: "GENERAL",
     SHIP: 8.5,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -268,7 +272,7 @@ const CATEGORIES = {
     NOTKEYWORD: []
   },
   UNKNOWN: {
-    NAME: "UNKNOWN",
+    ID: "UNKNOWN",
     SHIP: 0,
     EXTRA: 0,
     PRICEEXTRA: 0,
@@ -291,11 +295,11 @@ const WEBSITES = {
   },
   AMAZON: {
     TAX: 0.083,
-    MATCH: "amazon",
+    MATCH: "amazon.com",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
-      "#detailBullets_feature_div span.a-list-item",
       "#detailBulletsWrapper_feature_div li",
+      "#detailBullets_feature_div span.a-list-item",
       "#prodDetails tr",
       "#detail-bullets .content li",
       "#technical-details-table tr",
@@ -332,7 +336,7 @@ const WEBSITES = {
     MATCH: "carters",
     DETAILBLOCK: "",
     PRICEBLOCK:
-      'document.getElementsByClassName("product-price-container desktopvisible")[0].getElementsByClassName("price-sales-usd")[0]',
+      '.product-price-container .price-sales-usd',
     SHIPPINGBLOCK:
       ''
   },
@@ -469,10 +473,7 @@ const WEBSITES = {
     SHIPPINGBLOCK: ""
   }
 };
-module.exports = {
-  Website,
-  Item
-};
+
 // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
 Number.prototype.formatMoney = function(c, d, t) {
   var n = this,
@@ -504,28 +505,32 @@ class Parser{
     this.dom=dom;
   }
   getText(blockElementArray, index = 0){
-    for (var i = 0; i < blockElementArray.length; i++) {
-        var text = select(this.dom, blockElementArray[i]);   
-        //console.log(htmlparser.DomUtils.getText(text));
-        if (text != null) {        
-          return htmlparser.DomUtils.getText(text[index]);
-        }
-    }  
+    if (blockElementArray!==undefined)      
+      for (var i = 0; i < blockElementArray.length; i++) {          
+          var text = select(this.dom, blockElementArray[i]);
+          //console.log(htmlparser.DomUtils.getText(text));
+          if (text.length>0) {        
+            return htmlparser.DomUtils.getText(text[index]);
+          }
+      }  
     return "";
   }
   getTextArray(blockElementArray){
     var textArray=[];
+    if (blockElementArray!==undefined)
     for (var i = 0; i < blockElementArray.length; i++) {
       // Nguyên table data
-      var textTable = select(this.dom, blockElementArray[i]);   
-      for (var e of detailTable){
+      //console.log(blockElementArray[i]);
+      var textTable = select(this.dom, blockElementArray[i]);  
+      
+      for (var e of textTable){
         if (e.type === "tag") {
           //row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
           var row = e.children;
           try{
             var rowText=htmlparser.DomUtils.getText(row).replace(/\s+/gm," ")
                                                         .trim()
-                                                        .toLowerCase();
+                                                        .toLowerCase();            
             textArray.push(rowText);
           }
           catch (err) {}
@@ -540,30 +545,32 @@ class Parser{
 class AmazonCategory{
   constructor(detailArray){
     var found=false;
+    if (detailArray!== null)
     for(var i =0;i<detailArray.length;i++){
-      if (detailArray[i].indexOf("sellers rank")>=0){
+      if (detailArray[i].indexOf("sellers rank")>=0){        
         this.string=detailArray[i].replace(/\s{2,}|\..+ {.+}|see top 100| in|(amazon )*best sellers rank:|#\d*,?\d*/gm, "");;
         found=true;
+        
         // Query từng KEYWORD trong category
         for (var cat in CATEGORIES) {
           if (
-            checkKeyword(
-              detailArray[i],
+            this.checkKeyword(
+              this.string,
               CATEGORIES[cat].KEYWORD,
               CATEGORIES[cat].NOTKEYWORD
             ) === true
           ){
-            this.category = CATEGORIES[cat];            
+            this.att = CATEGORIES[cat];            
             break;
           }          
         }
-        this.category= CATEGORIES["GENERAL"];
+        this.att= CATEGORIES["GENERAL"];
       }            
     }
     if (found===false){
       this.string="";
-      this.category= CATEGORIES["UNKNOWN"];
-    }    
+      this.att= CATEGORIES["UNKNOWN"];
+    }   
   }  
   // Kiểm tra keyword có tồn tại trong array include và không tồn tại trong exclude
   // checkkeyword(string,array,array)
@@ -587,12 +594,14 @@ class AmazonWeight{
       kg= 0,
       unit= "";
     //console.log(detailArray);
-    var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/;    
+    var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
+    if (detailArray!== null)
     for (var i = 0; i < detailArray.length; i++) {
       if (detailArray[i].indexOf("weight") >= 0 || detailArray[i].indexOf("dimensions") >= 0){
         var weightReg = detailArray[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
         //console.log(weightReg);
         if (weightReg !== null) {
+          var weightString = weightReg[0];
           var weight = parseFloat(weightReg[1]);
           var weightKg = weight;
           
@@ -605,7 +614,7 @@ class AmazonWeight{
             kg < weightKg ||
             detailArray[i].indexOf("shipping weight") >= 0
           ) {
-            current = weight.toString();
+            current = weightString;
             kg = weightKg;
             unit = weightUnit;
           }
@@ -624,13 +633,13 @@ class Price{
                                 .trim()        
                                 .replace(/\$\s*|,/gm, "")
                                 .replace(" ", ".");
-    if (reg !== null){      
+    if (reg !== undefined){      
         var tempMatch = tempString.match(reg)
         if (tempMatch!=null){
           tempString=tempMatch[0];
         }   
-    }
-    this.value=parseFloat(tempString);
+    }    
+    this.value=(tempString!==""?parseFloat(tempString):0);
   }
   static getPriceShipping(price, ship){
     return price.value + ship.value;
@@ -639,23 +648,22 @@ class Price{
 class Website{
   constructor(url){
     this.url=url;
-    var reg=/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/igm;
-    var tempName="";
-    var tempMatch = url.match(reg);
+    this.found=false;
+    var reg=/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/i;
+    var tempWeb;
+    var tempMatch = url.match(reg);    
     if (tempMatch!==null){
-      for (var web in WEBSITES){
-        if(WEBSITES[web].MATCH.indexOf(tempMatch[1])>=0){
-          tempName = web;
+      for (var web in WEBSITES){             
+        if(tempMatch[1].indexOf(WEBSITES[web].MATCH)>=0){
+          tempWeb = WEBSITES[web];
+          break;
         }          
       }
     }
-    if (tempName!==""){
-      this.name=tempName;
+    if (tempWeb!==null){
+      this.att=tempWeb;
       this.htmlraw="";
-
-      this.priceBlock=WEBSITE[tempName].PRICEBLOCK;
-      this.shippingBlock=WEBSITE[tempName].SHIPPINGBLOCK;
-      this.detailBlock=WEBSITE[tempName].DETAILBLOCK;
+      this.found=true;
     }        
   }
   setHtmlRaw(htmlraw){
@@ -663,70 +671,69 @@ class Website{
   }
 }
 class Item{
-  constructor(website){   
-    if (website.name !==""){
-      var handler = new htmlparser.DomHandler((error, dom) => {
-        if (error) {
-          console.log(error);
-        } else {
-          var myparser = new Parser(dom);
-  
-          var priceString = myparser.getText(website.priceBlock);        
-          var price=new Price(priceString);
-  
-          var shippingString = myparser.getText(website.shippingBlock);
-          var regShipping=/\d+.?\d*/gm;
-          var shipping=new Price(shippingString, regShipping);
-  
-          this.price=price;
-          this.shipping=shipping;
-          this.priceshipping= Price.getPriceShipping(price, shipping);
-  
-          // detailArray gồm nhiều row trong table chứa Detail
-          var detailArray = myparser.getTextArray(website.detailBlock);
-          this.weight=new AmazonWeight(detailArray);
-          this.category=new AmazonCategory(detailArray); 
+  constructor(website){ 
+    this.webtax = website.att.TAX;
+    this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD'];
+    var handler = new htmlparser.DomHandler((error, dom) => {
+      if (error) {
+        console.log(error);
+      } else {
+        var myparser = new Parser(dom);
+        var priceString = myparser.getText(website.att.PRICEBLOCK);        
+        var price=new Price(priceString);
 
-          this.total=  calculatePrice();
-          this.totalString=(this.total===0?"":this.toVND(item.total));;
+        var shippingString = myparser.getText(website.att.SHIPPINGBLOCK);
+        var regShipping=/\d+.?\d*/gm;
+        var shipping=new Price(shippingString, regShipping);          
+        this.price=price;
+        this.shipping=shipping;
+        this.priceshipping= Price.getPriceShipping(price, shipping);
 
-          if (this.weight.value===0||item.category.NAME === "UNKNOWN"){
-            logger.log('error','{\n"URL":"%s",\n"PRICE":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', url, this.priceshipping,this.weight.string,this.category.NAME,this.totalString,this.category.string);
-          }
-          else{
-            logger.log('info','{\n"URL":"%s",\n"PRICE":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', url, this.priceshipping,this.weight.string,this.category.NAME,this.totalString,this.category.string);
-          }
+        // detailArray gồm nhiều row trong table chứa Detail
+        var detailArray = myparser.getTextArray(website.att.DETAILBLOCK);
+
+        this.weight=new AmazonWeight(detailArray);          
+        this.category=new AmazonCategory(detailArray); 
+
+        this.total =  this.calculatePrice();
+        this.totalString=(this.total===0?"":this.toVND(this.total));;
+
+        if (this.weight.value===0 || this.category.ID === "UNKNOWN"){
+          logger.log('error','{\n"URL":"%s",\n"PRICE":"%s ~ %s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, this.price.string, this.priceshipping,this.weight.current,this.category.att.ID,this.totalString,this.category.string);
         }
-      });
-      var parser = new htmlparser.Parser(handler, { decodeEntities: true });
-      parser.parseComplete(website.htmlraw);      
-    }    
+        else{
+          logger.log('info','{\n"URL":"%s",\n"PRICE":"%s ~ %s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, this.price.string, this.priceshipping,this.weight.current,this.category.att.ID,this.totalString,this.category.string);
+        }
+      }
+    });
+    var parser = new htmlparser.Parser(handler, { decodeEntities: true });
+    parser.parseComplete(website.htmlraw);  
   }
   calculatePrice(){
     var itemPrice = this.priceshipping;
     var category= this.category;
-    var itemTax = itemPrice * website.tax; // Thuế tại Mỹ
+    var itemTax = itemPrice * this.webtax; // Thuế tại Mỹ
     var itemPriceAfterTax = itemPrice + itemTax; // Giá Sau Thuế
-    //console.log("tax: " + itemTax + " (" + WEBSITES[website].TAX * 100 + "%)");
+    //console.log("tax: " + itemTax + " (" + this.webtax * 100 + "%)");
   
     var itemMoon = itemPriceAfterTax * (itemPriceAfterTax < 300 ? 0.07 : 0.05); // Công mua tính theo Giá Sau Thuế
     //console.log("moon: " + itemMoon);
   
-    var itemWeight = Math.ceil(this.weight * 10) / 10;
-    var itemShip = itemWeight * category.SHIP; // Giá ship theo cân nặng
-    //console.log("ship: $" + CATEGORIES[category].SHIP + "/kg x " + itemWeight + "kg");
+    var itemWeight = Math.ceil(this.weight.kg * 10) / 10;
+    var itemShip = itemWeight * category.att.SHIP; // Giá ship theo cân nặng
+    //console.log("ship: $" + category.att.SHIP + "/kg x " + itemWeight + "kg");
   
     var itemPriceExtra =
-    category.EXTRA +
-      (itemPrice >= category.PRICEANCHOR
-        ? category.PRICEEXTRA
+    category.att.EXTRA +
+      (itemPrice >= category.att.PRICEANCHOR
+        ? category.att.PRICEEXTRA
         : 0); /// Phụ thu theo cái
-    //console.log("extra: " + CATEGORIES[category].EXTRA);
+    //console.log("extra: " + category.att.EXTRA);
   
     var itemHQEXTRA =
       itemPrice *
-      (itemPrice >= category.HQANCHOR
-        ? category.HQEXTRA
+      (itemPrice >= category.att.HQANCHOR
+        ? category.att.HQEXTRA
         : 0); // Phụ thu giá trị cao (HQANCHOR)
     //console.log("high price extra: " + itemHQEXTRA);
   
@@ -753,7 +760,7 @@ class Item{
     // }
   
     var response;
-    if (item.totalString ==""){
+    if (this.totalString ==""){
       response= {
         "attachment": {
           "type": "template",
@@ -776,14 +783,13 @@ class Item{
     }
     else{
       var itemTitle, itemSubtitle;
-      itemTitle='[Auto] Giá dự kiến: ' + item.totalString;
-      //itemTitle+='(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
+      itemTitle='[Auto] Giá dự kiến: ' + this.totalString;
       // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
-      if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN'){
+      if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
         itemSubtitle = 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về';
       }
       else{
-        itemSubtitle = 'Đã bao gồm ' + CATEGORIES[item.category].NOTE + ' mặt hàng ' + CATEGORIES[item.category].NAME;      
+        itemSubtitle = 'Đã bao gồm ' + this.category.att.NOTE + ' mặt hàng ' + this.category.att.NAME;     
       };
       response = {
         "attachment": {
@@ -808,7 +814,9 @@ class Item{
     return response;
   }
   toVND(price){
-    var priceNew = Math.ceil((price * RATE_USD_VND) / 5000) * 5000; //Làm tròn lên 5000  
-    return num.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
+    var priceNew = Math.ceil((price * this.webrate) / 5000) * 5000; //Làm tròn lên 5000  
+    return priceNew.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
   }
 }
+module.exports.Website=Website;
+module.exports.Item=Item;
