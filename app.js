@@ -5,6 +5,7 @@ const PAGE_ACCESS_TOKEN = {
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
 const Website = require("./moon.js").Website;
 const Item = require("./moon.js").Item;
+const logger = require('./logger.js').logger;
 // Imports dependencies and set up http server
 const request = require("request"),
   express = require("express"),
@@ -78,6 +79,7 @@ function handleMessage(page_id, sender_psid, received_message) {
   // Check if the message contains text
   if (received_message.text) {
     var website= new Website(received_message.text);
+    // Nếu có trong list website thì mới trả lời
     if (website.found === true){      
       var requestOptions = {
         method: "GET",
@@ -85,9 +87,16 @@ function handleMessage(page_id, sender_psid, received_message) {
         gzip: true
       };
       request(requestOptions, function(error, response, body) {
+        // Đưa html raw vào website
         website.setHtmlRaw(body);
-        var item = new Item(website);
-        response=item.toFBResponse;
+        var item = new Item(website);   
+
+        // Log to file
+        var logtype='info';
+        if (item.weight.value===0 || item.category.ID === "UNKNOWN") {logtype='error';}
+        logger.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s ~ %s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, item.price.string, item.priceshipping,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
+
+        response=item.toFBResponse();
         callSendAPI(page_id, sender_psid, response);
       });           
     }

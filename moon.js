@@ -1,7 +1,6 @@
 "use strict"
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
-const logger = require('./logger.js').logger;
 const RATE = {
   'USD': 24000,
   'EUR': 30000
@@ -650,7 +649,7 @@ class Website{
     this.url=url;
     this.found=false;
     var reg=/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/i;
-    var tempWeb;
+    var tempWeb=null;
     var tempMatch = url.match(reg);    
     if (tempMatch!==null){
       for (var web in WEBSITES){             
@@ -671,9 +670,7 @@ class Website{
   }
 }
 class Item{
-  constructor(website){ 
-    this.webtax = website.att.TAX;
-    this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD'];
+  constructor(website){     
     var handler = new htmlparser.DomHandler((error, dom) => {
       if (error) {
         console.log(error);
@@ -684,26 +681,21 @@ class Item{
 
         var shippingString = myparser.getText(website.att.SHIPPINGBLOCK);
         var regShipping=/\d+.?\d*/gm;
-        var shipping=new Price(shippingString, regShipping);          
-        this.price=price;
-        this.shipping=shipping;
-        this.priceshipping= Price.getPriceShipping(price, shipping);
+        var shipping=new Price(shippingString, regShipping);
 
         // detailArray gồm nhiều row trong table chứa Detail
         var detailArray = myparser.getTextArray(website.att.DETAILBLOCK);
 
+        this.webtax = website.att.TAX; // Thuế tại Mỹ của từng web
+        this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD']; // Quy đổi ngoại tệ
+        this.price=price; // Giá item
+        this.shipping=shipping; // Giá ship của web
+        this.priceshipping= Price.getPriceShipping(price, shipping); // Tổng giá item và ship
         this.weight=new AmazonWeight(detailArray);          
         this.category=new AmazonCategory(detailArray); 
 
         this.total =  this.calculatePrice();
         this.totalString=(this.total===0?"":this.toVND(this.total));;
-
-        if (this.weight.value===0 || this.category.ID === "UNKNOWN"){
-          logger.log('error','{\n"URL":"%s",\n"PRICE":"%s ~ %s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, this.price.string, this.priceshipping,this.weight.current,this.category.att.ID,this.totalString,this.category.string);
-        }
-        else{
-          logger.log('info','{\n"URL":"%s",\n"PRICE":"%s ~ %s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, this.price.string, this.priceshipping,this.weight.current,this.category.att.ID,this.totalString,this.category.string);
-        }
       }
     });
     var parser = new htmlparser.Parser(handler, { decodeEntities: true });
