@@ -544,32 +544,33 @@ class Parser{
 class AmazonCategory{
   constructor(detailArray){
     var found=false;
+    var catString="";
+    var catType="GENERAL"; 
     if (detailArray!== null)
-    for(var i =0;i<detailArray.length;i++){
-      if (detailArray[i].indexOf("sellers rank")>=0){        
-        this.string=detailArray[i].replace(/\s{2,}|\..+ {.+}|see top 100| in|(amazon )*best sellers rank:|#\d*,?\d*/gm, "");;
-        found=true;
-        
-        // Query từng KEYWORD trong category
-        for (var cat in CATEGORIES) {
-          if (
-            this.checkKeyword(
-              this.string,
-              CATEGORIES[cat].KEYWORD,
-              CATEGORIES[cat].NOTKEYWORD
-            ) === true
-          ){
-            this.att = CATEGORIES[cat];            
-            break;
-          }          
-        }
-        this.att= CATEGORIES["GENERAL"];
-      }            
-    }
+      for(var i =0;i<detailArray.length;i++){
+        if (detailArray[i].indexOf("sellers rank")>=0){ 
+          catString=detailArray[i].replace(/\s{2,}|\..+ {.+}|see top 100| in |(amazon )?best sellers rank:?|#\d*,?\d*/gi, "|");
+          found=true;        
+          // Query từng KEYWORD trong category
+          for (var cat in CATEGORIES) {
+            if (
+              this.checkKeyword(
+                catString,
+                CATEGORIES[cat].KEYWORD,
+                CATEGORIES[cat].NOTKEYWORD
+              ) === true
+            ){
+              catType = cat;            
+              break;
+            }          
+          }
+        }            
+      }
     if (found===false){
-      this.string="";
-      this.att= CATEGORIES["UNKNOWN"];
-    }   
+      catType= "UNKNOWN";
+    }
+    this.string= catString;
+    this.att = CATEGORIES[catType];
   }  
   // Kiểm tra keyword có tồn tại trong array include và không tồn tại trong exclude
   // checkkeyword(string,array,array)
@@ -645,21 +646,23 @@ class Price{
   }
 }
 class Website{
-  constructor(url){
-    this.url=url;
+  constructor(url){    
     this.found=false;
-    var reg=/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/i;
-    var tempWeb=null;
-    var tempMatch = url.match(reg);    
+    var reg=/(?:(?:http|https):\/\/)?(\w*\.\w+\.\w+(?:\.\w+)?)+([\w- ;,./?%&=]*)?/i;
+    var tempWeb = null;
+    var tempUrl = "";
+    var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       for (var web in WEBSITES){             
         if(tempMatch[1].indexOf(WEBSITES[web].MATCH)>=0){
+          tempUrl = tempMatch[0];          
           tempWeb = WEBSITES[web];
           break;
         }          
       }
     }
     if (tempWeb!==null){
+      this.url=tempUrl;
       this.att=tempWeb;
       this.htmlraw="";
       this.found=true;
