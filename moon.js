@@ -321,6 +321,13 @@ const WEBSITES = {
     TAX: 0,
     MATCH: "bhcosmetics"
   },
+  BHPHOTOVIDEO: {
+    TAX: 0,
+    MATCH: "bhphotovideo.com",
+    PRICEBLOCK: [
+      ".ypYouPay"
+    ]
+  },
   CARTERS: {
     TAX: 0.083,
     MATCH: "carters",
@@ -636,12 +643,12 @@ class Item{
         var weight = new AmazonWeight();
         var category=new AmazonCategory();  
         if (website.att.DETAILBLOCK!==undefined){
+          // detailArray gồm nhiều row trong table chứa Detail
           var detailArray = myparser.getTextArray(website.att.DETAILBLOCK);
           weight.setWeight(detailArray);          
           category.setCategory(detailArray); 
         }
-        // detailArray gồm nhiều row trong table chứa Detail
-        
+               
               
         this.webtax = website.att.TAX; // Thuế tại Mỹ của từng web
         this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD']; // Quy đổi ngoại tệ
