@@ -326,7 +326,7 @@ const WEBSITES = {
     MATCH: "bhphotovideo.com",
     PRICEBLOCK: [
       ".ypYouPay",
-      ".itc-you-pay-price"
+      ".itc-you-pay .itc-you-pay-price"
     ]
   },
   CARTERS: {
