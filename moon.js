@@ -396,6 +396,13 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "walgreens.com"
   },
+  WALMART: {
+    TAX: 0,
+    MATCH: "walmart.com",
+    PRICEBLOCK: [
+      ".prod-PriceHero .price-group"
+    ]
+  },
   VITACOST: {
     TAX: 0,
     MATCH: "vitacost.com"
