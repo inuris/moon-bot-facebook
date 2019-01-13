@@ -145,11 +145,11 @@ function callSendAPI(page_id, sender_psid, response) {
     }
   );
 }
+
 // For Test only
 
-// function getAmazonPrice() {
-//   var url="https://www.amazon.com/%F0%9F%8D%92Jonerytime%F0%9F%8D%92Eye-Padded-Travel-Sleeping-Blindfold/dp/B07JNMGJS8/ref=bbp_bb_9ea285_st_9gcl_w_62?psc=1&smid=A1XSX0P82J8LUG&fbclid=IwAR08HFMeIcOaANSIgZ9GlwH_MEj2KzcxypE5isoYnhW4k0RjvE1bgrYv1GY";
-//   var response;
+// function testurl() {
+//   var url="https://www.amazon.com/%F0%9F%8D%92Jonerytime%F0%9F%8D%92Eye-Padded-Travel-Sleeping-Blindfold/dp/B07JNMGJS8/ref=bbp_bb_9ea285_st_9gcl_w_62?psc=1&smid=A1XSX0P82J8LUG&fbclid=IwAR08HFMeIcOaANSIgZ9GlwH_MEj2KzcxypE5isoYnhW4k0RjvE1bgrYv1GY";//   
 //   var website= new Website(url);
 //     if (website.name!==null){      
 //       var requestOptions = {
@@ -160,9 +160,8 @@ function callSendAPI(page_id, sender_psid, response) {
 //       request(requestOptions, function(error, response, body) {
 //         website.setHtmlRaw(body);
 //         var item = new Item(website);
-//         response=item.toFBResponse;
+//         console.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s",\n"SHIPPING":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, item.price.string, item.shipping.string,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
 //       });           
 //     }
-//   return response;
 // }
-//getAmazonPrice();
+//testurl();
