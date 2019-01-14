@@ -292,6 +292,7 @@ const WEBSITES = {
   AMAZON: {
     TAX: 0.083,
     MATCH: "amazon.com",
+    NAME: "Amazon",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
       "#detailBulletsWrapper_feature_div li",
@@ -324,6 +325,7 @@ const WEBSITES = {
   BHPHOTOVIDEO: {
     TAX: 0,
     MATCH: "bhphotovideo.com",
+    NAME: "BHPhotoVideo",
     PRICEBLOCK: [
       ".ypYouPay",
       ".itc-you-pay .itc-you-pay-price"
@@ -332,6 +334,7 @@ const WEBSITES = {
   CARTERS: {
     TAX: 0.083,
     MATCH: "carters",
+    NAME: "Carters",
     PRICEBLOCK:
       '.product-price-container .price-sales-usd'
   },
@@ -342,6 +345,7 @@ const WEBSITES = {
   FOREVER21: {
     TAX: 0.083,
     MATCH: "forever21",
+    NAME: "Forever21",
     PRICEBLOCK: ['#ItemPrice']
   },
   FRAGRANCENET: {
@@ -399,6 +403,7 @@ const WEBSITES = {
   WALMART: {
     TAX: 0,
     MATCH: "walmart.com",
+    NAME: "Walmart",
     PRICEBLOCK: [
       ".prod-PriceHero .price-group"
     ]
@@ -602,12 +607,14 @@ class Price{
 }
 class Website{
   constructor(url){    
-    this.found=false;
+    var found=false;
+    var isUrl=false;
     var reg=/(?:(?:http|https):\/\/)?(\w*\.\w+\.\w+(?:\.\w+)?)+([\w- ;,./?%&=]*)?/i;
     var tempWeb = null;
     var tempUrl = "";
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
+      isUrl=true;
       for (var web in WEBSITES){             
         if(tempMatch[1].indexOf(WEBSITES[web].MATCH)>=0){
           tempUrl = tempMatch[0];          
@@ -617,14 +624,26 @@ class Website{
       }
     }
     if (tempWeb!==null){
-      this.url=tempUrl;
-      this.att=tempWeb;
-      this.htmlraw="";
-      this.found=true;
-    }        
+      found = true;            
+    }      
+    this.url=tempUrl;
+    this.isUrl=isUrl;
+    this.att=tempWeb;
+    this.htmlraw="";
+    this.found = found;  
   }
   setHtmlRaw(htmlraw){
     this.htmlraw=htmlraw;
+  }
+  static getAvailableWebsite(){
+    var listweb = "";
+    for (var web in WEBSITES){             
+      if(WEBSITES[web].PRICEBLOCK !== undefined){
+        listweb += WEBSITES[web].NAME + ", "
+      }
+    }
+    listweb = listweb.substr(0, listweb.length-2);
+    return listweb;
   }
 }
 class Item{
@@ -727,21 +746,7 @@ class Item{
     }
     return response;
   }
-  toFBResponse(){
-    // var itemText = '[Auto Reply] ';
-    // if (item.totalString ==""){
-    //   itemText += 'Ko xác định được giá sản phẩm. Vui lòng liên hệ để được báo giá chính xác.';
-    // }
-    // else{
-    //   itemText += 'Giá của Moon: '+ item.totalString +'.\n';
-    //   if ((item.weight===0 && CATEGORIES[item.category].SHIP!==0) || item.category==='UNKNOWN')
-    //     // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
-    //     itemText += 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
-    //   else
-    //     itemText += 'Loại mặt hàng: ' + CATEGORIES[item.category].NAME +'.\n'+ CATEGORIES[item.category].NOTE +'.\n'
-    //     +'(Giá tham khảo, vui lòng liên hệ để được báo giá chính xác)';
-    // }
-  
+  toFBResponse(){  
     var response;
     if (this.totalString ==""){
       response= {
