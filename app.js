@@ -3,9 +3,9 @@ const PAGE_ACCESS_TOKEN = {
   949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938 // Rôm Rốp
 };
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
-const Website = require("./moon.js").Website;
-const Item = require("./moon.js").Item;
-const logger = require('./logger.js').logger;
+const Website = require("./core/moon.js").Website;
+const Item = require("./core/moon.js").Item;
+const logger = require('./core/logger.js').logger;
 // Imports dependencies and set up http server
 const request = require("request"),
   express = require("express"),
