@@ -707,7 +707,26 @@ class Item{
         : 0;
     //console.log("total: " + itemTotal);
     return itemTotal;
-  }  
+  }
+  toText(){
+    var response;
+    if (this.totalString ==""){
+      response= "Ko xác định được giá sản phẩm. Vui lòng chat với Moon để được báo giá chính xác."
+    }
+    else{
+      var itemTitle, itemSubtitle;
+      itemTitle='Giá dự kiến: ' + this.totalString+".";
+      // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
+      if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
+        itemSubtitle = ' Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
+      }
+      else{
+        itemSubtitle = ' Đã bao gồm ' + this.category.att.NOTE + ' mặt hàng ' + this.category.att.NAME + '.';     
+      };
+      response = itemTitle+itemSubtitle;
+    }
+    return response;
+  }
   toFBResponse(){
     // var itemText = '[Auto Reply] ';
     // if (item.totalString ==""){
