@@ -1,5 +1,5 @@
 "use strict"
-// from core
+// modify from facebook
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
 const RATE = {
