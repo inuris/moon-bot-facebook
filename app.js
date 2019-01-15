@@ -81,32 +81,8 @@ function handleMessage(page_id, sender_psid, received_message) {
     var website= new Website(received_message.text);
     // Nếu có trong list website thì mới trả lời
     if (website.found === true){      
-      var requestOptions = {
-        method: "GET",
-        url: website.url,
-        gzip: true
-      };
-      // Nếu website cần Cookie thì set
-      if (website.cookie !== null){
-        var cookie = request.cookie(website.cookie);
-        requestOptions.headers = {
-            'Cookie': cookie
-        };
-        requestOptions.jar = true;
-      }
-      request(requestOptions, function(error, response, body) {
-        // Đưa html raw vào website
-        website.setHtmlRaw(body);
-        var item = new Item(website);   
-
-        // Log to file
-        var logtype='info';
-        if (item.weight.value===0 || item.category.ID === "UNKNOWN") {logtype='error';}
-        logger.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s",\n"SHIPPING":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, item.price.string, item.shipping.string,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
-
-        response=item.toFBResponse();
-        callSendAPI(page_id, sender_psid, response);
-      });           
+      var message = await Website.getResponse(website);
+      callSendAPI(page_id, sender_psid, message);
     }
   }
 }
