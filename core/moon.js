@@ -2,6 +2,8 @@
 // modify from facebook
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
+const request = require("request");
+const logger = require('./logger.js').logger;
 const RATE = {
   'USD': 24000,
   'EUR': 30000
@@ -646,6 +648,41 @@ class Website{
   setHtmlRaw(htmlraw){
     this.htmlraw=htmlraw;
   }
+  static async getResponse(website, target){
+    const message = await new Promise(resolve => {                        
+      var requestOptions = {
+          method: "GET",
+          url: website.url,
+          gzip: true
+      };
+      // Nếu website cần Cookie thì set
+      if (website.cookie !== null){
+          var cookie = request.cookie(website.cookie);
+          requestOptions.headers = {
+              'Cookie': cookie
+          };
+          requestOptions.jar = true;
+      }
+      request(requestOptions, function(error, response, body) {
+          // Đưa html raw vào website
+          website.setHtmlRaw(body);  
+          var item = new Item(website);                 
+          // Log to file
+          var logtype='info';
+          if (item.weight.value===0 || item.category.ID === "UNKNOWN") {
+            logtype='error';
+          }
+          logger.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s",\n"SHIPPING":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, item.price.string, item.shipping.string,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
+          var _response= item.toText();
+          if (target === 'facebook')
+            _response = item.toFBResponse();
+          else
+            _response = item.toText();
+          resolve(_response);             
+      });  
+    })
+    return message;
+  }
   static getAvailableWebsite(){
     var listweb = "";
     for (var web in WEBSITES){             
@@ -656,6 +693,7 @@ class Website{
     listweb = listweb.substr(0, listweb.length-2);
     return listweb;
   }
+  
 }
 class Item{
   constructor(website){     
@@ -686,7 +724,6 @@ class Item{
           weight.setWeight(detailArray);          
           category.setCategory(detailArray); 
         }
-               
               
         this.webtax = website.att.TAX; // Thuế tại Mỹ của từng web
         this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD']; // Quy đổi ngoại tệ
