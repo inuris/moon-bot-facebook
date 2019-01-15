@@ -294,6 +294,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "amazon.com",
     NAME: "Amazon",
+    COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
       "#detailBulletsWrapper_feature_div li",
@@ -589,18 +590,23 @@ class Price{
     this.value = 0;
   }
   setPrice(priceString, reg){
-    this.string = priceString;
+    
     var tempString = priceString.replace(/\s+/gm," ")
-                                .trim()        
-                                .replace(/\$\s*|,/gm, "")
+                                .trim();
+    this.string = tempString;
+    tempString = tempString.replace(/\$\s*|,/gm, "")
                                 .replace(" ", ".");
     if (reg !== undefined){      
         var tempMatch = tempString.match(reg)
         if (tempMatch!=null){
           tempString=tempMatch[0];
         }   
-    }    
-    this.value=(tempString!==""?parseFloat(tempString):0);
+    } 
+    var value = parseFloat(tempString);
+    if (isNaN(value)){
+      value = 0;
+    }
+    this.value = value;
   }
   static getPriceShipping(price, ship){
     return price.value + ship.value;
@@ -613,6 +619,7 @@ class Website{
     var reg=/(?:(?:http|https):\/\/)?(\w*\.\w+\.\w+(?:\.\w+)?)+([\w- ;,./?%&=]*)?/i;
     var tempWeb = null;
     var tempUrl = "";
+    var tempCookie = null;
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
@@ -620,16 +627,19 @@ class Website{
         if(tempMatch[1].indexOf(WEBSITES[web].MATCH)>=0){
           tempUrl = tempMatch[0];          
           tempWeb = WEBSITES[web];
+          if (WEBSITES[web].COOKIE !== undefined) 
+            tempCookie=WEBSITES[web].COOKIE;
           break;
         }          
       }
     }
     if (tempWeb!==null){
       found = true;            
-    }      
+    }
     this.url=tempUrl;
     this.isUrl=isUrl;
     this.att=tempWeb;
+    this.cookie=tempCookie;
     this.htmlraw="";
     this.found = found;  
   }
