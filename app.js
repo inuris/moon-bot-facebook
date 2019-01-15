@@ -86,6 +86,14 @@ function handleMessage(page_id, sender_psid, received_message) {
         url: website.url,
         gzip: true
       };
+      // Nếu website cần Cookie thì set
+      if (website.cookie !== null){
+        var cookie = request.cookie(website.cookie);
+        requestOptions.headers = {
+            'Cookie': cookie
+        };
+        requestOptions.jar = true;
+      }
       request(requestOptions, function(error, response, body) {
         // Đưa html raw vào website
         website.setHtmlRaw(body);
