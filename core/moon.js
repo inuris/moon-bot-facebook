@@ -292,6 +292,17 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "aldoshoes"
   },
+  AMAZON3RD:{
+    TAX: 0.083,
+    MATCH: "amazon.com/gp/offer-listing",
+    COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
+    PRICEBLOCK: [
+      ".olpOfferPrice"
+    ],
+    SHIPPINGBLOCK: [
+      ".olpShippingInfo"
+    ]
+  },
   AMAZON: {
     TAX: 0.083,
     MATCH: "amazon.com",
@@ -313,6 +324,9 @@ const WEBSITES = {
       ".guild_priceblock_ourprice",
       ".offer-price",
       "#alohaPricingWidget .a-color-price"
+    ],
+    PRICE3RDBLOCK:[
+      "#availability a"
     ],
     SHIPPINGBLOCK: [
       "#ourprice_shippingmessage"
@@ -452,42 +466,65 @@ class Parser{
   constructor(dom){
     this.dom=dom;
   }
+  getLink(blockElementArray, index = 0){
+    try{
+      for (var i = 0; i < blockElementArray.length; i++) {          
+        var link = select(this.dom, blockElementArray[i]);
+        if (link.length>index && link[index].name==='a') {
+          return link[index].attribs.href;
+        }
+      }  
+      return "";
+    }
+    catch(e){
+      return "";
+    }
+  }
   getText(blockElementArray, index = 0){
-    if (blockElementArray!==undefined)      
+    try{    
       for (var i = 0; i < blockElementArray.length; i++) {          
           var text = select(this.dom, blockElementArray[i]);
           //console.log(htmlparser.DomUtils.getText(text));
-          if (text.length>0) {        
+          if (text.length>index) {        
             return htmlparser.DomUtils.getText(text[index]);
           }
-      }  
-    return "";
+      }
+      return "";
+    }
+    catch(e){
+      return "";
+    }
+    
   }
   getTextArray(blockElementArray){
-    var textArray=[];
-    if (blockElementArray!==undefined)
-    for (var i = 0; i < blockElementArray.length; i++) {
-      // Nguyên table data
-      //console.log(blockElementArray[i]);
-      var textTable = select(this.dom, blockElementArray[i]);  
-      
-      for (var e of textTable){
-        if (e.type === "tag") {
-          //row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
-          var row = e.children;
-          try{
-            var rowText=htmlparser.DomUtils.getText(row).replace(/\s+/gm," ")
-                                                        .trim()
-                                                        .toLowerCase();            
-            textArray.push(rowText);
+    try{
+      var textArray=[];
+      for (var i = 0; i < blockElementArray.length; i++) {
+        // Nguyên table data
+        //console.log(blockElementArray[i]);
+        var textTable = select(this.dom, blockElementArray[i]);  
+        
+        for (var e of textTable){
+          if (e.type === "tag") {
+            //row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
+            var row = e.children;
+            try{
+              var rowText=htmlparser.DomUtils.getText(row).replace(/\s+/gm," ")
+                                                          .trim()
+                                                          .toLowerCase();            
+              textArray.push(rowText);
+            }
+            catch (err) {}
           }
-          catch (err) {}
         }
-      }
-      if (textArray.length>0)
-        return textArray;
-    }  
-    return null;
+        if (textArray.length>0)
+          return textArray;
+      }    
+      return null;
+    }
+    catch(e){
+      return null;
+    }
   }
 }
 class AmazonCategory{
@@ -591,14 +628,13 @@ class Price{
     this.string = "";
     this.value = 0;
   }
-  setPrice(priceString, reg){
-    
+  setPrice(priceString, reg){    
     var tempString = priceString.replace(/\s+/gm," ")
                                 .trim();
     this.string = tempString;
     tempString = tempString.replace(/\$\s*|,/gm, "")
                                 .replace(" ", ".");
-    if (reg !== undefined){      
+    if (reg !== undefined){
         var tempMatch = tempString.match(reg)
         if (tempMatch!=null){
           tempString=tempMatch[0];
@@ -618,16 +654,20 @@ class Website{
   constructor(url){    
     var found=false;
     var isUrl=false;
-    var reg=/(?:(?:http|https):\/\/)?(\w*\.\w+\.\w+(?:\.\w+)?)+([\w- ;,./?%&=]*)?/i;
+    var reg=/((?:(?:http|https):\/\/)?(?:\w*\.\w+\.\w+)(?:\.\w+)?)+([\w-;,.\/?%&=]*)?/i;
     var tempWeb = null;
     var tempUrl = "";
+    var tempDomain="";
     var tempCookie = null;
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
       for (var web in WEBSITES){             
-        if(tempMatch[1].indexOf(WEBSITES[web].MATCH)>=0){
-          tempUrl = tempMatch[0];          
+        if(tempMatch[0].indexOf(WEBSITES[web].MATCH)>=0){
+          tempUrl = tempMatch[0]; 
+          tempDomain = tempMatch[1];
+          if (tempDomain.indexOf('http')!==0)
+            tempDomain="https://"+tempDomain;
           tempWeb = WEBSITES[web];
           if (WEBSITES[web].COOKIE !== undefined) 
             tempCookie=WEBSITES[web].COOKIE;
@@ -638,6 +678,7 @@ class Website{
     if (tempWeb!==null){
       found = true;            
     }
+    this.domain = tempDomain;
     this.url=tempUrl;
     this.isUrl=isUrl;
     this.att=tempWeb;
@@ -645,10 +686,10 @@ class Website{
     this.htmlraw="";
     this.found = found;  
   }
-  setHtmlRaw(htmlraw){
+  setDom(htmlraw){
     this.htmlraw=htmlraw;
   }
-  static async getResponse(website, target){
+  static async getResponse(website, bottype){
     const message = await new Promise(resolve => {                        
       var requestOptions = {
           method: "GET",
@@ -665,20 +706,15 @@ class Website{
       }
       request(requestOptions, function(error, response, body) {
           // Đưa html raw vào website
-          website.setHtmlRaw(body);  
-          var item = new Item(website);                 
+          website.setDom(body);  
+          var item = new Item(website);         
           // Log to file
           var logtype='info';
-          if (item.weight.value===0 || item.category.ID === "UNKNOWN") {
+          if (item.weight.value === 0 || item.category.ID === "UNKNOWN") {
             logtype='error';
           }
           logger.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s",\n"SHIPPING":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, item.price.string, item.shipping.string,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
-          var _response= item.toText();
-          if (target === 'facebook')
-            _response = item.toFBResponse();
-          else
-            _response = item.toText();
-          resolve(_response);             
+          resolve(item);
       });  
     })
     return message;
@@ -686,7 +722,7 @@ class Website{
   static getAvailableWebsite(){
     var listweb = "";
     for (var web in WEBSITES){             
-      if(WEBSITES[web].PRICEBLOCK !== undefined){
+      if(WEBSITES[web].PRICEBLOCK !== undefined && WEBSITES[web].NAME !== undefined){
         listweb += WEBSITES[web].NAME + ", "
       }
     }
@@ -706,7 +742,7 @@ class Item{
         var price=new Price();
         if (website.att.PRICEBLOCK!==undefined){
           var priceString = myparser.getText(website.att.PRICEBLOCK); 
-          price.setPrice(priceString);
+          price.setPrice(priceString);          
         }
 
         var shipping=new Price();
@@ -716,6 +752,13 @@ class Item{
           shipping.setPrice(shippingString, regShipping);
         }
         
+        var redirect="";
+        if (website.att.PRICE3RDBLOCK!==undefined){
+          var newurl = myparser.getLink(website.att.PRICE3RDBLOCK);
+          if (newurl!=="")
+            redirect = website.domain + newurl;            
+        }
+
         var weight = new AmazonWeight();
         var category=new AmazonCategory();  
         if (website.att.DETAILBLOCK!==undefined){
@@ -724,12 +767,15 @@ class Item{
           weight.setWeight(detailArray);          
           category.setCategory(detailArray); 
         }
-              
+        
         this.webtax = website.att.TAX; // Thuế tại Mỹ của từng web
         this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD']; // Quy đổi ngoại tệ
+        
         this.price=price; // Giá item
         this.shipping=shipping; // Giá ship của web
         this.priceshipping= Price.getPriceShipping(price, shipping); // Tổng giá item và ship
+
+        this.redirect=redirect;
         this.weight=weight;          
         this.category=category; 
 
@@ -739,7 +785,7 @@ class Item{
     });
     var parser = new htmlparser.Parser(handler, { decodeEntities: true });
     parser.parseComplete(website.htmlraw);  
-  }
+  }  
   calculatePrice(){
     var itemPrice = this.priceshipping;
     var category= this.category;
