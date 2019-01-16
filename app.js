@@ -73,7 +73,7 @@ app.get("/webhook", (req, res) => {
 });
 
 // Handles messages events
-function handleMessage(page_id, sender_psid, received_message) {
+async function handleMessage(page_id, sender_psid, received_message) {
   let response;
 
   // Check if the message contains text
@@ -82,7 +82,11 @@ function handleMessage(page_id, sender_psid, received_message) {
     // Nếu có trong list website thì mới trả lời
     if (website.found === true){      
       var message = await Website.getResponse(website);
-      callSendAPI(page_id, sender_psid, message);
+      if (message.price==0 && message.redirect!==""){
+          website= new Website(message.redirect);
+          message = await Website.getResponse(website);
+      }
+      callSendAPI(page_id, sender_psid, message.toFBResponse());
     }
   }
 }
