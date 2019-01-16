@@ -1,6 +1,11 @@
 "use strict"
+// modify from facebook
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
+const request = require("request");
+const logger = require('./logger.js').logger;
+const jp = require('jsonpath');
+
 const RATE = {
   'USD': 24000,
   'EUR': 30000
@@ -289,10 +294,22 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "aldoshoes"
   },
+  AMAZON3RD:{
+    TAX: 0.083,
+    MATCH: "amazon.com/gp/offer-listing",
+    COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
+    PRICEBLOCK: [
+      ".olpOfferPrice"
+    ],
+    SHIPPINGBLOCK: [
+      ".olpShippingInfo"
+    ]
+  },
   AMAZON: {
     TAX: 0.083,
     MATCH: "amazon.com",
     NAME: "Amazon",
+    COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
       "#detailBulletsWrapper_feature_div li",
@@ -309,6 +326,9 @@ const WEBSITES = {
       ".guild_priceblock_ourprice",
       ".offer-price",
       "#alohaPricingWidget .a-color-price"
+    ],
+    REDIRECT:[
+      "#availability a"
     ],
     SHIPPINGBLOCK: [
       "#ourprice_shippingmessage"
@@ -333,10 +353,11 @@ const WEBSITES = {
   },
   CARTERS: {
     TAX: 0.083,
-    MATCH: "carters",
+    MATCH: "carters.com",
     NAME: "Carters",
-    PRICEBLOCK:
+    PRICEBLOCK:[
       '.product-price-container .price-sales-usd'
+    ]
   },
   CLINIQUE: {
     TAX: 0.083,
@@ -344,9 +365,9 @@ const WEBSITES = {
   },
   FOREVER21: {
     TAX: 0.083,
-    MATCH: "forever21",
+    MATCH: "forever21.com",
     NAME: "Forever21",
-    PRICEBLOCK: ['#ItemPrice']
+    JSONBLOCK: "$.Offers.price"
   },
   FRAGRANCENET: {
     TAX: 0,
@@ -412,6 +433,18 @@ const WEBSITES = {
     TAX: 0,
     MATCH: "vitacost.com"
   },
+  ZARAUS:{
+    TAX: 0,
+    NAME: 'Zara',
+    MATCH: "zara.com/us",
+    JSONBLOCK: "$[0].offers.price"
+  },
+  ZARAES:{
+    TAX: 0,
+    RATE: 'EUR',
+    MATCH: "zara.com/es",
+    JSONBLOCK: "$[0].offers.price"
+  },
   ZULILY: {
     TAX: 0,
     MATCH: "zulily.com"
@@ -448,42 +481,93 @@ class Parser{
   constructor(dom){
     this.dom=dom;
   }
+  // Lấy ra đoạn JSON từ thẻ <script type='application/ld+json'
+  // Default sẽ lấy script đầu tiên, nếu cần lấy cái thứ n thì đổi index 
+  // Lấy ra element theo JSONPath của web.JSONBLOCK
+  getJSON(jsonpath, index = 1){
+    try{
+      var count=1;
+      var scriptBlock = select(this.dom, 'script');
+      for (var i = 0;i<scriptBlock.length; i++){
+        if (scriptBlock[i].attribs !== undefined && scriptBlock[i].attribs.type !== undefined && scriptBlock[i].attribs.type === 'application/ld+json'){
+          count++;
+          if (count>index){
+            var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));  
+            //console.log(json);      
+            return jp.query(json,jsonpath).toString();
+          }
+        }        
+      }
+      return "";
+    }
+    catch(e){
+      return "";
+    }
+  }
+
+  // Lấy ra link href trong thẻ <a>, từ danh sách các block chứa link web.REDIRECT
+  getLink(blockElementArray, index = 0){
+    try{
+      for (var i = 0; i < blockElementArray.length; i++) {          
+        var link = select(this.dom, blockElementArray[i]);
+        if (link.length>index && link[index].name==='a') {
+          return link[index].attribs.href;
+        }
+      }  
+      return "";
+    }
+    catch(e){
+      return "";
+    }
+  }
+  // Lấy ra plain text từ các array các block
   getText(blockElementArray, index = 0){
-    if (blockElementArray!==undefined)      
+    try{    
       for (var i = 0; i < blockElementArray.length; i++) {          
           var text = select(this.dom, blockElementArray[i]);
           //console.log(htmlparser.DomUtils.getText(text));
-          if (text.length>0) {        
+          if (text.length>index) {        
             return htmlparser.DomUtils.getText(text[index]);
           }
-      }  
-    return "";
-  }
-  getTextArray(blockElementArray){
-    var textArray=[];
-    if (blockElementArray!==undefined)
-    for (var i = 0; i < blockElementArray.length; i++) {
-      // Nguyên table data
-      //console.log(blockElementArray[i]);
-      var textTable = select(this.dom, blockElementArray[i]);  
-      
-      for (var e of textTable){
-        if (e.type === "tag") {
-          //row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
-          var row = e.children;
-          try{
-            var rowText=htmlparser.DomUtils.getText(row).replace(/\s+/gm," ")
-                                                        .trim()
-                                                        .toLowerCase();            
-            textArray.push(rowText);
-          }
-          catch (err) {}
-        }
       }
-      if (textArray.length>0)
-        return textArray;
-    }  
-    return null;
+      return "";
+    }
+    catch(e){
+      return "";
+    }
+    
+  }
+
+  // Lấy ra array text từ 1 bảng <td> hoặc <li>
+  getTextArray(blockElementArray){
+    try{
+      var textArray=[];
+      for (var i = 0; i < blockElementArray.length; i++) {
+        // Nguyên table data
+        //console.log(blockElementArray[i]);
+        var textTable = select(this.dom, blockElementArray[i]);  
+        
+        for (var e of textTable){
+          if (e.type === "tag") {
+            //row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
+            var row = e.children;
+            try{
+              var rowText=htmlparser.DomUtils.getText(row).replace(/\s+/gm," ")
+                                                          .trim()
+                                                          .toLowerCase();            
+              textArray.push(rowText);
+            }
+            catch (err) {}
+          }
+        }
+        if (textArray.length>0)
+          return textArray;
+      }    
+      return null;
+    }
+    catch(e){
+      return null;
+    }
   }
 }
 class AmazonCategory{
@@ -587,19 +671,23 @@ class Price{
     this.string = "";
     this.value = 0;
   }
-  setPrice(priceString, reg){
-    this.string = priceString;
+  setPrice(priceString, reg){    
     var tempString = priceString.replace(/\s+/gm," ")
-                                .trim()        
-                                .replace(/\$\s*|,/gm, "")
+                                .trim();
+    this.string = tempString;
+    tempString = tempString.replace(/\$\s*|,/gm, "")
                                 .replace(" ", ".");
-    if (reg !== undefined){      
+    if (reg !== undefined){
         var tempMatch = tempString.match(reg)
         if (tempMatch!=null){
           tempString=tempMatch[0];
         }   
-    }    
-    this.value=(tempString!==""?parseFloat(tempString):0);
+    } 
+    var value = parseFloat(tempString);
+    if (isNaN(value)){
+      value = 0;
+    }
+    this.value = value;
   }
   static getPriceShipping(price, ship){
     return price.value + ship.value;
@@ -609,42 +697,82 @@ class Website{
   constructor(url){    
     var found=false;
     var isUrl=false;
-    var reg=/(?:(?:http|https):\/\/)?(\w*\.\w+\.\w+(?:\.\w+)?)+([\w- ;,./?%&=]*)?/i;
+    var reg=/((?:(?:http|https):\/\/)?(?:\w*\.\w+\.\w+)(?:\.\w+)?)+([\w-;,.\/?%&=]*)?/i;
     var tempWeb = null;
     var tempUrl = "";
+    var tempDomain="";
+    var tempCookie = null;
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
       for (var web in WEBSITES){             
-        if(tempMatch[1].indexOf(WEBSITES[web].MATCH)>=0){
-          tempUrl = tempMatch[0];          
+        if(tempMatch[0].indexOf(WEBSITES[web].MATCH)>=0){
+          tempUrl = tempMatch[0]; 
+          tempDomain = tempMatch[1];
+          if (tempDomain.indexOf('http')!==0)
+            tempDomain="https://"+tempDomain;
           tempWeb = WEBSITES[web];
+          if (WEBSITES[web].COOKIE !== undefined) 
+            tempCookie=WEBSITES[web].COOKIE;
           break;
         }          
       }
     }
     if (tempWeb!==null){
       found = true;            
-    }      
+    }
+    this.domain = tempDomain;
     this.url=tempUrl;
     this.isUrl=isUrl;
     this.att=tempWeb;
+    this.cookie=tempCookie;
     this.htmlraw="";
     this.found = found;  
   }
-  setHtmlRaw(htmlraw){
+  setDom(htmlraw){
     this.htmlraw=htmlraw;
+  }
+  static async getResponse(website, bottype){
+    const message = await new Promise(resolve => {                        
+      var requestOptions = {
+          method: "GET",
+          url: website.url,
+          gzip: true
+      };
+      // Nếu website cần Cookie thì set
+      if (website.cookie !== null){
+          var cookie = request.cookie(website.cookie);
+          requestOptions.headers = {
+              'Cookie': cookie
+          };
+          requestOptions.jar = true;
+      }
+      request(requestOptions, function(error, response, body) {
+          // Đưa html raw vào website
+          website.setDom(body);  
+          var item = new Item(website);         
+          // Log to file
+          var logtype='info';
+          if (item.weight.value === 0 || item.category.ID === "UNKNOWN") {
+            logtype='error';
+          }
+          logger.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s",\n"SHIPPING":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, item.price.string, item.shipping.string,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
+          resolve(item);
+      });  
+    })
+    return message;
   }
   static getAvailableWebsite(){
     var listweb = "";
     for (var web in WEBSITES){             
-      if(WEBSITES[web].PRICEBLOCK !== undefined){
+      if(WEBSITES[web].PRICEBLOCK !== undefined && WEBSITES[web].NAME !== undefined){
         listweb += WEBSITES[web].NAME + ", "
       }
     }
     listweb = listweb.substr(0, listweb.length-2);
     return listweb;
   }
+  
 }
 class Item{
   constructor(website){     
@@ -657,6 +785,10 @@ class Item{
         var price=new Price();
         if (website.att.PRICEBLOCK!==undefined){
           var priceString = myparser.getText(website.att.PRICEBLOCK); 
+          price.setPrice(priceString);          
+        }
+        else if (website.att.JSONBLOCK!==undefined){
+          var priceString = myparser.getJSON(website.att.JSONBLOCK).toString(); 
           price.setPrice(priceString);
         }
 
@@ -667,6 +799,13 @@ class Item{
           shipping.setPrice(shippingString, regShipping);
         }
         
+        var redirect="";
+        if (website.att.REDIRECT!==undefined){
+          var newurl = myparser.getLink(website.att.REDIRECT);
+          if (newurl!=="")
+            redirect = website.domain + newurl;            
+        }
+
         var weight = new AmazonWeight();
         var category=new AmazonCategory();  
         if (website.att.DETAILBLOCK!==undefined){
@@ -675,13 +814,15 @@ class Item{
           weight.setWeight(detailArray);          
           category.setCategory(detailArray); 
         }
-               
-              
+        
         this.webtax = website.att.TAX; // Thuế tại Mỹ của từng web
         this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD']; // Quy đổi ngoại tệ
+        
         this.price=price; // Giá item
         this.shipping=shipping; // Giá ship của web
         this.priceshipping= Price.getPriceShipping(price, shipping); // Tổng giá item và ship
+
+        this.redirect=redirect;
         this.weight=weight;          
         this.category=category; 
 
@@ -691,7 +832,7 @@ class Item{
     });
     var parser = new htmlparser.Parser(handler, { decodeEntities: true });
     parser.parseComplete(website.htmlraw);  
-  }
+  }  
   calculatePrice(){
     var itemPrice = this.priceshipping;
     var category= this.category;
