@@ -327,7 +327,11 @@ const WEBSITES = {
       ".offer-price",
       "#alohaPricingWidget .a-color-price"
     ],
+<<<<<<< HEAD
     PRICE3RDBLOCK:[
+=======
+    REDIRECT:[
+>>>>>>> 2ddb2547cc01c4e4c0685cbb0912d0e6da210ebd
       "#availability a"
     ],
     SHIPPINGBLOCK: [
@@ -353,10 +357,11 @@ const WEBSITES = {
   },
   CARTERS: {
     TAX: 0.083,
-    MATCH: "carters",
+    MATCH: "carters.com",
     NAME: "Carters",
-    PRICEBLOCK:
+    PRICEBLOCK:[
       '.product-price-container .price-sales-usd'
+    ]
   },
   CLINIQUE: {
     TAX: 0.083,
@@ -432,6 +437,18 @@ const WEBSITES = {
     TAX: 0,
     MATCH: "vitacost.com"
   },
+  ZARAUS:{
+    TAX: 0,
+    NAME: 'Zara',
+    MATCH: "zara.com/us",
+    JSONBLOCK: "$[0].offers.price"
+  },
+  ZARAES:{
+    TAX: 0,
+    RATE: 'EUR',
+    MATCH: "zara.com/es",
+    JSONBLOCK: "$[0].offers.price"
+  },
   ZULILY: {
     TAX: 0,
     MATCH: "zulily.com"
@@ -468,6 +485,7 @@ class Parser{
   constructor(dom){
     this.dom=dom;
   }
+<<<<<<< HEAD
   getJSON(jsonpath, from = 0){
     try{
       var scriptBlock = select(this.dom, 'script');
@@ -476,6 +494,23 @@ class Parser{
           var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));  
           console.log(json);      
           return jp.query(json,jsonpath); 
+=======
+  // Lấy ra đoạn JSON từ thẻ <script type='application/ld+json'
+  // Default sẽ lấy script đầu tiên, nếu cần lấy cái thứ n thì đổi index 
+  // Lấy ra element theo JSONPath của web.JSONBLOCK
+  getJSON(jsonpath, index = 1){
+    try{
+      var count=1;
+      var scriptBlock = select(this.dom, 'script');
+      for (var i = 0;i<scriptBlock.length; i++){
+        if (scriptBlock[i].attribs !== undefined && scriptBlock[i].attribs.type !== undefined && scriptBlock[i].attribs.type === 'application/ld+json'){
+          count++;
+          if (count>index){
+            var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));  
+            //console.log(json);      
+            return jp.query(json,jsonpath).toString();
+          }
+>>>>>>> 2ddb2547cc01c4e4c0685cbb0912d0e6da210ebd
         }        
       }
       return "";
@@ -484,6 +519,11 @@ class Parser{
       return "";
     }
   }
+<<<<<<< HEAD
+=======
+
+  // Lấy ra link href trong thẻ <a>, từ danh sách các block chứa link web.REDIRECT
+>>>>>>> 2ddb2547cc01c4e4c0685cbb0912d0e6da210ebd
   getLink(blockElementArray, index = 0){
     try{
       for (var i = 0; i < blockElementArray.length; i++) {          
@@ -498,6 +538,10 @@ class Parser{
       return "";
     }
   }
+<<<<<<< HEAD
+=======
+  // Lấy ra plain text từ các array các block
+>>>>>>> 2ddb2547cc01c4e4c0685cbb0912d0e6da210ebd
   getText(blockElementArray, index = 0){
     try{    
       for (var i = 0; i < blockElementArray.length; i++) {          
@@ -514,6 +558,8 @@ class Parser{
     }
     
   }
+
+  // Lấy ra array text từ 1 bảng <td> hoặc <li>
   getTextArray(blockElementArray){
     try{
       var textArray=[];
@@ -775,8 +821,13 @@ class Item{
         }
         
         var redirect="";
+<<<<<<< HEAD
         if (website.att.PRICE3RDBLOCK!==undefined){
           var newurl = myparser.getLink(website.att.PRICE3RDBLOCK);
+=======
+        if (website.att.REDIRECT!==undefined){
+          var newurl = myparser.getLink(website.att.REDIRECT);
+>>>>>>> 2ddb2547cc01c4e4c0685cbb0912d0e6da210ebd
           if (newurl!=="")
             redirect = website.domain + newurl;            
         }
