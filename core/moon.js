@@ -375,7 +375,9 @@ const WEBSITES = {
   },
   GAP: {
     TAX: 0.083,
-    MATCH: "gap.com"
+    MATCH: "gap.com",
+    NAME: "GAP",
+    JSONBLOCK:"$[0].offers[0].price"
   },
   HM: {
     TAX: 0.083,
@@ -737,7 +739,8 @@ class Website{
       var requestOptions = {
           method: "GET",
           url: website.url,
-          gzip: true
+          gzip: true,
+          jar: true
       };
       // Nếu website cần Cookie thì set
       if (website.cookie !== null){
@@ -745,7 +748,6 @@ class Website{
           requestOptions.headers = {
               'Cookie': cookie
           };
-          requestOptions.jar = true;
       }
       request(requestOptions, function(error, response, body) {
           // Đưa html raw vào website
