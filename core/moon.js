@@ -510,9 +510,12 @@ class Parser{
   // Lấy ra link href trong thẻ <a>, từ danh sách các block chứa link web.REDIRECT
   getLink(blockElementArray, index = 0){
     try{
-      for (var i = 0; i < blockElementArray.length; i++) {          
+      
+      for (var i = 0; i < blockElementArray.length; i++) {
+        //console.log(blockElementArray[i]);         
         var link = select(this.dom, blockElementArray[i]);
         if (link.length>index && link[index].name==='a') {
+          //console.log(link[index]);
           return link[index].attribs.href;
         }
       }  
@@ -734,8 +737,8 @@ class Website{
   setDom(htmlraw){
     this.htmlraw=htmlraw;
   }
-  static async getResponse(website, bottype){
-    const message = await new Promise(resolve => {                        
+  static async getItem(website, recentitem){
+    const iteminfo = await new Promise(resolve => {                        
       var requestOptions = {
           method: "GET",
           url: website.url,
@@ -752,7 +755,7 @@ class Website{
       request(requestOptions, function(error, response, body) {
           // Đưa html raw vào website
           website.setDom(body);  
-          var item = new Item(website);         
+          var item = new Item(website, recentitem);         
           // Log to file
           var logtype='info';
           if (item.weight.value === 0 || item.category.ID === "UNKNOWN") {
@@ -762,7 +765,8 @@ class Website{
           resolve(item);
       });  
     })
-    return message;
+    // trả về Item type, tùy vào nhu cầu sẽ lấy item.toText() hoặc item.toFBResponse()
+    return iteminfo;
   }
   static getAvailableWebsite(){
     var listweb = "";
@@ -777,7 +781,7 @@ class Website{
   
 }
 class Item{
-  constructor(website){     
+  constructor(website, recentitem){     
     var handler = new htmlparser.DomHandler((error, dom) => {
       if (error) {
         console.log(error);
@@ -809,8 +813,14 @@ class Item{
         }
 
         var weight = new AmazonWeight();
-        var category=new AmazonCategory();  
-        if (website.att.DETAILBLOCK!==undefined){
+        var category=new AmazonCategory();
+        if (recentitem!==undefined){ // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
+          if (recentitem.weight.kg!==0)
+            weight = recentitem.weight;
+          if (recentitem.category.string!==0)
+            category = recentitem.category;
+        }
+        else if (website.att.DETAILBLOCK!==undefined){
           // detailArray gồm nhiều row trong table chứa Detail
           var detailArray = myparser.getTextArray(website.att.DETAILBLOCK);
           weight.setWeight(detailArray);          
@@ -820,10 +830,12 @@ class Item{
         this.webtax = website.att.TAX; // Thuế tại Mỹ của từng web
         this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD']; // Quy đổi ngoại tệ
         
+        //console.log(price);
         this.price=price; // Giá item
         this.shipping=shipping; // Giá ship của web
         this.priceshipping= Price.getPriceShipping(price, shipping); // Tổng giá item và ship
 
+        //console.log(redirect);
         this.redirect=redirect;
         this.weight=weight;          
         this.category=category; 
@@ -950,4 +962,3 @@ class Item{
   }
 }
 module.exports.Website=Website;
-module.exports.Item=Item;
