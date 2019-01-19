@@ -74,19 +74,20 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 async function handleMessage(page_id, sender_psid, received_message) {
-  let response;
 
   // Check if the message contains text
   if (received_message.text) {
     var website= new Website(received_message.text);
     // Nếu có trong list website thì mới trả lời
     if (website.found === true){      
-      var message = await Website.getResponse(website);
-      if (message.price==0 && message.redirect!==""){
-          website= new Website(message.redirect);
-          message = await Website.getResponse(website);
+      var item = await Website.getItem(website);
+
+      // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
+      if (item.price.value==0 && item.redirect!==""){
+          website= new Website(item.redirect);
+          item = await Website.getItem(website,item);
       }
-      callSendAPI(page_id, sender_psid, message.toFBResponse());
+      callSendAPI(page_id, sender_psid, item.toFBResponse());
     }
   }
 }
@@ -138,15 +139,15 @@ function callSendAPI(page_id, sender_psid, response) {
 
 // function testurl() {
 //   var url="https://www.amazon.com/%F0%9F%8D%92Jonerytime%F0%9F%8D%92Eye-Padded-Travel-Sleeping-Blindfold/dp/B07JNMGJS8/ref=bbp_bb_9ea285_st_9gcl_w_62?psc=1&smid=A1XSX0P82J8LUG&fbclid=IwAR08HFMeIcOaANSIgZ9GlwH_MEj2KzcxypE5isoYnhW4k0RjvE1bgrYv1GY";
-//   var website= new Website(received_message.text);
-
-//   if (website.found === true){      
-//     var message = await Website.getResponse(website);
-//     if (message.price==0 && message.redirect!==""){
-//         website= new Website(message.redirect);
-//         message = await Website.getResponse(website);
+//   var website= new Website(url);
+//     // Nếu có trong list website thì mới trả lời
+//     if (website.found === true){      
+//       var item = await Website.getItem(website);      
+//       // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
+//       if (item.price.value==0 && item.redirect!==""){
+//           website= new Website(item.redirect);
+//           item = await Website.getItem(website,item);
+//       }
 //     }
-//     console.log(message.toText());
-//   }
 // }
 // testurl();
