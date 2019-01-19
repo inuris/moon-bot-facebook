@@ -290,6 +290,15 @@ const CATEGORIES = {
   }
 };
 const WEBSITES = {
+  AEROPOSTALE: {
+    TAX: 0,
+    MATCH: "aeropostale.com",
+    NAME: "AeroPostale",
+    PRICEBLOCK: [
+      ".product-price .price-sale",
+      ".product-price .price-msrp"
+    ]
+  },
   ALDO: {
     TAX: 0.083,
     MATCH: "aldoshoes"
@@ -373,6 +382,30 @@ const WEBSITES = {
     TAX: 0,
     MATCH: "fragrancenet.com"
   },
+  ATHLETA: {
+    TAX: 0.083,
+    MATCH: "athleta.gap.com",
+    NAME: "Athleta",
+    JSONBLOCK:"$[0].offers[0].price"
+  },
+  BANANAREPUBLIC: {
+    TAX: 0.083,
+    MATCH: "bananarepublic.gap.com",
+    NAME: "BananaRepublic",
+    JSONBLOCK:"$[0].offers[0].price"
+  },
+  HILLCITY: {
+    TAX: 0.083,
+    MATCH: "hillcity.gap.com",
+    NAME: "HillCity",
+    JSONBLOCK:"$[0].offers[0].price"
+  },
+  OLDNAVY: {
+    TAX: 0.083,
+    MATCH: "oldnavy.gap.com",
+    NAME: "OldNavy",
+    JSONBLOCK:"$.offers[0].price"
+  },
   GAP: {
     TAX: 0.083,
     MATCH: "gap.com",
@@ -395,29 +428,33 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "ninewest.com"
   },
-  OLDNAVY: {
+    OSHKOSH: {
     TAX: 0.083,
-    MATCH: "oldnavy.com"
-  },
-  OSHKOSH: {
-    TAX: 0.083,
-    MATCH: "oshkosh.com"
+    MATCH: "oshkosh.com",
+    NAME: "OshKosh",
+    PRICEBLOCK:[
+      '.product-price-container .price-sales-usd'
+    ]
   },
   RALPHLAUREN: {
     TAX: 0.083,
     MATCH: "ralphlauren.com"
-  },
+  },  
   RUELALA: {
     TAX: 0,
     MATCH: "reulala.com"
   },
+  SKIPHOP: {
+    TAX: 0.083,
+    MATCH: "skiphop.com",
+    NAME: "SkipHop",
+    PRICEBLOCK:[
+      '.product-price-container .price-sales-usd'
+    ]
+  },
   THEBODYSHOP: {
     TAX: 0.083,
     MATCH: "thebodyshop.com"
-  },
-  VICTORIASSECRET: {
-    TAX: 0.083,
-    MATCH: "victoriassecret.com"
   },
   WALGREENS: {
     TAX: 0.083,
@@ -771,7 +808,7 @@ class Website{
   static getAvailableWebsite(){
     var listweb = "";
     for (var web in WEBSITES){             
-      if(WEBSITES[web].PRICEBLOCK !== undefined && WEBSITES[web].NAME !== undefined){
+      if(WEBSITES[web].NAME !== undefined){
         listweb += WEBSITES[web].NAME + ", "
       }
     }
