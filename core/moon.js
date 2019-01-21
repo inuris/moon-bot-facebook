@@ -299,10 +299,6 @@ const WEBSITES = {
       ".product-price .price-msrp"
     ]
   },
-  ALDO: {
-    TAX: 0.083,
-    MATCH: "aldoshoes"
-  },
   AMAZON3RD:{
     TAX: 0.083,
     MATCH: "amazon.com/gp/offer-listing",
@@ -343,14 +339,6 @@ const WEBSITES = {
       "#ourprice_shippingmessage"
     ]
   },
-  BATHBODYWORKS: {
-    TAX: 0.083,
-    MATCH: "bathandbodyworks"
-  },
-  BHCOSMETICS: {
-    TAX: 0,
-    MATCH: "bhcosmetics"
-  },
   BHPHOTOVIDEO: {
     TAX: 0,
     MATCH: "bhphotovideo.com",
@@ -368,67 +356,91 @@ const WEBSITES = {
       '.product-price-container .price-sales-usd'
     ]
   },
-  CLINIQUE: {
+  CROCS:{
     TAX: 0.083,
-    MATCH: "clinique"
+    MATCH: "crocs.com",
+    NAME: "Crocs",
+    JSONBLOCK:{
+      KEYWORD: "masterData",
+      REGEX: /\{[.\s\S]+\}/gm,
+      PATH: [
+        "$..masterData.colors[?(@.isSale==true)].price",
+        "$..masterData.colors[?(@.isSale==false)].price",
+            ]
+    } 
   },
   FOREVER21: {
     TAX: 0.083,
     MATCH: "forever21.com",
     NAME: "Forever21",
-    JSONBLOCK: "$.Offers.price"
+    JSONBLOCK:{
+      INDEX: 29,
+      PATH: ["$.Offers.price"]
+    } 
   },
-  FRAGRANCENET: {
-    TAX: 0,
-    MATCH: "fragrancenet.com"
-  },
-  ATHLETA: {
-    TAX: 0.083,
-    MATCH: "athleta.gap.com",
-    NAME: "Athleta",
-    JSONBLOCK:"$[0].offers[0].price"
-  },
-  BANANAREPUBLIC: {
-    TAX: 0.083,
-    MATCH: "bananarepublic.gap.com",
-    NAME: "BananaRepublic",
-    JSONBLOCK:"$[0].offers[0].price"
-  },
-  HILLCITY: {
-    TAX: 0.083,
-    MATCH: "hillcity.gap.com",
-    NAME: "HillCity",
-    JSONBLOCK:"$[0].offers[0].price"
-  },
-  OLDNAVY: {
-    TAX: 0.083,
-    MATCH: "oldnavy.gap.com",
-    NAME: "OldNavy",
-    JSONBLOCK:"$.offers[0].price"
-  },
+      // Subdomain của GAP
+      ATHLETA: {
+        TAX: 0.083,
+        MATCH: "athleta.gap.com",
+        NAME: "Athleta",
+        JSONBLOCK:{
+          INDEX: 0,
+          PATH: ["$[0].offers[0].price"]
+        }
+      },
+      BANANAREPUBLIC: {
+        TAX: 0.083,
+        MATCH: "bananarepublic.gap.com",
+        NAME: "BananaRepublic",
+        JSONBLOCK:{
+          INDEX: 0,
+          PATH: ["$[0].offers[0].price"]
+        }
+      },
+      HILLCITY: {
+        TAX: 0.083,
+        MATCH: "hillcity.gap.com",
+        NAME: "HillCity",
+        JSONBLOCK:{
+          INDEX: 0,
+          PATH: ["$[0].offers[0].price"]
+        }
+      },
+      OLDNAVY: {
+        TAX: 0.083,
+        MATCH: "oldnavy.gap.com",
+        NAME: "OldNavy",
+        JSONBLOCK:{
+          INDEX: 0,
+          PATH: ["$.offers[0].price"]
+        }
+      },
   GAP: {
     TAX: 0.083,
     MATCH: "gap.com",
     NAME: "GAP",
-    JSONBLOCK:"$[0].offers[0].price"
-  },
-  HM: {
-    TAX: 0.083,
-    MATCH: "hm.com"
+    JSONBLOCK:{
+      INDEX: 0,
+      PATH: ["$[0].offers[0].price"]
+    }
   },
   JOMASHOP: {
-    TAX: 0,
-    MATCH: "jomashop.com"
-  },
-  LOFT: {
     TAX: 0.083,
-    MATCH: "loft.com"
+    MATCH: "jomashop.com",
+    NAME: "JomaShop",
+    COOKIE:"bounceClientVisit355v=N4IgNgDiBcIBYBcEQM4FIDMBBNAmAYnvgO6kB0AVgPYC2AhinFRGQMa1EICWKKVCAWmJ0ErOAIQAGABwBWACy4A7AEYVktZMllENMCAA0IAE4wQpYpVoMmLdjRABfIA; _vuid=d11ab39c-b372-43e3-ad8d-3617c5cb6d4e; D_HID=62B7A346-4058-3C77-8CB7-ED51A5943914; D_IID=A74F366D-F291-329B-8AE3-695F6EBA958A; D_SID=115.77.169.59:WASVmq9DjNjsYYd7Yje++3y4C70jD9sz5J1mpazEagA; D_UID=CDF9689C-0487-3CF1-80E9-F81FCB40B168; D_ZID=F7698C1E-15E4-32FF-807F-C52EA2BA8BF2; D_ZUID=862AEB79-2FF9-382C-B620-D920270D33BD; gateCpc=[%22first_cpc%22]; gateNonDirect=[%22first_cpc%22]; tracker_device=8e55fcc1-53aa-4815-8985-04a6011b9886;",
+    JSONBLOCK:{
+      SELECTOR: '#xitem-primary-json',
+      INDEX: 0,
+      PATH: ["$.price"]
+    },
+    CATEGORYBLOCK:[".breadcrumbs li"]
   },
   NINEWEST: {
     TAX: 0.083,
     MATCH: "ninewest.com"
   },
-    OSHKOSH: {
+  OSHKOSH: {
     TAX: 0.083,
     MATCH: "oshkosh.com",
     NAME: "OshKosh",
@@ -436,13 +448,14 @@ const WEBSITES = {
       '.product-price-container .price-sales-usd'
     ]
   },
-  RALPHLAUREN: {
+  RILEYROSE: {
     TAX: 0.083,
-    MATCH: "ralphlauren.com"
-  },  
-  RUELALA: {
-    TAX: 0,
-    MATCH: "reulala.com"
+    MATCH: "rileyrose.com",
+    NAME: "RileyRose",
+    JSONBLOCK:{
+      INDEX: 29,
+      PATH: ["$.Offers.price"]
+    } 
   },
   SKIPHOP: {
     TAX: 0.083,
@@ -468,21 +481,23 @@ const WEBSITES = {
       ".prod-PriceHero .price-group"
     ]
   },
-  VITACOST: {
-    TAX: 0,
-    MATCH: "vitacost.com"
-  },
   ZARAUS:{
     TAX: 0,
     NAME: 'Zara',
     MATCH: "zara.com/us",
-    JSONBLOCK: "$[0].offers.price"
+    JSONBLOCK:{
+      INDEX: 16,
+      PATH: ["$[0].offers.price"]
+    }
   },
   ZARAES:{
     TAX: 0,
     RATE: 'EUR',
     MATCH: "zara.com/es",
-    JSONBLOCK: "$[0].offers.price"
+    JSONBLOCK:{
+      INDEX: 16,
+      PATH: ["$[0].offers.price"]
+    }
   },
   ZULILY: {
     TAX: 0,
@@ -523,32 +538,59 @@ class Parser{
   // Lấy ra đoạn JSON từ thẻ <script type='application/ld+json'
   // Default sẽ lấy script đầu tiên, nếu cần lấy cái thứ n thì đổi index 
   // Lấy ra element theo JSONPath của web.JSONBLOCK
-  getJSON(jsonpath, index = 1){
+  getJSON(jsonblock){
     try{
-      var count=1;
-      var scriptBlock = select(this.dom, 'script');
-      for (var i = 0;i<scriptBlock.length; i++){
-        if (scriptBlock[i].attribs !== undefined && scriptBlock[i].attribs.type !== undefined && scriptBlock[i].attribs.type === 'application/ld+json'){
-          count++;
-          if (count>index){
-            var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));  
-            //console.log(json);      
-            return jp.query(json,jsonpath).toString();
-          }
-        }        
+      var selector='script';
+      // Mặc định chỉ lấy JSON trong <script>, nếu cần lấy từ element khác thì phải thêm SELECTOR vào db
+      if (jsonblock.SELECTOR!==undefined)
+        selector = jsonblock.SELECTOR;
+      var scriptBlock = select(this.dom, selector);
+      var currentBlock;
+      // Nếu web có <script> chứa JSON có index cố định thì set INDEX trong db để lấy đúng cái block[index] đó
+      if (jsonblock.INDEX !==undefined && jsonblock.INDEX < scriptBlock.length){
+        currentBlock = htmlparser.DomUtils.getText(scriptBlock[jsonblock.INDEX])
       }
+      // Nếu web có <script> chứa JSON nằm bất kì thì phải dò bằng KEYWORD
+      else if (jsonblock.KEYWORD !== undefined){
+        for (let i=0;i<scriptBlock.length;i++){
+          var tempBlock = htmlparser.DomUtils.getText(scriptBlock[i]);
+          if (tempBlock.indexOf(jsonblock.KEYWORD)>=0){
+            currentBlock = tempBlock;
+            break;
+          }
+        }
+      }
+      else {
+        return "";
+      }
+      // Nếu trong <script> ko phải JSON chuẩn thì phải dùng regex lấy phần JSON ra
+      if (jsonblock.REGEX !== undefined){
+        var matchhtml = currentBlock.match(jsonblock.REGEX);
+        if (matchhtml.length>0)
+          currentBlock = matchhtml[0];
+      }
+
+      var json = JSON.parse(currentBlock);
+      // Có nhiều Path để lấy các trường hợp giá Sale/giá Thường có path khác nhau
+      for (let i=0;i<jsonblock.PATH.length;i++){
+        var query=jp.query(json,jsonblock.PATH[i]).toString();
+        if (query!=="")
+          return query;
+      }
+      //console.log(json);      
       return "";
     }
     catch(e){
+      console.log(e);
       return "";
     }
   }
 
-  // Lấy ra link href trong thẻ <a>, từ danh sách các block chứa link web.REDIRECT
+  // Lấy ra link href trong thẻ <a>
   getLink(blockElementArray, index = 0){
     try{
       
-      for (var i = 0; i < blockElementArray.length; i++) {
+      for (let i = 0; i < blockElementArray.length; i++) {
         //console.log(blockElementArray[i]);         
         var link = select(this.dom, blockElementArray[i]);
         if (link.length>index && link[index].name==='a') {
@@ -559,13 +601,14 @@ class Parser{
       return "";
     }
     catch(e){
+      console.log(e);
       return "";
     }
   }
-  // Lấy ra plain text từ các array các block
+  // Lấy ra plain text từ array các block selector, default chỉ return 1 string đầu tiên
   getText(blockElementArray, index = 0){
     try{    
-      for (var i = 0; i < blockElementArray.length; i++) {          
+      for (let i = 0; i < blockElementArray.length; i++) {          
           var text = select(this.dom, blockElementArray[i]);
           //console.log(htmlparser.DomUtils.getText(text));
           if (text.length>index) {        
@@ -575,6 +618,7 @@ class Parser{
       return "";
     }
     catch(e){
+      console.log(e);
       return "";
     }
     
@@ -584,12 +628,12 @@ class Parser{
   getTextArray(blockElementArray){
     try{
       var textArray=[];
-      for (var i = 0; i < blockElementArray.length; i++) {
+      for (let i = 0; i < blockElementArray.length; i++) {
         // Nguyên table data
         //console.log(blockElementArray[i]);
         var textTable = select(this.dom, blockElementArray[i]);  
         
-        for (var e of textTable){
+        for (let e of textTable){
           if (e.type === "tag") {
             //row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
             var row = e.children;
@@ -608,6 +652,7 @@ class Parser{
       return null;
     }
     catch(e){
+      console.log(e);
       return null;
     }
   }
@@ -622,12 +667,12 @@ class AmazonCategory{
     var catString="";
     var catType="GENERAL"; 
     if (detailArray!== null){
-      for(var i =0;i<detailArray.length;i++){
+      for (let i =0;i<detailArray.length;i++){
         if (detailArray[i].indexOf("sellers rank")>=0){ 
           catString=detailArray[i].replace(/\s{2,}|\..+ {.+}|see top 100| in |(amazon )?best sellers rank:?|#\d*,?\d*/gi, "|");
           found=true;        
           // Query từng KEYWORD trong category
-          for (var cat in CATEGORIES) {
+          for (let cat in CATEGORIES) {
             if (
               this.checkKeyword(
                 catString,
@@ -651,9 +696,9 @@ class AmazonCategory{
   // Kiểm tra keyword có tồn tại trong array include và không tồn tại trong exclude
   // checkkeyword(string,array,array)
   checkKeyword(keyString, include, exclude){  
-    for (var i = 0; i < include.length; i++) {
+    for (let i = 0; i < include.length; i++) {
       if (keyString.indexOf(include[i]) >= 0) {
-        for (var j = 0; j < exclude.length; j++) {
+        for (let j = 0; j < exclude.length; j++) {
           if (keyString.indexOf(exclude[j]) >= 0) {
             return false;
           }
@@ -677,7 +722,7 @@ class AmazonWeight{
     //console.log(detailArray);
     var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
     if (detailArray!== null)
-    for (var i = 0; i < detailArray.length; i++) {
+    for (let i = 0; i < detailArray.length; i++) {
       if (detailArray[i].indexOf("weight") >= 0 || detailArray[i].indexOf("dimensions") >= 0){
         var weightReg = detailArray[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
         //console.log(weightReg);
@@ -747,7 +792,7 @@ class Website{
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
-      for (var web in WEBSITES){             
+      for (let web in WEBSITES){             
         if(tempMatch[0].indexOf(WEBSITES[web].MATCH)>=0){
           tempUrl = tempMatch[0]; 
           tempDomain = tempMatch[1];
@@ -807,7 +852,7 @@ class Website{
   }
   static getAvailableWebsite(){
     var listweb = "";
-    for (var web in WEBSITES){             
+    for (let web in WEBSITES){             
       if(WEBSITES[web].NAME !== undefined){
         listweb += WEBSITES[web].NAME + ", "
       }
@@ -831,7 +876,7 @@ class Item{
           price.setPrice(priceString);          
         }
         else if (website.att.JSONBLOCK!==undefined){
-          var priceString = myparser.getJSON(website.att.JSONBLOCK).toString(); 
+          var priceString = myparser.getJSON(website.att.JSONBLOCK); 
           price.setPrice(priceString);
         }
 
