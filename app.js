@@ -90,7 +90,7 @@ async function handleMessage(page_id, sender_psid, received_message) {
       callSendAPI(page_id, sender_psid, item.toFBResponse());
     }
     else if (["help","menu","list"].includes(received_message.text)){
-      let response = { "text": Website.getAvailableWebsite() }
+      let response = { "text": "Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite() }
       callSendAPI(page_id, sender_psid, response);
     }
   }
