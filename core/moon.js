@@ -983,18 +983,17 @@ class Item{
     }
     return response;
   }
-  toFBResponse(){  
+  toFBResponse(badgeImageUrl){  
     var response;
-    var message = "Bạn đang chat với hệ thống trả lời tự động của Moon. Nhân viên sẽ báo giá chính thức ngay khi nhận được yêu cầu của quý khách. Xin cảm ơn."
     if (this.totalString ==""){
       response= {
-        "text": message,
         "attachment": {
           "type": "template",
           "payload": {
             "template_type": "generic",
             "elements": [{
               "title": "Ko xác định được giá sản phẩm",
+              "image_url": badgeImageUrl,
               "buttons": [
                 {
                   "type": "postback",
@@ -1020,12 +1019,12 @@ class Item{
       response =  {
         "text": message,
         "attachment": {
-          "type": "template",
           "payload": {
             "template_type": "generic",
             "elements": [{
               "title": itemTitle,
               "subtitle": itemSubtitle,
+              "image_url": badgeImageUrl,
               "buttons": [
                 {
                   "type": "postback",
