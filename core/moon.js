@@ -987,11 +987,8 @@ class Item{
     var response;
     var message = "Bạn đang chat với hệ thống trả lời tự động của Moon. Nhân viên sẽ báo giá chính thức ngay khi nhận được yêu cầu của quý khách. Xin cảm ơn."
     if (this.totalString ==""){
-      response= [
-        {
-          "text": message
-        },
-        {
+      response= {
+        "text": message,
         "attachment": {
           "type": "template",
           "payload": {
@@ -1008,8 +1005,7 @@ class Item{
             }]
           }
         }
-      }      
-    ]
+      }
     }
     else{
       var itemTitle, itemSubtitle;      
@@ -1021,30 +1017,26 @@ class Item{
       else{
         itemSubtitle = 'Đã bao gồm ' + this.category.att.NOTE + ' mặt hàng ' + this.category.att.NAME;     
       };
-      response = [
-        {
-          "text": message
-        },
-        {
-          "attachment": {
-            "type": "template",
-            "payload": {
-              "template_type": "generic",
-              "elements": [{
-                "title": itemTitle,
-                "subtitle": itemSubtitle,
-                "buttons": [
-                  {
-                    "type": "postback",
-                    "payload": "chat",
-                    "title": "Chat với Moon",
-                  }
-                ],
-              }]
-            }
+      response =  {
+        "text": message,
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": [{
+              "title": itemTitle,
+              "subtitle": itemSubtitle,
+              "buttons": [
+                {
+                  "type": "postback",
+                  "payload": "chat",
+                  "title": "Chat với Moon",
+                }
+              ],
+            }]
           }
         }
-      ]
+      }      
     }
     return response;
   }
