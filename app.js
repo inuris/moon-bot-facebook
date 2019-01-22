@@ -2,7 +2,7 @@ const PAGE_ACCESS_TOKEN = {
   573537602700846:process.env.PAGE_ACCESS_TOKEN_573537602700846, // Moon Hàng Mỹ
   949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938 // Rôm Rốp
 };
-const badgeImageUrl="https://cdn.glitch.com/dda37f82-9420-407f-8f78-ed662a328e79%2Fbadge-autoreply.png?1548131188953";
+const badgeImageUrl="./badge-autoreply.png";
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
 const Website = require("./core/moon.js").Website;
 const Item = require("./core/moon.js").Item;
