@@ -985,15 +985,19 @@ class Item{
   }
   toFBResponse(){  
     var response;
+    var message = "Bạn đang chat với hệ thống trả lời tự động của Moon. Nhân viên sẽ báo giá chính thức ngay khi nhận được yêu cầu của quý khách. Xin cảm ơn."
     if (this.totalString ==""){
-      response= {
+      response= [
+        {
+          "text": message
+        },
+        {
         "attachment": {
           "type": "template",
           "payload": {
             "template_type": "generic",
             "elements": [{
               "title": "Ko xác định được giá sản phẩm",
-              "subtitle": "Vui lòng chat với Moon để được báo giá chính xác",
               "buttons": [
                 {
                   "type": "postback",
@@ -1004,11 +1008,12 @@ class Item{
             }]
           }
         }
-      }
+      }      
+    ]
     }
     else{
-      var itemTitle, itemSubtitle;
-      itemTitle='[Auto] Giá dự kiến: ' + this.totalString;
+      var itemTitle, itemSubtitle;      
+      itemTitle='Giá tham khảo: ' + this.totalString;
       // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
       if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
         itemSubtitle = 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về';
@@ -1016,25 +1021,30 @@ class Item{
       else{
         itemSubtitle = 'Đã bao gồm ' + this.category.att.NOTE + ' mặt hàng ' + this.category.att.NAME;     
       };
-      response = {
-        "attachment": {
-          "type": "template",
-          "payload": {
-            "template_type": "generic",
-            "elements": [{
-              "title": itemTitle,
-              "subtitle": itemSubtitle,
-              "buttons": [
-                {
-                  "type": "postback",
-                  "payload": "chat",
-                  "title": "Chat với Moon",
-                }
-              ],
-            }]
+      response = [
+        {
+          "text": message
+        },
+        {
+          "attachment": {
+            "type": "template",
+            "payload": {
+              "template_type": "generic",
+              "elements": [{
+                "title": itemTitle,
+                "subtitle": itemSubtitle,
+                "buttons": [
+                  {
+                    "type": "postback",
+                    "payload": "chat",
+                    "title": "Chat với Moon",
+                  }
+                ],
+              }]
+            }
           }
         }
-      }
+      ]
     }
     return response;
   }
