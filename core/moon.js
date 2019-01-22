@@ -1018,6 +1018,7 @@ class Item{
       };
       response =  {
         "attachment": {
+          "type": "template",
           "payload": {
             "template_type": "generic",
             "elements": [{
