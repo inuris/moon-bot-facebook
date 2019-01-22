@@ -1017,7 +1017,6 @@ class Item{
         itemSubtitle = 'Đã bao gồm ' + this.category.att.NOTE + ' mặt hàng ' + this.category.att.NAME;     
       };
       response =  {
-        "text": message,
         "attachment": {
           "payload": {
             "template_type": "generic",
