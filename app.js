@@ -145,17 +145,18 @@ function callSendAPI(page_id, sender_psid, response) {
 
 // For Test only
 
-// function testurl() {
-//   var url="https://www.amazon.com/%F0%9F%8D%92Jonerytime%F0%9F%8D%92Eye-Padded-Travel-Sleeping-Blindfold/dp/B07JNMGJS8/ref=bbp_bb_9ea285_st_9gcl_w_62?psc=1&smid=A1XSX0P82J8LUG&fbclid=IwAR08HFMeIcOaANSIgZ9GlwH_MEj2KzcxypE5isoYnhW4k0RjvE1bgrYv1GY";
-//   var website= new Website(url);
-//     // Nếu có trong list website thì mới trả lời
-//     if (website.found === true){      
-//       var item = await Website.getItem(website);      
-//       // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
-//       if (item.price.value==0 && item.redirect!==""){
-//           website= new Website(item.redirect);
-//           item = await Website.getItem(website,item);
-//       }
-//     }
-// }
-// testurl();
+async function testurl() {
+  var url="https://www.jomashop.com/costa-del-mar-sunglasses-lr-64-ogp.html";
+  //url="https://www.amazon.com/Anker-Qi-Certified-Compatible-Fast-Charging-PowerWave/dp/B07DBXZZN3/ref=br_msw_pdt-6?_encoding=UTF8&smid=A294P4X9EWVXLJ&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=RJ1MJ4F47B2HVXEMH96Q&pf_rd_t=36701&pf_rd_p=28ea8511-ea82-4cfd-a17d-cb45137bb8ed&pf_rd_i=desktop";
+  var website= new Website(url);
+    // Nếu có trong list website thì mới trả lời
+    if (website.found === true){      
+      var item = await Website.getItem(website);      
+      // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
+      if (item.price.value==0 && item.redirect!==""){
+          website= new Website(item.redirect);
+          item = await Website.getItem(website,item);
+      }
+    }
+}
+//testurl();
