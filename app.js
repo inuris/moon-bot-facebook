@@ -2,7 +2,7 @@ const PAGE_ACCESS_TOKEN = {
   573537602700846:process.env.PAGE_ACCESS_TOKEN_573537602700846, // Moon Hàng Mỹ
   949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938 // Rôm Rốp
 };
-const badgeImageUrl="./badge-autoreply.png";
+const badgeImageUrl="https://cdn.glitch.com/dda37f82-9420-407f-8f78-ed662a328e79%2Fbadge-autoreply.png?1548140694952";
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
 const Website = require("./core/moon.js").Website;
 const Item = require("./core/moon.js").Item;
@@ -76,6 +76,7 @@ app.get("/webhook", (req, res) => {
 // Handles messages events
 async function handleMessage(page_id, sender_psid, received_message) {
 
+  
   // Check if the message contains text
   if (received_message.text) {
     var website= new Website(received_message.text);
@@ -88,13 +89,15 @@ async function handleMessage(page_id, sender_psid, received_message) {
           website= new Website(item.redirect);
           item = await Website.getItem(website,item);
       }
-      callSendAPI(page_id, sender_psid, item.toFBResponse(badgeImageUrl));
+      if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))
+        callSendAPI(page_id, sender_psid, item.toFBResponse(badgeImageUrl));
     }
     else if (["help","menu","list"].includes(received_message.text)){
       let response = { "text": "Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite() }
       callSendAPI(page_id, sender_psid, response);
     }
   }
+  
 }
 
 // Handles messaging_postbacks events

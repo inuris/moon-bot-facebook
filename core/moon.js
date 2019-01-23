@@ -290,30 +290,11 @@ const CATEGORIES = {
   }
 };
 const WEBSITES = {
-  AEROPOSTALE: {
-    TAX: 0,
-    MATCH: "aeropostale.com",
-    NAME: "AeroPostale",
-    PRICEBLOCK: [
-      ".product-price .price-sale",
-      ".product-price .price-msrp"
-    ]
-  },
-  AMAZON3RD:{
-    TAX: 0.083,
-    MATCH: "amazon.com/gp/offer-listing",
-    COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
-    PRICEBLOCK: [
-      ".olpOfferPrice"
-    ],
-    SHIPPINGBLOCK: [
-      ".olpShippingInfo"
-    ]
-  },
   AMAZON: {
     TAX: 0.083,
     MATCH: "amazon.com",
     NAME: "Amazon",
+    SILENCE: false,
     COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
@@ -324,6 +305,8 @@ const WEBSITES = {
       "#technical-details-table tr",
       "#tech-specs-desktop tr"
     ],
+    CATEGORYCONDITION: ["sellers rank"],
+    WEIGHTCONDITION: ["weight" , "dimensions"],    
     PRICEBLOCK: [
       "#priceblock_dealprice",
       "#priceblock_ourprice",
@@ -339,10 +322,33 @@ const WEBSITES = {
       "#ourprice_shippingmessage"
     ]
   },
+  AEROPOSTALE: {
+    TAX: 0,
+    MATCH: "aeropostale.com",
+    NAME: "AeroPostale",
+    SILENCE: false,
+    PRICEBLOCK: [
+      ".product-price .price-sale",
+      ".product-price .price-msrp"
+    ]
+  },
+  AMAZON3RD:{
+    TAX: 0.083,
+    MATCH: "amazon.com/gp/offer-listing",
+    SILENCE: false,
+    COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
+    PRICEBLOCK: [
+      ".olpOfferPrice"
+    ],
+    SHIPPINGBLOCK: [
+      ".olpShippingInfo"
+    ]
+  },  
   BHPHOTOVIDEO: {
     TAX: 0,
-    MATCH: "bhphotovideo.com",
+    MATCH: "bhphotovideo.com",    
     NAME: "BHPhotoVideo",
+    SILENCE: false,
     PRICEBLOCK: [
       ".ypYouPay",
       ".itc-you-pay .itc-you-pay-price"
@@ -352,6 +358,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "carters.com",
     NAME: "Carters",
+    SILENCE: false,
     PRICEBLOCK:[
       '.product-price-container .price-sales-usd'
     ]
@@ -360,6 +367,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "crocs.com",
     NAME: "Crocs",
+    SILENCE: false,
     JSONBLOCK:{
       KEYWORD: "masterData",
       REGEX: /\{[.\s\S]+\}/gm,
@@ -373,6 +381,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "forever21.com",
     NAME: "Forever21",
+    SILENCE: false,
     JSONBLOCK:{
       INDEX: 29,
       PATH: ["$.Offers.price"]
@@ -383,6 +392,7 @@ const WEBSITES = {
         TAX: 0.083,
         MATCH: "athleta.gap.com",
         NAME: "Athleta",
+        SILENCE: false,
         JSONBLOCK:{
           INDEX: 0,
           PATH: ["$[0].offers[0].price"]
@@ -392,6 +402,7 @@ const WEBSITES = {
         TAX: 0.083,
         MATCH: "bananarepublic.gap.com",
         NAME: "BananaRepublic",
+        SILENCE: false,
         JSONBLOCK:{
           INDEX: 0,
           PATH: ["$[0].offers[0].price"]
@@ -401,6 +412,7 @@ const WEBSITES = {
         TAX: 0.083,
         MATCH: "hillcity.gap.com",
         NAME: "HillCity",
+        SILENCE: false,
         JSONBLOCK:{
           INDEX: 0,
           PATH: ["$[0].offers[0].price"]
@@ -410,6 +422,7 @@ const WEBSITES = {
         TAX: 0.083,
         MATCH: "oldnavy.gap.com",
         NAME: "OldNavy",
+        SILENCE: false,
         JSONBLOCK:{
           INDEX: 0,
           PATH: ["$.offers[0].price"]
@@ -419,31 +432,36 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "gap.com",
     NAME: "GAP",
+    SILENCE: false,
     JSONBLOCK:{
       INDEX: 0,
       PATH: ["$[0].offers[0].price"]
     }
   },
   JOMASHOP: {
+    SILENT: true,
     TAX: 0.083,
     MATCH: "jomashop.com",
     NAME: "JomaShop",
+    SILENCE: true,
     COOKIE:"bounceClientVisit355v=N4IgNgDiBcIBYBcEQM4FIDMBBNAmAYnvgO6kB0AVgPYC2AhinFRGQMa1EICWKKVCAWmJ0ErOAIQAGABwBWACy4A7AEYVktZMllENMCAA0IAE4wQpYpVoMmLdjRABfIA; _vuid=d11ab39c-b372-43e3-ad8d-3617c5cb6d4e; D_HID=62B7A346-4058-3C77-8CB7-ED51A5943914; D_IID=A74F366D-F291-329B-8AE3-695F6EBA958A; D_SID=115.77.169.59:WASVmq9DjNjsYYd7Yje++3y4C70jD9sz5J1mpazEagA; D_UID=CDF9689C-0487-3CF1-80E9-F81FCB40B168; D_ZID=F7698C1E-15E4-32FF-807F-C52EA2BA8BF2; D_ZUID=862AEB79-2FF9-382C-B620-D920270D33BD; gateCpc=[%22first_cpc%22]; gateNonDirect=[%22first_cpc%22]; tracker_device=8e55fcc1-53aa-4815-8985-04a6011b9886;",
     JSONBLOCK:{
       SELECTOR: '#xitem-primary-json',
       INDEX: 0,
       PATH: ["$.price"]
     },
-    CATEGORYBLOCK:[".breadcrumbs li"]
+    CATEGORYBLOCK:[".breadcrumbs"]
   },
   NINEWEST: {
     TAX: 0.083,
-    MATCH: "ninewest.com"
+    MATCH: "ninewest.com",
+    SILENCE: true
   },
   OSHKOSH: {
     TAX: 0.083,
     MATCH: "oshkosh.com",
     NAME: "OshKosh",
+    SILENCE: false,
     PRICEBLOCK:[
       '.product-price-container .price-sales-usd'
     ]
@@ -452,6 +470,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "rileyrose.com",
     NAME: "RileyRose",
+    SILENCE: false,
     JSONBLOCK:{
       INDEX: 29,
       PATH: ["$.Offers.price"]
@@ -461,30 +480,35 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "skiphop.com",
     NAME: "SkipHop",
+    SILENCE: false,
     PRICEBLOCK:[
       '.product-price-container .price-sales-usd'
     ]
   },
   THEBODYSHOP: {
     TAX: 0.083,
-    MATCH: "thebodyshop.com"
+    MATCH: "thebodyshop.com",
+    SILENCE: true
   },
   WALGREENS: {
     TAX: 0.083,
-    MATCH: "walgreens.com"
+    MATCH: "walgreens.com",
+    SILENCE: true
   },
   WALMART: {
     TAX: 0,
     MATCH: "walmart.com",
     NAME: "Walmart",
+    SILENCE: false,
     PRICEBLOCK: [
       ".prod-PriceHero .price-group"
     ]
   },
   ZARAUS:{
     TAX: 0,
-    NAME: 'Zara',
     MATCH: "zara.com/us",
+    NAME: 'Zara',
+    SILENCE: false,   
     JSONBLOCK:{
       INDEX: 16,
       PATH: ["$[0].offers.price"]
@@ -494,14 +518,11 @@ const WEBSITES = {
     TAX: 0,
     RATE: 'EUR',
     MATCH: "zara.com/es",
+    SILENCE: false,
     JSONBLOCK:{
       INDEX: 16,
       PATH: ["$[0].offers.price"]
     }
-  },
-  ZULILY: {
-    TAX: 0,
-    MATCH: "zulily.com"
   }
 };
 
@@ -531,6 +552,26 @@ Number.prototype.toVND = function(rate){
   var priceNew = Math.ceil((this * rate) / 5000) * 5000; //Làm tròn lên 5000  
   return priceNew.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
 };
+
+// Check a string contain one of any string in Array
+String.prototype.checkKeyword = function(include, exclude){
+  if (include==undefined){
+    return true;    
+  }
+  for (let i=0;i<include.length;i++) {
+    if (this.includes(include[i])) {
+      if (exclude !== undefined){
+        for (let e=0;e<exclude.length;e++) {
+          if (this.includes(exclude[e])) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+  }
+  return false;
+}
 class Parser{
   constructor(dom){
     this.dom=dom;
@@ -558,11 +599,11 @@ class Parser{
             currentBlock = tempBlock;
             break;
           }
-  for (let i=0;i<include.length;i++) {
-    if (this.includes(include[i])) {
+        }
+      }
       else {
-        for (let e=0;e<exclude.length;e++) {
-          if (this.includes(exclude[e])) {
+        return "";
+      }
       // Nếu trong <script> ko phải JSON chuẩn thì phải dùng regex lấy phần JSON ra
       if (jsonblock.REGEX !== undefined){
         var matchhtml = currentBlock.match(jsonblock.REGEX);
@@ -662,20 +703,19 @@ class AmazonCategory{
     this.string = "";
     this.att = CATEGORIES["UNKNOWN"];
   }
-  setCategory(detailArray){
+  setCategory(detailArray, categoryCondition){
     var found=false;
     var catString="";
-    var catType="GENERAL"; 
+    var catType="GENERAL";     
     if (detailArray!== null){
       for (let i =0;i<detailArray.length;i++){
-        if (detailArray[i].indexOf("sellers rank")>=0){ 
-          catString=detailArray[i].replace(/\s{2,}|\..+ {.+}|see top 100| in |(amazon )?best sellers rank:?|#\d*,?\d*/gi, "|");
+        if (detailArray[i].checkKeyword(categoryCondition)){ 
+          catString=detailArray[i].replace(/\s{2,}|\..+ {.+}|see top 100|(amazon )?best sellers rank:?|#\d*,?\d*/gi, "|");
           found=true;        
           // Query từng KEYWORD trong category
           for (let cat in CATEGORIES) {
             if (
-              this.checkKeyword(
-                catString,
+              catString.checkKeyword(
                 CATEGORIES[cat].KEYWORD,
                 CATEGORIES[cat].NOTKEYWORD
               ) === true
@@ -692,22 +732,7 @@ class AmazonCategory{
     }
     this.string= catString;
     this.att = CATEGORIES[catType];
-  }  
-  // Kiểm tra keyword có tồn tại trong array include và không tồn tại trong exclude
-  // checkkeyword(string,array,array)
-  checkKeyword(keyString, include, exclude){  
-    for (let i = 0; i < include.length; i++) {
-      if (keyString.indexOf(include[i]) >= 0) {
-        for (let j = 0; j < exclude.length; j++) {
-          if (keyString.indexOf(exclude[j]) >= 0) {
-            return false;
-          }
-        }
-        return true;
-      }
-    }
-    return false;
-  }
+  }    
 }
 class AmazonWeight{
   constructor(){ 
@@ -715,7 +740,7 @@ class AmazonWeight{
     this.kg=0;
     this.unit="";
   }
-  setWeight(detailArray){
+  setWeight(detailArray, weightCondition){
     var current= "",
         kg= 0,
         unit= "";
@@ -723,7 +748,7 @@ class AmazonWeight{
     var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
     if (detailArray!== null)
     for (let i = 0; i < detailArray.length; i++) {
-      if (detailArray[i].indexOf("weight") >= 0 || detailArray[i].indexOf("dimensions") >= 0){
+      if (detailArray[i].checkKeyword(weightCondition)){
         var weightReg = detailArray[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
         //console.log(weightReg);
         if (weightReg !== null) {
@@ -902,11 +927,22 @@ class Item{
           if (recentitem.category.string!==0)
             category = recentitem.category;
         }
+        // Nếu cần lấy Category & Weight từ chung 1 data table thì define DETAILBLOCK
         else if (website.att.DETAILBLOCK!==undefined){
           // detailArray gồm nhiều row trong table chứa Detail
           var detailArray = myparser.getTextArray(website.att.DETAILBLOCK);
-          weight.setWeight(detailArray);          
-          category.setCategory(detailArray); 
+          weight.setWeight(detailArray,website.att.WEIGHTCONDITION);          
+          category.setCategory(detailArray, website.att.CATEGORYCONDITION); 
+        }
+        else{
+          if (website.att.CATEGORYBLOCK!==undefined){
+            var categoryString = myparser.getTextArray(website.att.CATEGORYBLOCK);
+            category.setCategory(categoryString); 
+          }
+          if (website.att.WEIGHTBLOCK!==undefined){
+            var weightString = myparser.getTextArray(website.att.WEIGHTBLOCK);
+            weight.setWeight(weightString); 
+          }
         }
         
         this.webtax = website.att.TAX; // Thuế tại Mỹ của từng web
