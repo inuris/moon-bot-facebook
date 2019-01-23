@@ -558,11 +558,11 @@ class Parser{
             currentBlock = tempBlock;
             break;
           }
-        }
-      }
+  for (let i=0;i<include.length;i++) {
+    if (this.includes(include[i])) {
       else {
-        return "";
-      }
+        for (let e=0;e<exclude.length;e++) {
+          if (this.includes(exclude[e])) {
       // Nếu trong <script> ko phải JSON chuẩn thì phải dùng regex lấy phần JSON ra
       if (jsonblock.REGEX !== undefined){
         var matchhtml = currentBlock.match(jsonblock.REGEX);
