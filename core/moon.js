@@ -756,8 +756,8 @@ class AmazonWeight{
           
           var weightUnit = weightReg[2];
           if (weightUnit.indexOf("ounce") >= 0 || weightUnit.indexOf("oz") >= 0)
-            weightKg = Math.round((weight / 35.274)*1000/1000);
-          else if (weightUnit.indexOf("pound") >= 0) weightKg = Math.round((weight / 2.2)*1000/1000);
+            weightKg = weight / 35.274;
+          else if (weightUnit.indexOf("pound") >= 0) weightKg = weight / 2.2;
           // Tìm weight lớn nhất
           if (
             kg < weightKg ||
@@ -769,7 +769,8 @@ class AmazonWeight{
           }
         }
       }
-    }   
+    }
+    kg = Math.round(kg *1000/1000);
     this.string=current;
     this.kg=kg;
     this.unit=weightUnit;
