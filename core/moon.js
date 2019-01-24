@@ -1009,7 +1009,7 @@ CATEGORYSTRING : ${this.category.string}`;
       content: logContent,
       type: logType
     }
-    console.log(logContent)
+    console.log(logContent);
     return log;
   }
   toText(){
