@@ -856,7 +856,8 @@ class Website{
       if (website.cookie !== null){
           var cookie = request.cookie(website.cookie);
           requestOptions.headers = {
-              'Cookie': cookie
+              'Cookie' : cookie,
+              'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
           };
       }
       request(requestOptions, function(error, response, body) {
