@@ -770,10 +770,10 @@ class AmazonWeight{
         }
       }
     }
-    kg = Math.round(kg *1000/1000);
+    kg = Math.round(kg * 1000) / 1000;
     this.string=current;
     this.kg=kg;
-    this.unit=weightUnit;
+    this.unit=unit;
 
   }
 }
