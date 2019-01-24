@@ -1087,8 +1087,9 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
-  toVND(price){
-    var priceNew = Math.ceil((price * this.webatt.RATE!==undefined?RATE[this.webatt.RATE]:RATE['USD']) / 5000) * 5000; //Làm tròn lên 5000  
+  toVND(price){    
+    var rate=this.webatt.RATE!==undefined?RATE[this.webatt.RATE]:RATE['USD'];
+    var priceNew = Math.ceil((price * rate) / 5000) * 5000; //Làm tròn lên 5000 
     return priceNew.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
   }
 }
