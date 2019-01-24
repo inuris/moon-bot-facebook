@@ -309,6 +309,7 @@ const WEBSITES = {
       "#priceblock_dealprice",
       "#priceblock_ourprice",
       "#priceblock_saleprice",
+      "#priceblock_pospromoprice",
       ".guild_priceblock_ourprice",
       ".offer-price",
       "#alohaPricingWidget .a-color-price"
