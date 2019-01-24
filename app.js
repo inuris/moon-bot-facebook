@@ -4,9 +4,14 @@ const PAGE_ACCESS_TOKEN = {
 };
 const BADGE_IMAGE_URL=process.env.BADGE_IMAGE_URL;
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
+const DiscordLogger = require('discord-logger');
+const options = {
+  endpoint: process.env.DISCORD_WEBHOOK,
+  botUsername: 'Logger'
+} 
+const logger = new DiscordLogger(options);
+
 const Website = require("./core/moon.js").Website;
-const Item = require("./core/moon.js").Item;
-const logger = require('./core/logger.js').logger;
 // Imports dependencies and set up http server
 const request = require("request"),
   express = require("express"),
@@ -74,20 +79,23 @@ app.get("/webhook", (req, res) => {
 });
 
 // Handles messages events
-async function handleMessage(page_id, sender_psid, received_message) {
-
-  
+async function handleMessage(page_id, sender_psid, received_message) { 
   // Check if the message contains text
   if (received_message.text) {
     var website= new Website(received_message.text);
     // Nếu có trong list website thì mới trả lời
     if (website.found === true){      
       var item = await Website.getItem(website);
-
+      var log=item.toLog();
+      if (log.type==="error") logger.error(log.content);
+      else logger.success(log.content);
       // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
       if (item.price.value==0 && item.redirect!==""){
-          website= new Website(item.redirect);
-          item = await Website.getItem(website,item);
+        website= new Website(item.redirect);
+        item = await Website.getItem(website,item);
+        var log=item.toLog();
+        if (log.type==="error") logger.error(log.content);
+        else logger.success(log.content);
       }
       if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))
         callSendAPI(page_id, sender_psid, item.toFBResponse(BADGE_IMAGE_URL));

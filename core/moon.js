@@ -3,9 +3,7 @@
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
 const request = require("request");
-const logger = require('./logger.js').logger;
 const jp = require('jsonpath');
-
 const RATE = {
   'USD': 24000,
   'EUR': 30000
@@ -736,7 +734,7 @@ class AmazonCategory{
 }
 class AmazonWeight{
   constructor(){ 
-    this.current="";
+    this.string="";
     this.kg=0;
     this.unit="";
   }
@@ -772,7 +770,7 @@ class AmazonWeight{
         }
       }
     }   
-    this.current=current;
+    this.string=current;
     this.kg=kg;
     this.unit=weightUnit;
 
@@ -813,19 +811,16 @@ class Website{
     var tempWeb = null;
     var tempUrl = "";
     var tempDomain="";
-    var tempCookie = null;
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
-      for (let web in WEBSITES){             
-        if(tempMatch[0].indexOf(WEBSITES[web].MATCH)>=0){
-          tempUrl = tempMatch[0]; 
-          tempDomain = tempMatch[1];
+      for (let i in WEBSITES){             
+        if(tempMatch[0].indexOf(WEBSITES[i].MATCH)>=0){
+          tempUrl = tempMatch[0]; // full url
+          tempDomain = tempMatch[1]; // chỉ có domain
           if (tempDomain.indexOf('http')!==0)
             tempDomain="https://"+tempDomain;
-          tempWeb = WEBSITES[web];
-          if (WEBSITES[web].COOKIE !== undefined) 
-            tempCookie=WEBSITES[web].COOKIE;
+          tempWeb = WEBSITES[i];
           break;
         }          
       }
@@ -833,11 +828,10 @@ class Website{
     if (tempWeb!==null){
       found = true;            
     }
-    this.domain = tempDomain;
-    this.url=tempUrl;
-    this.isUrl=isUrl;
-    this.att=tempWeb;
-    this.cookie=tempCookie;
+    this.domain = tempDomain;  // chỉ có domain
+    this.url=tempUrl;  // full url
+    this.isUrl=isUrl; // true false
+    this.att=tempWeb; // các thuộc tính của WEBSITES
     this.htmlraw="";
     this.found = found;  
   }
@@ -853,8 +847,8 @@ class Website{
           jar: true
       };
       // Nếu website cần Cookie thì set
-      if (website.cookie !== null){
-          var cookie = request.cookie(website.cookie);
+      if (website.att.COOKIE !== undefined){
+          var cookie = request.cookie(website.att.COOKIE);
           requestOptions.headers = {
               'Cookie' : cookie,
               'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
@@ -863,13 +857,7 @@ class Website{
       request(requestOptions, function(error, response, body) {
           // Đưa html raw vào website
           website.setDom(body);  
-          var item = new Item(website, recentitem);         
-          // Log to file
-          var logtype='info';
-          if (item.weight.value === 0 || item.category.ID === "UNKNOWN") {
-            logtype='error';
-          }
-          logger.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s",\n"SHIPPING":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, item.price.string, item.shipping.string,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
+          var item = new Item(website, recentitem);
           resolve(item);
       });  
     })
@@ -889,7 +877,7 @@ class Website{
   
 }
 class Item{
-  constructor(website, recentitem){     
+  constructor(website, recentitem){
     var handler = new htmlparser.DomHandler((error, dom) => {
       if (error) {
         console.log(error);
@@ -898,7 +886,7 @@ class Item{
 
         var price=new Price();
         if (website.att.PRICEBLOCK!==undefined){
-          var priceString = myparser.getText(website.att.PRICEBLOCK); 
+          var priceString = myparser.getText(website.att.PRICEBLOCK);
           price.setPrice(priceString);          
         }
         else if (website.att.JSONBLOCK!==undefined){
@@ -945,9 +933,8 @@ class Item{
             weight.setWeight(weightString); 
           }
         }
-        
-        this.webtax = website.att.TAX; // Thuế tại Mỹ của từng web
-        this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD']; // Quy đổi ngoại tệ
+        this.weburl = website.url;
+        this.webatt = website.att; // Thuế tại Mỹ của từng web
         
         //console.log(price);
         this.price=price; // Giá item
@@ -969,7 +956,7 @@ class Item{
   calculatePrice(){
     var itemPrice = this.priceshipping;
     var category= this.category;
-    var itemTax = itemPrice * this.webtax; // Thuế tại Mỹ
+    var itemTax = itemPrice * this.webatt.TAX; // Thuế tại Mỹ
     var itemPriceAfterTax = itemPrice + itemTax; // Giá Sau Thuế
     //console.log("tax: " + itemTax + " (" + this.webtax * 100 + "%)");
   
@@ -1000,6 +987,29 @@ class Item{
         : 0;
     //console.log("total: " + itemTotal);
     return itemTotal;
+  }
+  toLog(){
+    let logContent = `
+      URL : ${this.weburl}
+      PRICE : ${this.price.string}
+      SHIPPING : ${this.shipping.string}
+      WEIGHT : ${this.weight.string} ~ ${this.weight.kg}
+      CATEGORY : ${this.category.att.ID}
+      TOTAL : ${this.totalString}
+      CATEGORYSTRING : ${this.category.string}
+      `;
+    let logType='success';
+    if (this.webatt.DETAILBLOCK!== undefined){
+      if (this.weight.kg===0 || this.category.att.ID ==="UNKNOWN")
+      logType='error';
+    }
+    if (this.price.value===0)
+      logType='error';
+    let log = {
+      content: logContent,
+      type: logType
+    }
+    return log;
   }
   toText(){
     var response;
@@ -1077,7 +1087,7 @@ class Item{
     return response;
   }
   toVND(price){
-    var priceNew = Math.ceil((price * this.webrate) / 5000) * 5000; //Làm tròn lên 5000  
+    var priceNew = Math.ceil((price * this.webatt.RATE!==undefined?RATE[this.webatt.RATE]:RATE['USD']) / 5000) * 5000; //Làm tròn lên 5000  
     return priceNew.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
   }
 }
