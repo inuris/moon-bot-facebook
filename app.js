@@ -155,15 +155,21 @@ function callSendAPI(page_id, sender_psid, response) {
 
 async function testurl() {
   var url="https://www.jomashop.com/costa-del-mar-sunglasses-lr-64-ogp.html";
-  //url="https://www.amazon.com/Anker-Qi-Certified-Compatible-Fast-Charging-PowerWave/dp/B07DBXZZN3/ref=br_msw_pdt-6?_encoding=UTF8&smid=A294P4X9EWVXLJ&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=RJ1MJ4F47B2HVXEMH96Q&pf_rd_t=36701&pf_rd_p=28ea8511-ea82-4cfd-a17d-cb45137bb8ed&pf_rd_i=desktop";
+  url="https://www.amazon.com/Anker-Qi-Certified-Compatible-Fast-Charging-PowerWave/dp/B07DBXZZN3/ref=br_msw_pdt-6?_encoding=UTF8&smid=A294P4X9EWVXLJ&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=RJ1MJ4F47B2HVXEMH96Q&pf_rd_t=36701&pf_rd_p=28ea8511-ea82-4cfd-a17d-cb45137bb8ed&pf_rd_i=desktop";
   var website= new Website(url);
     // Nếu có trong list website thì mới trả lời
     if (website.found === true){      
-      var item = await Website.getItem(website);      
+      var item = await Website.getItem(website);
+      var log=item.toLog();
+      if (log.type==="error") logger.error(log.content);
+      else logger.success(log.content);
       // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
       if (item.price.value==0 && item.redirect!==""){
-          website= new Website(item.redirect);
-          item = await Website.getItem(website,item);
+        website= new Website(item.redirect);
+        item = await Website.getItem(website,item);
+        var log=item.toLog();
+        if (log.type==="error") logger.error(log.content);
+        else logger.success(log.content);
       }
     }
 }

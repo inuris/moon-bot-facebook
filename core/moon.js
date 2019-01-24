@@ -756,8 +756,8 @@ class AmazonWeight{
           
           var weightUnit = weightReg[2];
           if (weightUnit.indexOf("ounce") >= 0 || weightUnit.indexOf("oz") >= 0)
-            weightKg = weight / 35.274;
-          else if (weightUnit.indexOf("pound") >= 0) weightKg = weight / 2.2;
+            weightKg = Math.round((weight / 35.274)*1000/1000);
+          else if (weightUnit.indexOf("pound") >= 0) weightKg = Math.round((weight / 2.2)*1000/1000);
           // Tìm weight lớn nhất
           if (
             kg < weightKg ||
@@ -989,15 +989,14 @@ class Item{
     return itemTotal;
   }
   toLog(){
-    let logContent = `
-      URL : ${this.weburl}
-      PRICE : ${this.price.string}
-      SHIPPING : ${this.shipping.string}
-      WEIGHT : ${this.weight.string} ~ ${this.weight.kg}
-      CATEGORY : ${this.category.att.ID}
-      TOTAL : ${this.totalString}
-      CATEGORYSTRING : ${this.category.string}
-      `;
+    let logContent =`
+URL : ${this.weburl}
+PRICE : ${this.price.string}
+SHIPPING : ${this.shipping.string}
+WEIGHT : ${this.weight.string} ~ ${this.weight.kg}kg
+CATEGORY : ${this.category.att.ID}
+TOTAL : ${this.totalString}
+CATEGORYSTRING : ${this.category.string}`;
     let logType='success';
     if (this.webatt.DETAILBLOCK!== undefined){
       if (this.weight.kg===0 || this.category.att.ID ==="UNKNOWN")
