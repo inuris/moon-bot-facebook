@@ -4,18 +4,20 @@
   "description": "Moon Bot",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "debug": "node app.js"
   },
   "author": "KhoaLam",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "discord-logger": "^1.0.1",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "request": "^2.88.0",
     "htmlparser2": "^3.10.0",
-    "soupselect-update": "^0.2.5",
     "jsonpath": "^1.0.0",
-    "discord-logger": "^1.0.1"
+    "request": "^2.88.0",
+    "soupselect-update": "^0.2.5"
   },
   "engines": {
     "node": "10"

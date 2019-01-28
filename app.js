@@ -1,12 +1,15 @@
+require('dotenv').config();
 const PAGE_ACCESS_TOKEN = {
   573537602700846:process.env.PAGE_ACCESS_TOKEN_573537602700846, // Moon Hàng Mỹ
   949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938 // Rôm Rốp
 };
 const BADGE_IMAGE_URL=process.env.BADGE_IMAGE_URL;
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
+const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
+
 const DiscordLogger = require('discord-logger');
 const options = {
-  endpoint: process.env.DISCORD_WEBHOOK,
+  endpoint: DISCORD_WEBHOOK,
   botUsername: 'Logger'
 } 
 const logger = new DiscordLogger(options);
@@ -19,7 +22,7 @@ const request = require("request"),
   app = express().use(body_parser.json()); // creates express http server
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
+app.listen(process.env.PORT || 3000, () => console.log("webhook is listening"));
 
 // Accepts POST requests at /webhook endpoint
 app.post("/webhook", (req, res) => {

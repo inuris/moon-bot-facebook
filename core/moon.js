@@ -15,8 +15,8 @@ const CATEGORIES = {
     EXTRA: 5,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Kính mát",
     NOTE: "Phụ thu $5/cái",
     KEYWORD: ["sunglasses", "eyewear accessories"],
@@ -28,8 +28,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Dây nịt",
     NOTE: "Phí ship $11/kg",
     KEYWORD: ["belt"],
@@ -41,8 +41,8 @@ const CATEGORIES = {
     EXTRA: 15,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Đồng hồ",
     NOTE: "Phụ thu $15/cái",
     KEYWORD: ["watches"],
@@ -54,8 +54,8 @@ const CATEGORIES = {
     EXTRA: 5,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Trang sức",
     NOTE: "Phụ thu $5/cái",
     KEYWORD: ["> jewelry"],
@@ -67,8 +67,8 @@ const CATEGORIES = {
     EXTRA: 40,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Xe đạp",
     NOTE: "Phí ship $12/kg + Phụ thu $40/chiếc",
     KEYWORD: ["bike", "walker", "rollator","cycling"],
@@ -80,8 +80,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Dụng cụ nhà bếp",
     NOTE: "Phí ship $12/kg",
     KEYWORD: ["coffee machine", "blender", "brewer", "appliance"],
@@ -93,8 +93,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0,
-    HQANCHOR: 500,
+    HVEXTRA: 0,
+    HVANCHOR: 500,
     NAME: "Đĩa nhạc, game",
     NOTE: "Phí ship $10/kg",
     KEYWORD: ["video games", " > games","blu-ray >", "dvd >"],
@@ -106,8 +106,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0,
-    HQANCHOR: 500,
+    HVEXTRA: 0,
+    HVANCHOR: 500,
     NAME: "Thuốc - Vitamin - Hóa chất",
     NOTE: "Phí ship $11/kg",
     KEYWORD: [
@@ -128,8 +128,8 @@ const CATEGORIES = {
     EXTRA: 40,
     PRICEEXTRA: 70,
     PRICEANCHOR: 25,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Điện thoại - Laptop",
     NOTE: "Phí ship $12/kg + Phụ thu $40/cái",
     KEYWORD: [
@@ -146,8 +146,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 0,
+    HVEXTRA: 0.1,
+    HVANCHOR: 0,
     NAME: "Máy chơi game",
     NOTE: "Phí ship $13/kg",
     KEYWORD: [" > consoles"],
@@ -159,8 +159,8 @@ const CATEGORIES = {
     EXTRA: 35,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Camera",
     NOTE: "Phụ thu $35/chiếc",
     KEYWORD: ["camera & photo > video >", "camera & photo > dslr cameras"],
@@ -172,8 +172,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Golf",
     NOTE: "Phí ship $12/kg",
     KEYWORD: ["golf club", " > racquets"],
@@ -185,8 +185,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.05,
-    HQANCHOR: 500,
+    HVEXTRA: 0.05,
+    HVANCHOR: 500,
     NAME: "Điện tử",
     NOTE: "Phí ship $13/kg",
     KEYWORD: [
@@ -226,8 +226,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.05,
-    HQANCHOR: 500,
+    HVEXTRA: 0.05,
+    HVANCHOR: 500,
     NAME: "Phụ kiện xe hơi",
     NOTE: "Phí ship $11/kg",
     KEYWORD: ["> wheels & tires >",
@@ -240,8 +240,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Sữa",
     NOTE: "Phí ship $7.5/kg",
     KEYWORD: ["bottled beverages, water & drink mixes"],
@@ -253,8 +253,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Quần áo, giày dép",
     NOTE: "Phí ship $8.5/kg",
     KEYWORD: ["clothing, shoes & jewelry >"],
@@ -266,8 +266,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "thông thường",
     NOTE: "Phí ship $8.5/kg",
     KEYWORD: [],
@@ -279,8 +279,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Chưa xác định",
     NOTE: "Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về",
     KEYWORD: [],
@@ -288,12 +288,24 @@ const CATEGORIES = {
   }
 };
 const WEBSITES = {
+  AMAZON3RD:{
+    TAX: 0.083,
+    MATCH: "amazon.com/gp/offer-listing",
+    SILENCE: false,
+    //COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHVjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
+    PRICEBLOCK: [
+      ".olpOfferPrice"
+    ],
+    SHIPPINGBLOCK: [
+      ".olpShippingInfo"
+    ]
+  },  
   AMAZON: {
     TAX: 0.083,
     MATCH: "amazon.com",
     NAME: "Amazon",
     SILENCE: false,
-    COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
+    //COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHVjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
       "#detailBulletsWrapper_feature_div li",
@@ -329,18 +341,6 @@ const WEBSITES = {
     PRICEBLOCK: [
       ".product-price .price-sale",
       ".product-price .price-msrp"
-    ]
-  },
-  AMAZON3RD:{
-    TAX: 0.083,
-    MATCH: "amazon.com/gp/offer-listing",
-    SILENCE: false,
-    COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
-    PRICEBLOCK: [
-      ".olpOfferPrice"
-    ],
-    SHIPPINGBLOCK: [
-      ".olpShippingInfo"
     ]
   },  
   BHPHOTOVIDEO: {
@@ -697,7 +697,7 @@ class Parser{
     }
   }
 }
-class AmazonCategory{
+class Category{
   constructor(){
     this.string = "";
     this.att = CATEGORIES["UNKNOWN"];
@@ -733,7 +733,7 @@ class AmazonCategory{
     this.att = CATEGORIES[catType];
   }    
 }
-class AmazonWeight{
+class Weight{
   constructor(){ 
     this.string="";
     this.kg=0;
@@ -771,7 +771,8 @@ class AmazonWeight{
         }
       }
     }
-    kg = Math.round(kg * 1000) / 1000;
+    // Làm tròn kg lên 0.1
+    kg = Math.round(kg * 10) / 10;
     this.string=current;
     this.kg=kg;
     this.unit=unit;
@@ -910,8 +911,8 @@ class Item{
             redirect = website.domain + newurl;            
         }
 
-        var weight = new AmazonWeight();
-        var category=new AmazonCategory();
+        var weight = new Weight();
+        var category=new Category();
         if (recentitem!==undefined){ // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
           if (recentitem.weight.kg!==0)
             weight = recentitem.weight;
@@ -957,39 +958,38 @@ class Item{
   }  
   calculatePrice(){
     var itemPrice = this.priceshipping;
-    var category= this.category;
     var itemTax = itemPrice * this.webatt.TAX; // Thuế tại Mỹ
     var itemPriceAfterTax = itemPrice + itemTax; // Giá Sau Thuế
-    //console.log("tax: " + itemTax + " (" + this.webtax * 100 + "%)");
+    //console.log("tax: " + itemTax + " (" + this.webatt.TAX * 100 + "%)");
   
     var itemMoon = itemPriceAfterTax * (itemPriceAfterTax < 300 ? 0.07 : 0.05); // Công mua tính theo Giá Sau Thuế
     //console.log("moon: " + itemMoon);
   
-    var itemWeight = Math.ceil(this.weight.kg * 10) / 10;
-    var itemShip = itemWeight * category.att.SHIP; // Giá ship theo cân nặng
-    //console.log("ship: $" + category.att.SHIP + "/kg x " + itemWeight + "kg");
+    var itemWeight = this.weight.kg;
+    var itemShip = itemWeight * this.category.att.SHIP; // Giá ship theo cân nặng
+    //console.log("ship: $" + this.category.att.SHIP + "/kg x " + itemWeight + "kg");
   
-    var itemPriceExtra =
-    category.att.EXTRA +
-      (itemPrice >= category.att.PRICEANCHOR
-        ? category.att.PRICEEXTRA
+    var itemPriceExtra = this.category.att.EXTRA +
+      (itemPrice >= this.category.att.PRICEANCHOR
+        ? this.category.att.PRICEEXTRA
         : 0); /// Phụ thu theo cái
     //console.log("extra: " + category.att.EXTRA);
   
-    var itemHQEXTRA =
+    var itemHVEXTRA =
       itemPrice *
-      (itemPrice >= category.att.HQANCHOR
-        ? category.att.HQEXTRA
-        : 0); // Phụ thu giá trị cao (HQANCHOR)
-    //console.log("high price extra: " + itemHQEXTRA);
+      (itemPrice >= this.category.att.HVANCHOR
+        ? this.category.att.HVEXTRA
+        : 0); // Phụ thu giá trị cao (HVANCHOR)
+    //console.log("high price extra: " + itemHVEXTRA);
   
     var itemTotal =
       itemPrice > 0
-        ? itemPriceAfterTax + itemMoon + itemShip + itemPriceExtra + itemHQEXTRA
+        ? itemPriceAfterTax + itemMoon + itemShip + itemPriceExtra + itemHVEXTRA
         : 0;
     //console.log("total: " + itemTotal);
     return itemTotal;
   }
+  // Xuất log gồm log.type (error/success) và log.content dạng string
   toLog(){
     let logContent =`
 URL : ${this.weburl}
@@ -1013,8 +1013,10 @@ CATEGORYSTRING : ${this.category.string}`;
     console.log(logContent);
     return log;
   }
+  // Xuất ra string báo giá và chú thích
   toText(){
     var response;
+    // Nếu ko xác định dc giá
     if (this.totalString ==""){
       response= "Ko xác định được giá sản phẩm. Vui lòng chat với Moon để được báo giá chính xác."
     }
@@ -1032,8 +1034,11 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
+  // Xuất ra json theo format response của FB
+  // badgeImageUrl là hình cover của response
   toFBResponse(badgeImageUrl){  
     var response;
+    // Nếu ko xác định dc giá
     if (this.totalString ==""){
       response= {
         "attachment": {
@@ -1088,6 +1093,7 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
+  // chuyển giá (float)price sang VND theo RATE, thêm đơn vị VND
   toVND(price){    
     var rate=this.webatt.RATE!==undefined?RATE[this.webatt.RATE]:RATE['USD'];
     var priceNew = Math.ceil((price * rate) / 5000) * 5000; //Làm tròn lên 5000 
