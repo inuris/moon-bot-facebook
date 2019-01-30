@@ -513,16 +513,16 @@ const WEBSITES = {
       PATH: ["$[0].offers.price"]
     }
   },
-  ZARAES:{
-    TAX: 0,
-    RATE: 'EUR',
-    MATCH: "zara.com/es",
-    SILENCE: false,
-    JSONBLOCK:{
-      INDEX: 16,
-      PATH: ["$[0].offers.price"]
-    }
-  }
+  // ZARAES:{
+  //   TAX: 0,
+  //   RATE: 'EUR',
+  //   MATCH: "zara.com/es",
+  //   SILENCE: false,
+  //   JSONBLOCK:{
+  //     INDEX: 16,
+  //     PATH: ["$[0].offers.price"]
+  //   }
+  // }
 };
 
 // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
@@ -741,7 +741,7 @@ class Weight{
   }
   setWeight(detailArray, weightCondition){
     var current= "",
-        kg= 0,
+        kg= 0.2,
         unit= "";
     //console.log(detailArray);
     var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
