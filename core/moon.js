@@ -772,7 +772,7 @@ class Weight{
       }
     }
     // Làm tròn kg lên 0.1
-    kg = Math.round(kg * 10) / 10;
+    kg = Math.ceil(kg * 10) / 10;
     this.string=current;
     this.kg=kg;
     this.unit=unit;
