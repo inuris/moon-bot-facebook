@@ -100,8 +100,10 @@ async function handleMessage(page_id, sender_psid, received_message) {
         if (log.type==="error") logger.error(log.content);
         else logger.success(log.content);
       }
-      if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))
-        callSendAPI(page_id, sender_psid, item.toFBResponse(BADGE_IMAGE_URL));
+      if (page_id === "949373165137938"){ // Chỉ auto reply cho page Rôm Rốp
+        if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))
+          callSendAPI(page_id, sender_psid, item.toFBResponse(BADGE_IMAGE_URL));
+      }
     }
     else if (["help","menu","list"].includes(received_message.text)){
       let response = { "text": "Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite() }
