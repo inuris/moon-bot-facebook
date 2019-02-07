@@ -487,7 +487,11 @@ const WEBSITES = {
   THEBODYSHOP: {
     TAX: 0.083,
     MATCH: "thebodyshop.com",
-    SILENCE: true
+    SILENCE: true,
+    PRICEBLOCK:[
+      '.current-price',
+      '.price-wrapper'
+    ]
   },
   WALGREENS: {
     TAX: 0.083,
