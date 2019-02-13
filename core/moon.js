@@ -745,7 +745,7 @@ class Weight{
   }
   setWeight(detailArray, weightCondition){
     var current= "",
-        kg= 0.2,
+        kg= 0,
         unit= "";
     //console.log(detailArray);
     var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
@@ -775,8 +775,14 @@ class Weight{
         }
       }
     }
-    // Làm tròn kg lên 0.1
-    kg = Math.ceil(kg * 10) / 10;
+    // Nếu tìm dc cân nặng thì làm tròn
+    if (kg>0){
+      // Làm tròn lên 0.1
+      kg = Math.ceil(kg * 10) / 10;
+      // Nếu nhỏ hơn 0.2kg thì làm tròn 0.2
+      if (kg < 0.2) {kg=0.2};
+    }
+    
     this.string=current;
     this.kg=kg;
     this.unit=unit;
