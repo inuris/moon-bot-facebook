@@ -377,7 +377,7 @@ const WEBSITES = {
     } 
   },
   FOREVER21: {
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "forever21.com",
     NAME: "Forever21",
     SILENCE: false,
@@ -398,7 +398,7 @@ const WEBSITES = {
         }
       },
       BANANAREPUBLIC: {
-        TAX: 0.083,
+        TAX: 0,
         MATCH: "bananarepublic.gap.com",
         NAME: "BananaRepublic",
         SILENCE: false,
@@ -439,7 +439,7 @@ const WEBSITES = {
   },
   JOMASHOP: {
     SILENT: true,
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "jomashop.com",
     NAME: "JomaShop",
     SILENCE: true,
@@ -485,7 +485,7 @@ const WEBSITES = {
     ]
   },
   THEBODYSHOP: {
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "thebodyshop.com",
     SILENCE: true,
     PRICEBLOCK:[
@@ -745,7 +745,7 @@ class Weight{
   }
   setWeight(detailArray, weightCondition){
     var current= "",
-        kg= 0,
+        kg= 0.2,
         unit= "";
     //console.log(detailArray);
     var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
@@ -898,10 +898,12 @@ class Item{
         var myparser = new Parser(dom);
 
         var price=new Price();
+        // Tìm giá trên HTML (có priceBlock)
         if (website.att.PRICEBLOCK!==undefined){
           var priceString = myparser.getText(website.att.PRICEBLOCK);
           price.setPrice(priceString);          
         }
+        // Tìm giá trên JSON (ko có priceBlock, chỉ có JSONBlock)
         else if (website.att.JSONBLOCK!==undefined){
           var priceString = myparser.getJSON(website.att.JSONBLOCK); 
           price.setPrice(priceString);
@@ -923,7 +925,14 @@ class Item{
 
         var weight = new Weight();
         var category=new Category();
+<<<<<<< HEAD
         if (recentitem!==undefined){ // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
+=======
+
+        // recentitem chỉ có khi vào trang redirect rồi
+        if (recentitem!==undefined){ 
+          // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
+>>>>>>> 7680d89c6ea778f4aaef8ffedba1bab13aeec703
           if (recentitem.weight.kg!==0)
             weight = recentitem.weight;
           if (recentitem.category.string!==0)
@@ -936,7 +945,7 @@ class Item{
           weight.setWeight(detailArray,website.att.WEIGHTCONDITION);          
           category.setCategory(detailArray, website.att.CATEGORYCONDITION); 
         }
-        else{
+        else{ // các trang thông thường sẽ có category nằm riêng, weight nằm riêng
           if (website.att.CATEGORYBLOCK!==undefined){
             var categoryString = myparser.getTextArray(website.att.CATEGORYBLOCK);
             category.setCategory(categoryString); 
