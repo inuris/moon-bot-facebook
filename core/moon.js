@@ -796,9 +796,9 @@ class Price{
   }
   setPrice(priceString, reg){    
     var tempString = priceString.replace(/\s+/gm," ")
-                                .trim();
+                                .trim().toLowerCase();
     this.string = tempString;
-    tempString = tempString.replace(/\$\s*|,/gm, "")
+    tempString = tempString.replace(/\$\s*|free shipping on orders over \$\d+.?\d*/gm, "")
                                 .replace(" ", ".");
     if (reg !== undefined){
         var tempMatch = tempString.match(reg)
