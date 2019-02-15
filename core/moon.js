@@ -925,14 +925,10 @@ class Item{
 
         var weight = new Weight();
         var category=new Category();
-<<<<<<< HEAD
-        if (recentitem!==undefined){ // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
-=======
 
         // recentitem chỉ có khi vào trang redirect rồi
         if (recentitem!==undefined){ 
           // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
->>>>>>> 7680d89c6ea778f4aaef8ffedba1bab13aeec703
           if (recentitem.weight.kg!==0)
             weight = recentitem.weight;
           if (recentitem.category.string!==0)
