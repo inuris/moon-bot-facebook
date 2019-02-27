@@ -102,10 +102,12 @@ async function handleMessage(page_id, sender, received_message) {
         else logger.success(log.content);
       }
       if (page_id === "949373165137938"){ // Chỉ auto reply cho page Rôm Rốp
-        if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))
+        if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))          
           callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
-        // Gửi cho Admin Quick Reply
-        callSendAPI(page_id, ADMIN, item.toFBQuickReply(sender.id,sender.name));
+        
+      } else {
+        // Gửi cho Admin suggest reply
+        callSendAPI(page_id, ADMIN, item.toFBAdmin(sender.id));
       }
     }
     else if (["help","menu","list"].includes(received_message.text)){
@@ -137,11 +139,11 @@ function handlePostback(page_id, sender, received_postback) {
 }
 
 // Sends response messages via the Send API
-function callSendAPI(page_id, sender, response) {
+function callSendAPI(page_id, sender_id, response) {
   // Construct the message body
   let request_body = {
     recipient: {
-      id: sender.id
+      id: sender_id
     },
     message: response
   };

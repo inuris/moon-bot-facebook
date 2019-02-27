@@ -1049,6 +1049,7 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
+  // [DEPRECATED]
   // Xuất ra json theo format response của FB
   // badgeImageUrl là hình cover của response
   toFBResponse(badgeImageUrl){  
@@ -1108,41 +1109,47 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
-  toFBQuickReply(senderid, sendername){
-    let response;
-    let responseContent =`[Moon] ${sendername}
-LINK : ${this.weburl}
-WEB : ${this.price.string}`;
+  // Xuất ra json theo format response của FB
+  // gửi thông tin báo giá kèm theo button cho phép trả lời nhanh
+  toFBAdmin(senderid){  
+    var response;
+    let responseContent =`${this.weburl}
+Giá web: ${this.price.string}`;
     if (this.shipping.value>0) {
     responseContent += `
-SHIP : ${this.shipping.string}`;
+Ship: ${this.shipping.string}`;
     }
     if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
-
+      responseContent += "\nChưa có cân nặng";
     }
     else
       responseContent += `
-CÂN : ${this.weight.string} ~ ${this.weight.kg}kg;    
-MẶT HÀNG : ${this.category.att.NAME}`;
-    responseContent += `
-GIÁ BÁO : ${this.totalString}`;
+Cân: ${this.weight.string}~${this.weight.kg}kg;    
+Mặt hàng: ${this.category.att.NAME}`;
     let payloadContent=`send|${senderid}|${this.totalString}`;
     response =  {
-      "text": responseContent,
-      "quick_replies": [{
-              "content_type": "text",
-              "title": "Báo giá",
-              "payload": payloadContent
-          }
-      ]
-    }
-    return response;      
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type":"button",
+          "text":responseContent,
+          "buttons":[
+            {
+              "type":"postback",
+              "payload": payloadContent,
+              "title":this.totalString
+            }
+          ]
+        }
+      }
+    }  
+    return response;
   }
   // chuyển giá (float)price sang VND theo RATE, thêm đơn vị VND
   toVND(price){    
     var rate=this.webatt.RATE!==undefined?RATE[this.webatt.RATE]:RATE['USD'];
     var priceNew = Math.ceil((price * rate) / 5000) * 5000; //Làm tròn lên 5000 
-    return priceNew.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
+    return priceNew.formatMoney(0, '.', ',')+"đ"; // Thêm VND vào
   }
 }
 module.exports.Website=Website;
