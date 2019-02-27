@@ -3,6 +3,7 @@ const PAGE_ACCESS_TOKEN = {
   573537602700846:process.env.PAGE_ACCESS_TOKEN_573537602700846, // Moon Hàng Mỹ
   949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938 // Rôm Rốp
 };
+const ADMIN = process.env.ADMIN;
 const BADGE_IMAGE_URL=process.env.BADGE_IMAGE_URL;
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
 const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
@@ -40,14 +41,14 @@ app.post("/webhook", (req, res) => {
       let page_id= entry.id;
 
       // Lấy Sender ID
-      let sender_psid = webhook_event.sender.id;
+      let sender = webhook_event.sender;
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        handleMessage(page_id, sender_psid, webhook_event.message);
+        handleMessage(page_id, sender, webhook_event.message);
       } else if (webhook_event.postback) {
-        handlePostback(page_id, sender_psid, webhook_event.postback);
+        handlePostback(page_id, sender, webhook_event.postback);
       }
     });
 
@@ -82,7 +83,7 @@ app.get("/webhook", (req, res) => {
 });
 
 // Handles messages events
-async function handleMessage(page_id, sender_psid, received_message) { 
+async function handleMessage(page_id, sender, received_message) { 
   // Check if the message contains text
   if (received_message.text) {
     var website= new Website(received_message.text);
@@ -102,38 +103,45 @@ async function handleMessage(page_id, sender_psid, received_message) {
       }
       if (page_id === "949373165137938"){ // Chỉ auto reply cho page Rôm Rốp
         if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))
-          callSendAPI(page_id, sender_psid, item.toFBResponse(BADGE_IMAGE_URL));
+          callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
+        // Gửi cho Admin Quick Reply
+        callSendAPI(page_id, ADMIN, item.toFBQuickReply(sender.id,sender.name));
       }
     }
     else if (["help","menu","list"].includes(received_message.text)){
       let response = { "text": "Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite() }
-      callSendAPI(page_id, sender_psid, response);
+      callSendAPI(page_id, sender.id, response);
     }
   }
   
 }
 
 // Handles messaging_postbacks events
-function handlePostback(page_id, sender_psid, received_postback) {
+function handlePostback(page_id, sender, received_postback) {
   let response;
   
   // Get the payload for the postback
   let payload = received_postback.payload;
-
+  let senderid = sender.id;
   // Set the response based on the postback payload
   if (payload === 'chat') {
     response = { "text": "[Auto] Vui lòng chờ giây lát, nhân viên Moon sẽ liên hệ lại ngay" }
-  } 
+  } else
+  if (payload.indexOf('send')===0){
+    let splitter=payload.split('|');
+    senderid = splitter[1];
+    response = { "text": splitter[2] }
+  }
   // Send the message to acknowledge the postback
-  callSendAPI(page_id, sender_psid, response);
+  callSendAPI(page_id, senderid, response);
 }
 
 // Sends response messages via the Send API
-function callSendAPI(page_id, sender_psid, response) {
+function callSendAPI(page_id, sender, response) {
   // Construct the message body
   let request_body = {
     recipient: {
-      id: sender_psid
+      id: sender.id
     },
     message: response
   };

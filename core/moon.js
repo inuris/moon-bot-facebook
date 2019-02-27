@@ -1108,6 +1108,36 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
+  toFBQuickReply(senderid, sendername){
+    let response;
+    let responseContent =`[Moon] ${sendername}
+LINK : ${this.weburl}
+WEB : ${this.price.string}`;
+    if (this.shipping.value>0) {
+    responseContent += `
+SHIP : ${this.shipping.string}`;
+    }
+    if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
+
+    }
+    else
+      responseContent += `
+CÂN : ${this.weight.string} ~ ${this.weight.kg}kg;    
+MẶT HÀNG : ${this.category.att.NAME}`;
+    responseContent += `
+GIÁ BÁO : ${this.totalString}`;
+    let payloadContent=`send|${senderid}|${this.totalString}`;
+    response =  {
+      "text": responseContent,
+      "quick_replies": [{
+              "content_type": "text",
+              "title": "Báo giá",
+              "payload": payloadContent
+          }
+      ]
+    }
+    return response;      
+  }
   // chuyển giá (float)price sang VND theo RATE, thêm đơn vị VND
   toVND(price){    
     var rate=this.webatt.RATE!==undefined?RATE[this.webatt.RATE]:RATE['USD'];
