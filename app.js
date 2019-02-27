@@ -3,7 +3,7 @@ const PAGE_ACCESS_TOKEN = {
   573537602700846:process.env.PAGE_ACCESS_TOKEN_573537602700846, // Moon Hàng Mỹ
   949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938 // Rôm Rốp
 };
-const ADMIN = process.env.ADMIN;
+const ADMIN = process.env.TRANGNGUYEN;
 const BADGE_IMAGE_URL=process.env.BADGE_IMAGE_URL;
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
 const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
@@ -104,7 +104,6 @@ async function handleMessage(page_id, sender, received_message) {
       if (page_id === "949373165137938"){ // Chỉ auto reply cho page Rôm Rốp
         if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))          
           callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
-        
       } else {
         // Gửi cho Admin suggest reply
         callSendAPI(page_id, ADMIN, item.toFBAdmin(sender.id));
