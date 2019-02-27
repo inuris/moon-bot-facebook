@@ -1126,7 +1126,7 @@ Ship: ${this.shipping.string}`;
       responseContent += `
 Cân: ${this.weight.string}~${this.weight.kg}kg;    
 Mặt hàng: ${this.category.att.NAME}`;
-    let payloadContent=`send|${senderid}|Dạ giá này là ${this.totalString}`;
+    let payloadContent=`send|${senderid}|Dạ giá sp này là ${this.totalString}`;
     response =  {
       "attachment": {
         "type": "template",
