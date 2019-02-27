@@ -132,6 +132,7 @@ function handlePostback(page_id, sender, received_postback) {
     response = { "text": "[Auto] Vui lòng chờ giây lát, nhân viên Moon sẽ liên hệ lại ngay" }
   } else
   if (payload.indexOf('send')===0){
+    console.log("receive payload: send");
     let splitter=payload.split('|');
     senderid = splitter[1];
     response = { "text": splitter[2] }
