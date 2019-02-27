@@ -101,8 +101,6 @@ async function handleMessage(page_id, sender, received_message) {
         if (log.type==="error") logger.error(log.content);
         else logger.success(log.content);
       }
-      
-      console.log("Sender:"+sender.id);
       if (page_id === "949373165137938"){ // Chỉ auto reply cho page Rôm Rốp
         if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))          
           callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
