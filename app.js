@@ -101,12 +101,15 @@ async function handleMessage(page_id, sender, received_message) {
         if (log.type==="error") logger.error(log.content);
         else logger.success(log.content);
       }
-      if (page_id === "949373165137938"){ // Chỉ auto reply cho page Rôm Rốp
-        if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))          
+      // Nếu tìm được giá thì mới báo
+      if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0)){
+        // Chỉ auto reply cho page Rôm Rốp
+        if (page_id === "949373165137938"){                     
           callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
-      } else {
-        // Gửi cho Admin suggest reply
-        callSendAPI(page_id, ADMIN, item.toFBAdmin(sender.id));
+        } else {
+          // Nếu là Moon Hàng Mỹ thì gửi cho Admin suggest reply
+          callSendAPI(page_id, ADMIN, item.toFBAdmin(sender.id));
+        }
       }
     }
     else if (["help","menu","list"].includes(received_message.text)){
