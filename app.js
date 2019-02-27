@@ -1,16 +1,29 @@
-const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+require('dotenv').config();
+const PAGE_ACCESS_TOKEN = {
+  573537602700846:process.env.PAGE_ACCESS_TOKEN_573537602700846, // Moon Hàng Mỹ
+  949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938 // Rôm Rốp
+};
+const ADMIN = process.env.TRANGNGUYEN;
+const BADGE_IMAGE_URL=process.env.BADGE_IMAGE_URL;
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
-const amazon = require("./amazon.js");
-const select = require("soupselect-update").select;
+const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
+
+const DiscordLogger = require('discord-logger');
+const options = {
+  endpoint: DISCORD_WEBHOOK,
+  botUsername: 'Logger'
+} 
+const logger = new DiscordLogger(options);
+
+const Website = require("./core/moon.js").Website;
 // Imports dependencies and set up http server
 const request = require("request"),
   express = require("express"),
   body_parser = require("body-parser"),
-  htmlparser = require("htmlparser2"),
   app = express().use(body_parser.json()); // creates express http server
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
+app.listen(process.env.PORT || 3000, () => console.log("webhook is listening"));
 
 // Accepts POST requests at /webhook endpoint
 app.post("/webhook", (req, res) => {
@@ -19,21 +32,23 @@ app.post("/webhook", (req, res) => {
   // Check the webhook event is from a Page subscription
   if (body.object === "page") {
     // Iterate over each entry - there may be multiple if batched
-    body.entry.forEach(function(entry) {
+    body.entry.forEach((entry)=> {
       // Get the webhook event. entry.messaging is an array, but
       // will only ever contain one event, so we get index 0
       let webhook_event = entry.messaging[0];
-      
 
-      // Get the sender PSID
-      let sender_psid = webhook_event.sender.id;
+      // Lấy Page ID của page nhận msg
+      let page_id= entry.id;
+
+      // Lấy Sender ID
+      let sender = webhook_event.sender;
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        handleMessage(sender_psid, webhook_event.message);
+        handleMessage(page_id, sender, webhook_event.message);
       } else if (webhook_event.postback) {
-        handlePostback(sender_psid, webhook_event.postback);
+        handlePostback(page_id, sender, webhook_event.postback);
       }
     });
 
@@ -68,43 +83,68 @@ app.get("/webhook", (req, res) => {
 });
 
 // Handles messages events
-function handleMessage(sender_psid, received_message) {
-  let response;
-
+async function handleMessage(page_id, sender, received_message) { 
   // Check if the message contains text
   if (received_message.text) {
-    
-    var reg=/(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?(amazon.com\/\S+)/gm;
-    var matchurl=received_message.text.match(reg);
-    if (matchurl!==null){
+    var website= new Website(received_message.text);
+    // Nếu có trong list website thì mới trả lời
+    if (website.found === true){      
+      var item = await Website.getItem(website);
+      var log=item.toLog();
+      if (log.type==="error") logger.error(log.content);
+      else logger.success(log.content);
+      // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
+      if (item.price.value==0 && item.redirect!==""){
+        website= new Website(item.redirect);
+        item = await Website.getItem(website,item);
+        var log=item.toLog();
+        if (log.type==="error") logger.error(log.content);
+        else logger.success(log.content);
+      }
       
-      // Create the payload for a basic text message
-      var requestOptions = {
-        method: "GET",
-        url: matchurl[0],
-        gzip: true
-      };
-      request(requestOptions, function(error, response, body) {
-        var response = amazon.getMoonPrice(matchurl[0],body);    
-        // response = {
-        // "text": price
-        // }
-        
-        callSendAPI(sender_psid, response);
-      });           
+      console.log("Sender:"+sender.id);
+      if (page_id === "949373165137938"){ // Chỉ auto reply cho page Rôm Rốp
+        if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0))          
+          callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
+      } else {
+        // Gửi cho Admin suggest reply
+        callSendAPI(page_id, ADMIN, item.toFBAdmin(sender.id));
+      }
+    }
+    else if (["help","menu","list"].includes(received_message.text)){
+      let response = { "text": "Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite() }
+      callSendAPI(page_id, sender.id, response);
     }
   }
+  
 }
 
 // Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {}
+function handlePostback(page_id, sender, received_postback) {
+  let response;
+  
+  // Get the payload for the postback
+  let payload = received_postback.payload;
+  let senderid = sender.id;
+  // Set the response based on the postback payload
+  if (payload === 'chat') {
+    response = { "text": "[Auto] Vui lòng chờ giây lát, nhân viên Moon sẽ liên hệ lại ngay" }
+  } else
+  if (payload.indexOf('send')===0){
+    let splitter=payload.split('|');
+    senderid = splitter[1];
+    response = { "text": splitter[2] }
+  }
+  // Send the message to acknowledge the postback
+  callSendAPI(page_id, senderid, response);
+}
 
 // Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
+function callSendAPI(page_id, sender_id, response) {
   // Construct the message body
   let request_body = {
     recipient: {
-      id: sender_psid
+      id: sender_id
     },
     message: response
   };
@@ -113,7 +153,7 @@ function callSendAPI(sender_psid, response) {
   request(
     {
       uri: "https://graph.facebook.com/v2.6/me/messages",
-      qs: { access_token: PAGE_ACCESS_TOKEN },
+      qs: { access_token: PAGE_ACCESS_TOKEN[page_id] },
       method: "POST",
       json: request_body
     },
@@ -126,20 +166,27 @@ function callSendAPI(sender_psid, response) {
     }
   );
 }
+
 // For Test only
 
-// function getAmazonPrice() {
-//   var url="https://www.amazon.com/Subwoofer-meidong-Bluetooth-KY-2022/dp/B07J64XH1S/ref=br_msw_pdt-3?_encoding=UTF8&smid=A1DD8WAGHSJ7M5&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=ZFK2XXAHP42WTY2E7Z4Q&pf_rd_t=36701&pf_rd_p=28b04fc5-b068-4db7-9f75-c6ec32ddbd9a&pf_rd_i=desktop";
-//   var requestOptions = {
-//     method: "GET",
-//     url: url,
-//     gzip: true
-//   };
-//   var price=0;
-//   request(requestOptions, function(error, response, body) {
-//     price = amazon.getPrice(body);    
-//   });
-//   console.log(price);
-//   return price;
-// }
-// getAmazonPrice();
+async function testurl() {
+  var url="https://www.jomashop.com/costa-del-mar-sunglasses-lr-64-ogp.html";
+  url="https://www.amazon.com/Anker-Qi-Certified-Compatible-Fast-Charging-PowerWave/dp/B07DBXZZN3/ref=br_msw_pdt-6?_encoding=UTF8&smid=A294P4X9EWVXLJ&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=RJ1MJ4F47B2HVXEMH96Q&pf_rd_t=36701&pf_rd_p=28ea8511-ea82-4cfd-a17d-cb45137bb8ed&pf_rd_i=desktop";
+  var website= new Website(url);
+    // Nếu có trong list website thì mới trả lời
+    if (website.found === true){      
+      var item = await Website.getItem(website);
+      var log=item.toLog();
+      if (log.type==="error") logger.error(log.content);
+      else logger.success(log.content);
+      // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
+      if (item.price.value==0 && item.redirect!==""){
+        website= new Website(item.redirect);
+        item = await Website.getItem(website,item);
+        var log=item.toLog();
+        if (log.type==="error") logger.error(log.content);
+        else logger.success(log.content);
+      }
+    }
+}
+//testurl();
