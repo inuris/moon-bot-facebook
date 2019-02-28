@@ -172,6 +172,7 @@ function callSendAPI(page_id, sender_id, response) {
   );
 }
 
+// Lấy user info từ FBGraph
 async function getUserInfo(page_id, sender_id){
   const _getUserInfo = await new Promise(resolve => { 
   const userFieldSet = 'id, name';

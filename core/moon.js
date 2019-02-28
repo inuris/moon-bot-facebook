@@ -798,7 +798,7 @@ class Price{
     var tempString = priceString.replace(/\s+/gm," ")
                                 .trim().toLowerCase();
     this.string = tempString;
-    tempString = tempString.replace(/\$\s*|free shipping on orders over \$\d+.?\d*/gm, "")
+    tempString = tempString.replace(/\$\s*|free shipping on orders over \$\d+.?\d*\D*/gm, "")
                                 .replace(" ", ".");
     if (reg !== undefined){
         var tempMatch = tempString.match(reg)
@@ -1115,7 +1115,7 @@ CATEGORYSTRING : ${this.category.string}`;
   // gửi thông tin báo giá kèm theo button cho phép trả lời nhanh
   toFBAdmin(senderid,sendername){  
     var response;
-    let responseContent =`${sendername} gửi link ${this.weburl.length>100?this.weburl.substr(0,100)+"...":this.weburl}
+    let responseContent =`${sendername} gửi link ${this.weburl}
 Giá web: ${this.price.string}`;
     if (this.shipping.value>0) {
     responseContent += `
@@ -1126,8 +1126,8 @@ Ship: ${this.shipping.value}`;
     }
     else
       responseContent += `
-Cân: ${this.weight.string} ~ ${this.weight.kg}kg;    
-Mặt hàng: ${this.category.att.NAME}`;
+Cân: ${this.weight.kg}kg;    
+Mặt hàng ${this.category.att.NAME}`;
     let payloadContent=`send|${senderid}|Dạ giá sp này là ${this.totalString}`;
     response =  {
       "attachment": {
@@ -1144,7 +1144,7 @@ Mặt hàng: ${this.category.att.NAME}`;
             {
               "type":"postback",
               "payload": payloadContent,
-              "title": "Trả lời: " + this.totalString
+              "title": "Reply: " + this.totalString
             }
           ]
         }
