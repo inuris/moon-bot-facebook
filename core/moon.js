@@ -1049,8 +1049,9 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
-  // [DEPRECATED]
+  
   // Xuất ra json theo format response của FB
+  // Dùng để auto reply
   // badgeImageUrl là hình cover của response
   toFBResponse(badgeImageUrl){  
     var response;
@@ -1110,21 +1111,22 @@ CATEGORYSTRING : ${this.category.string}`;
     return response;
   }
   // Xuất ra json theo format response của FB
+  // Dùng để gửi admin duyệty
   // gửi thông tin báo giá kèm theo button cho phép trả lời nhanh
-  toFBAdmin(senderid){  
+  toFBAdmin(senderid,sendername){  
     var response;
-    let responseContent =`${this.weburl}
+    let responseContent =`${sendername} gửi link ${this.weburl.length>100?this.weburl.substr(0,100)+"...":this.weburl}
 Giá web: ${this.price.string}`;
     if (this.shipping.value>0) {
     responseContent += `
-Ship: ${this.shipping.string}`;
+Ship: ${this.shipping.value}`;
     }
     if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
       responseContent += "\nChưa có cân nặng";
     }
     else
       responseContent += `
-Cân: ${this.weight.string}~${this.weight.kg}kg;    
+Cân: ${this.weight.string} ~ ${this.weight.kg}kg;    
 Mặt hàng: ${this.category.att.NAME}`;
     let payloadContent=`send|${senderid}|Dạ giá sp này là ${this.totalString}`;
     response =  {
@@ -1135,9 +1137,14 @@ Mặt hàng: ${this.category.att.NAME}`;
           "text":responseContent,
           "buttons":[
             {
+              "type": "web_url",
+              "url": this.weburl,
+              "title": "Xem link"
+            },
+            {
               "type":"postback",
               "payload": payloadContent,
-              "title":this.totalString
+              "title": "Trả lời: " + this.totalString
             }
           ]
         }
