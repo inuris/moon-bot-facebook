@@ -43,7 +43,6 @@ app.post("/webhook", (req, res) => {
 
       // Lấy Sender ID
       let sender = webhook_event.sender;
-      console.log(sender);
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
@@ -119,8 +118,10 @@ async function handleMessage(page_id, sender, received_message) {
       let response = { "text": "Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite() }
       callSendAPI(page_id, sender.id, response);
     }
-  }
-  
+    else if (website.isUrl){
+      logger.error("Undefined: " + website.url);
+    }
+  }  
 }
 
 // Handles messaging_postbacks events
@@ -139,6 +140,7 @@ function handlePostback(page_id, sender, received_postback) {
     let splitter=payload.split('|');
     senderid = splitter[1];
     response = { "text": splitter[2] }
+    logger.info(splitter[2]);
   }
   // Send the message to acknowledge the postback
   callSendAPI(page_id, senderid, response);
