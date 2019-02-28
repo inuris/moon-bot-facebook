@@ -1,9 +1,10 @@
 require('dotenv').config();
 const PAGE_ACCESS_TOKEN = {
-  573537602700846:process.env.PAGE_ACCESS_TOKEN_573537602700846, // Moon Hàng Mỹ
-  949373165137938:process.env.PAGE_ACCESS_TOKEN_949373165137938 // Rôm Rốp
+  573537602700846:process.env.PAGE_ACCESS_TOKEN_MOON, // Moon Hàng Mỹ
+  949373165137938:process.env.PAGE_ACCESS_TOKEN_ROMROP // Rôm Rốp
 };
-const ADMIN = process.env.TRANGNGUYEN;
+const ADMIN = process.env.ADMIN;
+const TESTER = process.env.TESTER;
 const BADGE_IMAGE_URL=process.env.BADGE_IMAGE_URL;
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
 const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
@@ -42,7 +43,7 @@ app.post("/webhook", (req, res) => {
 
       // Lấy Sender ID
       let sender = webhook_event.sender;
-
+      console.log(sender);
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
@@ -103,12 +104,14 @@ async function handleMessage(page_id, sender, received_message) {
       }
       // Nếu tìm được giá thì mới báo
       if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0)){
+        let senderInfo = await getUserInfo(page_id , sender.id);
         // Chỉ auto reply cho page Rôm Rốp
         if (page_id === "949373165137938"){                     
           callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
+          callSendAPI(page_id, TESTER, item.toFBAdmin(sender.id , senderInfo.name));
         } else {
-          // Nếu là Moon Hàng Mỹ thì gửi cho Admin suggest reply
-          callSendAPI(page_id, ADMIN, item.toFBAdmin(sender.id));
+          // Nếu là Moon Hàng Mỹ thì gửi cho Admin suggest reply          
+          callSendAPI(page_id, ADMIN, item.toFBAdmin(sender.id , senderInfo.name));
         }
       }
     }
@@ -169,8 +172,31 @@ function callSendAPI(page_id, sender_id, response) {
   );
 }
 
-// For Test only
+async function getUserInfo(page_id, sender_id){
+  const _getUserInfo = await new Promise(resolve => { 
+  const userFieldSet = 'id, name';
+  request(
+    {
+      method: 'GET',
+      uri: `https://graph.facebook.com/v3.2/${sender_id}`,
+      qs: {
+        access_token: PAGE_ACCESS_TOKEN[page_id],
+        fields: userFieldSet
+      }
+    },
+  (err, res, body) => {
+      if (!err) {
+        resolve(JSON.parse(body));
+      } else {
+        return null;
+      }
+    })
+  })
+  return _getUserInfo;
+}
 
+
+// For Test only
 async function testurl() {
   var url="https://www.jomashop.com/costa-del-mar-sunglasses-lr-64-ogp.html";
   url="https://www.amazon.com/Anker-Qi-Certified-Compatible-Fast-Charging-PowerWave/dp/B07DBXZZN3/ref=br_msw_pdt-6?_encoding=UTF8&smid=A294P4X9EWVXLJ&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=&pf_rd_r=RJ1MJ4F47B2HVXEMH96Q&pf_rd_t=36701&pf_rd_p=28ea8511-ea82-4cfd-a17d-cb45137bb8ed&pf_rd_i=desktop";
