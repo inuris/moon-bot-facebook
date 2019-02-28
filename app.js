@@ -43,7 +43,6 @@ app.post("/webhook", (req, res) => {
 
       // Lấy Sender ID
       let sender = webhook_event.sender;
-      console.log(sender);
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
