@@ -798,7 +798,7 @@ class Price{
     var tempString = priceString.replace(/\s+/gm," ")
                                 .trim().toLowerCase();
     this.string = tempString;
-    tempString = tempString.replace(/\$\s*|free shipping on orders over \$\d+.?\d*\D*/gm, "")
+    tempString = tempString.replace(/\$\s*|.*free shipping.*/gm, "")
                                 .replace(" ", ".");
     if (reg !== undefined){
         var tempMatch = tempString.match(reg)
@@ -827,6 +827,7 @@ class Website{
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
+      tempUrl = tempMatch[0]; // Lấy ra url trong đoạn text
       for (let i in WEBSITES){             
         if(tempMatch[0].indexOf(WEBSITES[i].MATCH)>=0){
           tempUrl = tempMatch[0]; // full url
@@ -1116,19 +1117,20 @@ CATEGORYSTRING : ${this.category.string}`;
   toFBAdmin(senderid,sendername){  
     var response;
     let responseContent =`${sendername} gửi link ${this.weburl}
-Giá web: ${this.price.string}`;
+- Giá web: ${this.price.string}`;
     if (this.shipping.value>0) {
     responseContent += `
-Ship: ${this.shipping.value}`;
+- Ship: ${this.shipping.value}`;
     }
     if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
       responseContent += "\nChưa có cân nặng";
     }
     else
       responseContent += `
-Cân: ${this.weight.kg}kg;    
-Mặt hàng ${this.category.att.NAME}`;
-    let payloadContent=`send|${senderid}|Dạ giá sp này là ${this.totalString}`;
+- Cân: ${this.weight.kg}kg
+- Mặt hàng ${this.category.att.NAME}`;
+    let payloadContent_1=`send|${senderid}|Dạ giá sp này là ${this.totalString}`;
+    let payloadContent_2=`send|${senderid}|Cái này là ${this.totalString}`;
     response =  {
       "attachment": {
         "type": "template",
@@ -1137,14 +1139,14 @@ Mặt hàng ${this.category.att.NAME}`;
           "text":responseContent,
           "buttons":[
             {
-              "type": "web_url",
-              "url": this.weburl,
-              "title": "Xem link"
+              "type":"postback",
+              "payload": payloadContent_1,
+              "title": "Dạ, " + this.totalString
             },
             {
               "type":"postback",
-              "payload": payloadContent,
-              "title": "Reply: " + this.totalString
+              "payload": payloadContent_2,
+              "title": "Cái này " + this.totalString
             }
           ]
         }
