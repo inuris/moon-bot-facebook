@@ -1010,7 +1010,7 @@ class Item{
     let logContent =`
 URL : ${this.weburl}
 PRICE : ${this.price.string}
-SHIPPING : ${this.shipping.string}
+SHIPPING : ${this.shipping.value} ~ ${this.shipping.string}
 WEIGHT : ${this.weight.string} ~ ${this.weight.kg}kg
 CATEGORY : ${this.category.att.ID}
 TOTAL : ${this.totalString}
@@ -1123,7 +1123,7 @@ CATEGORYSTRING : ${this.category.string}`;
 - Ship: ${this.shipping.value}`;
     }
     if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
-      responseContent += "\nChưa có cân nặng";
+      responseContent += "\n- Chưa có cân nặng";
     }
     else
       responseContent += `
