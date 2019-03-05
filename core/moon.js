@@ -2,7 +2,7 @@
 // modify from facebook
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
-const request = require("request");
+const request = require("request-promise");
 const jp = require('jsonpath');
 const RATE = {
   'USD': 24000,
@@ -852,31 +852,31 @@ class Website{
   setDom(htmlraw){
     this.htmlraw=htmlraw;
   }
-  static async getItem(website, recentitem){
-    const iteminfo = await new Promise(resolve => {                        
-      var requestOptions = {
-          method: "GET",
-          url: website.url,
-          gzip: true,
-          jar: true
-      };
-      // Nếu website cần Cookie thì set
-      if (website.att.COOKIE !== undefined){
-          var cookie = request.cookie(website.att.COOKIE);
-          requestOptions.headers = {
-              'Cookie' : cookie,
-              'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-          };
-      }
-      request(requestOptions, function(error, response, body) {
-          // Đưa html raw vào website
-          website.setDom(body);  
-          var item = new Item(website, recentitem);
-          resolve(item);
-      });  
-    })
-    // trả về Item type, tùy vào nhu cầu sẽ lấy item.toText() hoặc item.toFBResponse()
-    return iteminfo;
+  static getItem(website, recentitem){                     
+    var requestOptions = {
+        method: "GET",
+        url: website.url,
+        gzip: true,
+        jar: true
+    };
+    // Nếu website cần Cookie thì set
+    if (website.att.COOKIE !== undefined){
+        var cookie = request.cookie(website.att.COOKIE);
+        requestOptions.headers = {
+            'Cookie' : cookie,
+            'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+        };
+    }
+    return request(requestOptions)
+      .then((body)=>{
+        // Đưa html raw vào website
+        website.setDom(body);  
+        var item = new Item(website, recentitem);
+        return item;
+      })
+      .catch((err)=>{
+        return null;
+      });
   }
   static getAvailableWebsite(){
     var listweb = "";
@@ -1158,7 +1158,7 @@ CATEGORYSTRING : ${this.category.string}`;
   toVND(price){    
     var rate=this.webatt.RATE!==undefined?RATE[this.webatt.RATE]:RATE['USD'];
     var priceNew = Math.ceil((price * rate) / 5000) * 5000; //Làm tròn lên 5000 
-    return priceNew.formatMoney(0, '.', ',')+"đ"; // Thêm VND vào
+    return priceNew.formatMoney(0, ',', '.')+"đ"; // Thêm VND vào
   }
 }
 module.exports.Website=Website;
