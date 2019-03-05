@@ -852,11 +852,7 @@ class Website{
   setDom(htmlraw){
     this.htmlraw=htmlraw;
   }
-<<<<<<< HEAD
-  static getItem(website, recentitem){                     
-=======
   static async getItem(website, recentitem){                     
->>>>>>> 7b288ff5e127f7c5b7bf27a2c059bdec2f1580b3
     var requestOptions = {
         method: "GET",
         url: website.url,
@@ -871,18 +867,6 @@ class Website{
             'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
         };
     }
-<<<<<<< HEAD
-    return request(requestOptions)
-      .then((body)=>{
-        // Đưa html raw vào website
-        website.setDom(body);  
-        var item = new Item(website, recentitem);
-        return item;
-      })
-      .catch((err)=>{
-        return null;
-      });
-=======
     try {
       const body = await request(requestOptions);
       // Đưa html raw vào website
@@ -893,7 +877,6 @@ class Website{
     catch (err) {
       return null;
     }
->>>>>>> 7b288ff5e127f7c5b7bf27a2c059bdec2f1580b3
   }
   static getAvailableWebsite(){
     var listweb = "";
