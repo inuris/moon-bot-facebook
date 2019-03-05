@@ -185,7 +185,7 @@ function callSendAPI(page_id, sender_id, response) {
 }
 
 // Lấy user info từ FBGraph
-function getUserInfo(page_id, sender_id){  
+async function getUserInfo(page_id, sender_id){  
   const userFieldSet = 'id, name';
   let opt = {
       method: 'GET',
@@ -195,15 +195,13 @@ function getUserInfo(page_id, sender_id){
         fields: userFieldSet
       }
     };
-  return request(opt)
-    .then(
-    (body) => {
-      return JSON.parse(body);
-    })
-    .catch(
-    (err) => {
-      return {"id":sender_id,"name":"N/A"};
-    })
+  try {
+    const body = await request(opt);
+    return JSON.parse(body);
+  }
+  catch (err) {
+    return { "id": sender_id, "name": "N/A" };
+  }
 }
 
 // For Test only
