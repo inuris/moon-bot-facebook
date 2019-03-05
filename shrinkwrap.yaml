@@ -3,9 +3,10 @@ dependencies:
   discord-logger: 1.0.1
   dotenv: 6.2.0
   express: 4.16.4
-  htmlparser2: 3.10.0
-  jsonpath: 1.0.0
+  htmlparser2: 3.10.1
+  jsonpath: 1.0.1
   request: 2.88.0
+  request-promise: 4.2.4
   soupselect-update: 0.2.5
 packages:
   /JSONSelect/0.4.0:
@@ -66,6 +67,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-pDAdOJtqQ/m2f/PKEaP2Y342Dp4=
+  /bluebird/3.5.3:
+    dev: false
+    resolution:
+      integrity: sha512-/qKPUQlaW1OyR51WeCPBvRnAlnZFUJkCSG5HzGnuIqhgyJtF+T94lFnn33eiazjRm2LAHVy2guNnaq48X9SJuw==
   /body-parser/1.18.3:
     dependencies:
       bytes: 3.0.0
@@ -179,17 +184,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-UgXG8eL+SfV0VphHqsioVXmDNgmn3i/M1/bGhQ2Q0iY9G7l1Aw8JVepxjtgc+TkbEWADdOl+OWDRAsYwxHJCyA==
-  /dom-serializer/0.1.0:
+  /dom-serializer/0.1.1:
     dependencies:
-      domelementtype: 1.1.3
+      domelementtype: 1.3.1
       entities: 1.1.2
     dev: false
     resolution:
-      integrity: sha1-BzxpdUbOB4DOI75KKOKT5AvDDII=
-  /domelementtype/1.1.3:
-    dev: false
-    resolution:
-      integrity: sha1-vSh3PiZCiBrsUVRJJCmcXNgiGFs=
+      integrity: sha512-l0IU0pPzLWSHBcieZbpOKgkIn3ts3vAh7ZuFyXNwJxJXk/c4Gwj9xaTJwIDVQCXawWD0qb3IzMGH5rglQaO0XA==
   /domelementtype/1.3.1:
     dev: false
     resolution:
@@ -202,7 +203,7 @@ packages:
       integrity: sha512-JiK04h0Ht5u/80fdLMCEmV4zkNh2BcoMFBmZ/91WtYZ8qVXSKjiw7fXMgFPnHcSZgOo3XdinHvmnDUeMf5R4wA==
   /domutils/1.7.0:
     dependencies:
-      dom-serializer: 0.1.0
+      dom-serializer: 0.1.1
       domelementtype: 1.3.1
     dev: false
     resolution:
@@ -254,7 +255,7 @@ packages:
       source-map: 0.7.3
     resolution:
       integrity: sha1-U9ZSz6EDA4gnlFilJmxf/HCcY8M=
-  /escodegen/1.11.0:
+  /escodegen/1.11.1:
     dependencies:
       esprima: 3.1.3
       estraverse: 4.2.0
@@ -267,7 +268,7 @@ packages:
     optionalDependencies:
       source-map: 0.6.1
     resolution:
-      integrity: sha512-IeMV45ReixHS53K/OmfKAIztN/igDHzTJUhZM3k1jMhIZWjk45SMwAtBsEXiJp3vSPmTcu6CXn7mDvFHRN66fw==
+      integrity: sha512-JwiqFD9KdGVVpeuRa68yU3zZnBEOcPs0nKW7wZzXky8Z7tffdYUHbe11bPCV5jYlK6DVdKLWLm0f5I/QlL0Kmw==
   /esprima/1.0.4:
     dev: false
     engines:
@@ -445,17 +446,17 @@ packages:
       node: '>=0.1.33'
     resolution:
       integrity: sha1-GeezmX/2+6yZrlp9J2ZInv5+LQ4=
-  /htmlparser2/3.10.0:
+  /htmlparser2/3.10.1:
     dependencies:
       domelementtype: 1.3.1
       domhandler: 2.4.2
       domutils: 1.7.0
       entities: 1.1.2
       inherits: 2.0.3
-      readable-stream: 3.1.1
+      readable-stream: 3.2.0
     dev: false
     resolution:
-      integrity: sha512-J1nEUGv+MkXS0weHNWVKJJ+UrLfePxRWpN3C9bEi9fLxL2+ggW94DQvgYVXsaT30PGwYRIZKNZXuyMhp3Di4bQ==
+      integrity: sha512-IgieNijUMbkDovyoKObU1DUhm1iwNYE/fuifEoEHfd1oZKZDaONBSkal7Y01shxsM49R4XaMdGez3WnF9UfiCQ==
   /http-errors/1.6.3:
     dependencies:
       depd: 1.1.2
@@ -546,16 +547,16 @@ packages:
     dev: false
     resolution:
       integrity: sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
-  /jsonpath/1.0.0:
+  /jsonpath/1.0.1:
     dependencies:
       esprima: 1.2.2
       jison: 0.4.13
-      static-eval: 2.0.0
+      static-eval: 2.0.2
       underscore: 1.7.0
     dev: false
     requiresBuild: true
     resolution:
-      integrity: sha1-Rc2dTE0NaCXZC9fkD4PxGCsT3Qc=
+      integrity: sha512-HY5kSg82LHIs0r0h9gYBwpNc1w1qGY0qJ7al01W1bJltsN2lp+mjjA/a79gXWuvD6Xf8oPkD2d5uKMZQXTGzqA==
   /jsprim/1.4.1:
     dependencies:
       assert-plus: 1.0.0
@@ -580,6 +581,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-ZMTwJfF/1Tv7RXY/rrFvAVp0dVA=
+  /lodash/4.17.11:
+    dev: false
+    resolution:
+      integrity: sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
   /media-typer/0.3.0:
     dev: false
     engines:
@@ -724,7 +729,7 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha512-9esiElv1BrZoI3rCDuOuKCBRbuApGGaDPQfjSflGxdy4oyzqghxu6klEkkVIvBje+FF0BX9coEv8KqW6X/7njw==
-  /readable-stream/3.1.1:
+  /readable-stream/3.2.0:
     dependencies:
       inherits: 2.0.3
       string_decoder: 1.2.0
@@ -733,7 +738,30 @@ packages:
     engines:
       node: '>= 6'
     resolution:
-      integrity: sha512-DkN66hPyqDhnIQ6Jcsvx9bFjhw214O4poMBcIMgPVpQvNy9a0e0Uhg5SqySyDKAmUlwt8LonTBz1ezOnM8pUdA==
+      integrity: sha512-RV20kLjdmpZuTF1INEb9IA3L68Nmi+Ri7ppZqo78wj//Pn62fCoJyV9zalccNzDD/OuJpMG4f+pfMl8+L6QdGw==
+  /request-promise-core/1.1.2:
+    dependencies:
+      lodash: 4.17.11
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    peerDependencies:
+      request: ^2.34
+    resolution:
+      integrity: sha512-UHYyq1MO8GsefGEt7EprS8UrXsm1TxEvFUX1IMTuSLU2Rh7fTIdFtl8xD7JiEYiWU2dl+NYAjCTksTehQUxPag==
+  /request-promise/4.2.4:
+    dependencies:
+      bluebird: 3.5.3
+      request-promise-core: 1.1.2
+      stealthy-require: 1.1.1
+      tough-cookie: 2.5.0
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    peerDependencies:
+      request: ^2.34
+    resolution:
+      integrity: sha512-8wgMrvE546PzbR5WbYxUQogUnUDfM0S7QIFZMID+J73vdFARkFy+HElj4T+MWYhpXwlLp0EQ8Zoj8xUA0he4Vg==
   /request/2.88.0:
     dependencies:
       aws-sign2: 0.7.0
@@ -843,12 +871,12 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-Zhev35/y7hRMcID/upReIvRse+I9SVhyVre/KTJSJQWMz3C3+G+HpO7m1wK/yckEtujKZ7dS4hkVxAnmHaIGVQ==
-  /static-eval/2.0.0:
+  /static-eval/2.0.2:
     dependencies:
-      escodegen: 1.11.0
+      escodegen: 1.11.1
     dev: false
     resolution:
-      integrity: sha512-6flshd3F1Gwm+Ksxq463LtFd1liC77N/PX1FVVc3OzL3hAmo2fwHFbuArkcfi7s9rTNsLEhcRmXGFZhlgy40uw==
+      integrity: sha512-N/D219Hcr2bPjLxPiV+TQE++Tsmrady7TqAJugLy7Xk1EumfDWS/f5dtBbkRCGE7wKKXuYockQoj8Rm2/pVKyg==
   /statuses/1.4.0:
     dev: false
     engines:
@@ -861,6 +889,12 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
+  /stealthy-require/1.1.1:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
   /string_decoder/1.2.0:
     dependencies:
       safe-buffer: 5.1.2
@@ -876,6 +910,15 @@ packages:
       node: '>=0.8'
     resolution:
       integrity: sha512-Q5srk/4vDM54WJsJio3XNn6K2sCG+CQ8G5Wz6bZhRZoAe/+TxjWB/GlFAnYEbkYVlON9FMk/fE3h2RLpPXo4lQ==
+  /tough-cookie/2.5.0:
+    dependencies:
+      psl: 1.1.31
+      punycode: 2.1.1
+    dev: false
+    engines:
+      node: '>=0.8'
+    resolution:
+      integrity: sha512-nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==
   /tunnel-agent/0.6.0:
     dependencies:
       safe-buffer: 5.1.2
@@ -966,7 +1009,8 @@ specifiers:
   discord-logger: ^1.0.1
   dotenv: ^6.2.0
   express: ^4.16.4
-  htmlparser2: ^3.10.0
-  jsonpath: ^1.0.0
+  htmlparser2: ^3.10.1
+  jsonpath: ^1.0.1
   request: ^2.88.0
+  request-promise: ^4.2.4
   soupselect-update: ^0.2.5

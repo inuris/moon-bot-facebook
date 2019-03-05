@@ -1,10 +1,18 @@
 require('dotenv').config();
-const PAGE_ACCESS_TOKEN = {
-  573537602700846:process.env.PAGE_ACCESS_TOKEN_MOON, // Moon Hàng Mỹ
-  949373165137938:process.env.PAGE_ACCESS_TOKEN_ROMROP // Rôm Rốp
+const PAGE = {
+  573537602700846:{
+    token: process.env.PAGE_ACCESS_TOKEN_MOON,
+    name: "Moon",
+    admin: process.env.ADMIN,
+    auto: false
+  }, // Moon Hàng Mỹ
+  949373165137938:{
+    token: process.env.PAGE_ACCESS_TOKEN_ROMROP,
+    name: "RomRop",
+    admin: process.env.TESTER,
+    auto: true
+  } // Rôm Rốp
 };
-const ADMIN = process.env.ADMIN;
-const TESTER = process.env.TESTER;
 const BADGE_IMAGE_URL=process.env.BADGE_IMAGE_URL;
 const BOT_VERIFY_TOKEN= process.env.BOT_VERIFY_TOKEN;
 const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
@@ -18,7 +26,7 @@ const logger = new DiscordLogger(options);
 
 const Website = require("./core/moon.js").Website;
 // Imports dependencies and set up http server
-const request = require("request"),
+const request = require("request-promise"),
   express = require("express"),
   body_parser = require("body-parser"),
   app = express().use(body_parser.json()); // creates express http server
@@ -89,30 +97,32 @@ async function handleMessage(page_id, sender, received_message) {
     var website= new Website(received_message.text);
     // Nếu có trong list website thì mới trả lời
     if (website.found === true){      
-      var item = await Website.getItem(website);
-      var log=item.toLog();
-      if (log.type==="error") logger.error(log.content);
-      else logger.success(log.content);
-      // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
-      if (item.price.value==0 && item.redirect!==""){
-        website= new Website(item.redirect);
-        item = await Website.getItem(website,item);
+      Website.getItem(website).then((item)=>{
         var log=item.toLog();
-        if (log.type==="error") logger.error(log.content);
-        else logger.success(log.content);
-      }
-      // Nếu tìm được giá thì mới báo
-      if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0)){
-        let senderInfo = await getUserInfo(page_id , sender.id);
-        // Chỉ auto reply cho page Rôm Rốp
-        if (page_id === "949373165137938"){                     
-          callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
-          callSendAPI(page_id, TESTER, item.toFBAdmin(sender.id , senderInfo.name));
-        } else {
-          // Nếu là Moon Hàng Mỹ thì gửi cho Admin suggest reply          
-          callSendAPI(page_id, ADMIN, item.toFBAdmin(sender.id , senderInfo.name));
+        if (log.type==="error") logger.error(log.content);        
+        // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
+        if (item.price.value==0 && item.redirect!==""){
+          website= new Website(item.redirect);
+          Website.getItem(website,item).then((item)=>{
+            var log=item.toLog();
+            if (log.type==="error") logger.error(log.content);
+          })
         }
-      }
+        // Nếu tìm được giá thì mới báo
+        if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0)){
+          getUserInfo(page_id , sender.id).then((senderInfo)=>{ 
+            if (senderInfo.name===undefined)
+              senderInfo.name="N/A";
+            logger.success(senderInfo.name+"\n"+log.content);
+            // Chỉ auto reply cho page Rôm Rốp
+            if (PAGE[page_id].auto === true){                     
+              callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
+            }
+            // Gửi cho Admin suggest reply    
+            callSendAPI(page_id, PAGE[page_id].admin, item.toFBAdmin(sender.id , senderInfo.name));
+          })
+        }
+      })
     }
     else if (["help","menu","list"].includes(received_message.text)){
       let response = { "text": "Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite() }
@@ -140,7 +150,7 @@ function handlePostback(page_id, sender, received_postback) {
     let splitter=payload.split('|');
     senderid = splitter[1];
     response = { "text": splitter[2] }
-    logger.info(splitter[2]);
+    logger.info("reply sent: "+splitter[2]);
   }
   // Send the message to acknowledge the postback
   callSendAPI(page_id, senderid, response);
@@ -160,13 +170,13 @@ function callSendAPI(page_id, sender_id, response) {
   request(
     {
       uri: "https://graph.facebook.com/v2.6/me/messages",
-      qs: { access_token: PAGE_ACCESS_TOKEN[page_id] },
+      qs: { access_token: PAGE[page_id].token },
       method: "POST",
       json: request_body
     },
     (err, res, body) => {
       if (!err) {
-        console.log("message sent!");
+        console.log("Message sent from "+page_id+" to "+sender_id);
       } else {
         console.error("Unable to send message:" + err);
       }
@@ -175,29 +185,26 @@ function callSendAPI(page_id, sender_id, response) {
 }
 
 // Lấy user info từ FBGraph
-async function getUserInfo(page_id, sender_id){
-  const _getUserInfo = await new Promise(resolve => { 
+function getUserInfo(page_id, sender_id){  
   const userFieldSet = 'id, name';
-  request(
-    {
+  let opt = {
       method: 'GET',
       uri: `https://graph.facebook.com/v3.2/${sender_id}`,
       qs: {
-        access_token: PAGE_ACCESS_TOKEN[page_id],
+        access_token: PAGE[page_id].token,
         fields: userFieldSet
       }
-    },
-  (err, res, body) => {
-      if (!err) {
-        resolve(JSON.parse(body));
-      } else {
-        return null;
-      }
+    };
+  return request(opt)
+    .then(
+    (body) => {
+      return JSON.parse(body);
     })
-  })
-  return _getUserInfo;
+    .catch(
+    (err) => {
+      return {"id":sender_id,"name":"N/A"};
+    })
 }
-
 
 // For Test only
 async function testurl() {
