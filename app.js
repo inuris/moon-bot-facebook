@@ -113,7 +113,7 @@ async function handleMessage(page_id, sender, received_message) {
           getUserInfo(page_id , sender.id).then((senderInfo)=>{ 
             if (senderInfo.name===undefined)
               senderInfo.name="N/A";
-            logger.success(senderInfo.name+"\n"+log.content);
+            logger.success(senderInfo.name+log.content);
             // Chỉ auto reply cho page Rôm Rốp
             if (PAGE[page_id].auto === true){                     
               callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
