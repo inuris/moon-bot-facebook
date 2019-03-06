@@ -382,7 +382,7 @@ const WEBSITES = {
     NAME: "Forever21",
     SILENCE: false,
     JSONBLOCK:{
-      INDEX: 29,
+      SELECTOR:'script[type="application/ld+json"]',
       PATH: ["$.Offers.price"]
     } 
   },
@@ -589,6 +589,7 @@ class Parser{
       if (jsonblock.SELECTOR!==undefined)
         selector = jsonblock.SELECTOR;
       var scriptBlock = select(this.dom, selector);
+      if (scriptBlock === null) return "";
       var currentBlock;
       // Nếu web có <script> chứa JSON có index cố định thì set INDEX trong db để lấy đúng cái block[index] đó
       if (jsonblock.INDEX !==undefined && jsonblock.INDEX < scriptBlock.length){
@@ -604,8 +605,9 @@ class Parser{
           }
         }
       }
-      else {
-        return "";
+      else{
+        // Mặc định lấy scriptBlock đầu tiên (thường dùng selector sẽ chỉ ra 1 block)
+        currentBlock = htmlparser.DomUtils.getText(scriptBlock[0]);
       }
       // Nếu trong <script> ko phải JSON chuẩn thì phải dùng regex lấy phần JSON ra
       if (jsonblock.REGEX !== undefined){
@@ -613,7 +615,7 @@ class Parser{
         if (matchhtml.length>0)
           currentBlock = matchhtml[0];
       }
-
+      //console.log(currentBlock);  
       var json = JSON.parse(currentBlock);
       // Có nhiều Path để lấy các trường hợp giá Sale/giá Thường có path khác nhau
       for (let i=0;i<jsonblock.PATH.length;i++){
