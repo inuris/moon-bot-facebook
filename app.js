@@ -97,7 +97,7 @@ async function handleMessage(page_id, sender, received_message) {
     var website= new Website(received_message.text);
     // Nếu có trong list website thì mới trả lời
     if (website.found === true){      
-      Website.getItem(website).then((item)=>{
+      await Website.getItem(website).then((item)=>{
         var log=item.toLog();
         if (log.type==="error") logger.error(log.content);        
         // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
