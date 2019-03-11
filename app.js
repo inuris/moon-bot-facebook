@@ -97,23 +97,20 @@ async function handleMessage(page_id, sender, received_message) {
     var website= new Website(received_message.text);
     // Nếu có trong list website thì mới trả lời
     if (website.found === true){      
-      await Website.getItem(website).then((item)=>{
-        var log=item.toLog();
-        if (log.type==="error") logger.error(log.content);        
+      await Website.getItem(website).then((item)=>{ 
         // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
         if (item.price.value==0 && item.redirect!==""){
           website= new Website(item.redirect);
           Website.getItem(website,item).then((item)=>{
-            var log=item.toLog();
-            if (log.type==="error") logger.error(log.content);
+            logToDiscord(item.toLog(), 'redirect');
           })
         }
         // Nếu tìm được giá thì mới báo
-        if (website.att.SILENCE===false || (website.att.SILENCE === true && item.total>0)){
+        if (website.att.SILENCE===false && item.total>0){
           getUserInfo(page_id , sender.id).then((senderInfo)=>{ 
             if (senderInfo.name===undefined)
               senderInfo.name="N/A";
-            logger.success(senderInfo.name+log.content);
+            logToDiscord(item.toLog(), senderInfo.name);
             // Chỉ auto reply cho page Rôm Rốp
             if (PAGE[page_id].auto === true){                     
               callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
@@ -121,6 +118,10 @@ async function handleMessage(page_id, sender, received_message) {
             // Gửi cho Admin suggest reply    
             callSendAPI(page_id, PAGE[page_id].admin, item.toFBAdmin(sender.id , senderInfo.name));
           })
+        }
+        // Ko tìm dc giá thì log error
+        else{
+          logToDiscord(item.toLog());
         }
       })
     }
@@ -154,6 +155,17 @@ function handlePostback(page_id, sender, received_postback) {
   }
   // Send the message to acknowledge the postback
   callSendAPI(page_id, senderid, response);
+}
+
+// log vào Discord theo log.type
+function logToDiscord(log, title){
+  let logContent=log.content;
+  if (title)
+    logContent = title+logContent;
+  if (log.type==="error")
+    logger.error(logContent);
+  else
+    logger.success(logContent);
 }
 
 // Sends response messages via the Send API
