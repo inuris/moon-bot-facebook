@@ -442,7 +442,7 @@ const WEBSITES = {
     TAX: 0,
     MATCH: "jomashop.com",
     NAME: "JomaShop",
-    SILENCE: true,
+    SILENCE: false,
     COOKIE:"bounceClientVisit355v=N4IgNgDiBcIBYBcEQM4FIDMBBNAmAYnvgO6kB0AVgPYC2AhinFRGQMa1EICWKKVCAWmJ0ErOAIQAGABwBWACy4A7AEYVktZMllENMCAA0IAE4wQpYpVoMmLdjRABfIA; _vuid=d11ab39c-b372-43e3-ad8d-3617c5cb6d4e; D_HID=62B7A346-4058-3C77-8CB7-ED51A5943914; D_IID=A74F366D-F291-329B-8AE3-695F6EBA958A; D_SID=115.77.169.59:WASVmq9DjNjsYYd7Yje++3y4C70jD9sz5J1mpazEagA; D_UID=CDF9689C-0487-3CF1-80E9-F81FCB40B168; D_ZID=F7698C1E-15E4-32FF-807F-C52EA2BA8BF2; D_ZUID=862AEB79-2FF9-382C-B620-D920270D33BD; gateCpc=[%22first_cpc%22]; gateNonDirect=[%22first_cpc%22]; tracker_device=8e55fcc1-53aa-4815-8985-04a6011b9886;",
     JSONBLOCK:{
       SELECTOR: '#xitem-primary-json',
@@ -454,7 +454,7 @@ const WEBSITES = {
   NINEWEST: {
     TAX: 0.083,
     MATCH: "ninewest.com",
-    SILENCE: true
+    SILENCE: false
   },
   OSHKOSH: {
     TAX: 0.083,
@@ -487,7 +487,7 @@ const WEBSITES = {
   THEBODYSHOP: {
     TAX: 0,
     MATCH: "thebodyshop.com",
-    SILENCE: true,
+    SILENCE: false,
     PRICEBLOCK:[
       '.current-price',
       '.price-wrapper'
@@ -496,7 +496,7 @@ const WEBSITES = {
   WALGREENS: {
     TAX: 0.083,
     MATCH: "walgreens.com",
-    SILENCE: true
+    SILENCE: false
   },
   WALMART: {
     TAX: 0,
