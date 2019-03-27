@@ -747,7 +747,7 @@ class Weight{
   }
   setWeight(detailArray, weightCondition){
     var current= "",
-        kg= 0.2,
+        kg= 0,
         unit= "";
     //console.log(detailArray);
     var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
