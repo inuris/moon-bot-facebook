@@ -376,6 +376,16 @@ const WEBSITES = {
             ]
     } 
   },
+  DOLLSKILL:{
+    TAX: 0,
+    MATCH: "dollskill.com",
+    NAME: "DollSkill",
+    SILENCE: false,
+    PRICEBLOCK:[
+      '.price-usd .special-price',
+      '.price-usd .price'
+    ]
+  },
   FOREVER21: {
     TAX: 0,
     MATCH: "forever21.com",
@@ -496,7 +506,16 @@ const WEBSITES = {
   WALGREENS: {
     TAX: 0.083,
     MATCH: "walgreens.com",
+<<<<<<< HEAD
     SILENCE: false
+=======
+    NAME: "Walgreens",
+    SILENCE: false,
+    PRICEBLOCK: [
+      "#sales-price-info",
+      "#regular-price-info"
+    ]
+>>>>>>> 3792ead577f786dd0509e42d4ad846e3827d1683
   },
   WALMART: {
     TAX: 0,
@@ -655,10 +674,11 @@ class Parser{
   getText(blockElementArray, index = 0){
     try{    
       for (let i = 0; i < blockElementArray.length; i++) {          
-          var text = select(this.dom, blockElementArray[i]);
-          //console.log(htmlparser.DomUtils.getText(text));
-          if (text.length>index) {        
-            return htmlparser.DomUtils.getText(text[index]);
+          var text = select(this.dom, blockElementArray[i]);   
+          if (text.length>index) {
+            var trimmedtext=htmlparser.DomUtils.getText(text[index]).trim();
+            if (trimmedtext.length>0)
+              return htmlparser.DomUtils.getText(text[index]);
           }
       }
       return "";
@@ -798,7 +818,7 @@ class Price{
   }
   setPrice(priceString, reg){    
     var tempString = priceString.replace(/\s+/gm," ")
-                                .trim().toLowerCase();
+                                .trim().toLowerCase();    
     this.string = tempString;
     tempString = tempString.replace(/\$\s*|.*free shipping.*/gm, "")
                                 .replace(" ", ".");
