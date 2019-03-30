@@ -506,16 +506,12 @@ const WEBSITES = {
   WALGREENS: {
     TAX: 0.083,
     MATCH: "walgreens.com",
-<<<<<<< HEAD
-    SILENCE: false
-=======
     NAME: "Walgreens",
     SILENCE: false,
     PRICEBLOCK: [
       "#sales-price-info",
       "#regular-price-info"
     ]
->>>>>>> 3792ead577f786dd0509e42d4ad846e3827d1683
   },
   WALMART: {
     TAX: 0,
