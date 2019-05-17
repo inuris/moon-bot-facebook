@@ -97,12 +97,14 @@ async function handleMessage(page_id, sender, received_message) {
     var website= new Website(received_message.text);
     // Nếu có trong list website thì mới trả lời
     if (website.found === true){      
-      await Website.getItem(website).then((item)=>{ 
+      
+      await Website.getItem(website).then(async (item)=>{ 
         // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
         if (item.price.value==0 && item.redirect!==""){
           website= new Website(item.redirect);
-          Website.getItem(website,item).then((item)=>{
-            logToDiscord(item.toLog(), 'redirect');
+          await Website.getItem(website,item).then((redirectitem)=>{
+            item = redirectitem;
+            logToDiscord(redirectitem.toLog(), 'redirect');
           })
         }
         // Nếu tìm được giá thì mới báo
