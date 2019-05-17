@@ -376,16 +376,6 @@ const WEBSITES = {
             ]
     } 
   },
-  DOLLSKILL:{
-    TAX: 0,
-    MATCH: "dollskill.com",
-    NAME: "DollSkill",
-    SILENCE: false,
-    PRICEBLOCK:[
-      '.price-usd .special-price',
-      '.price-usd .price'
-    ]
-  },
   FOREVER21: {
     TAX: 0,
     MATCH: "forever21.com",
@@ -506,12 +496,7 @@ const WEBSITES = {
   WALGREENS: {
     TAX: 0.083,
     MATCH: "walgreens.com",
-    NAME: "Walgreens",
-    SILENCE: false,
-    PRICEBLOCK: [
-      "#sales-price-info",
-      "#regular-price-info"
-    ]
+    SILENCE: false
   },
   WALMART: {
     TAX: 0,
@@ -670,11 +655,10 @@ class Parser{
   getText(blockElementArray, index = 0){
     try{    
       for (let i = 0; i < blockElementArray.length; i++) {          
-          var text = select(this.dom, blockElementArray[i]);   
-          if (text.length>index) {
-            var trimmedtext=htmlparser.DomUtils.getText(text[index]).trim();
-            if (trimmedtext.length>0)
-              return htmlparser.DomUtils.getText(text[index]);
+          var text = select(this.dom, blockElementArray[i]);
+          //console.log(htmlparser.DomUtils.getText(text));
+          if (text.length>index) {        
+            return htmlparser.DomUtils.getText(text[index]);
           }
       }
       return "";
@@ -814,7 +798,7 @@ class Price{
   }
   setPrice(priceString, reg){    
     var tempString = priceString.replace(/\s+/gm," ")
-                                .trim().toLowerCase();    
+                                .trim().toLowerCase();
     this.string = tempString;
     tempString = tempString.replace(/\$\s*|.*free shipping.*/gm, "")
                                 .replace(" ", ".");
@@ -896,6 +880,7 @@ class Website{
       return null;
     }
   }
+  
   static getAvailableWebsite(){
     var listweb = "";
     for (let web in WEBSITES){             
@@ -944,7 +929,7 @@ class Item{
 
         var weight = new Weight();
         var category=new Category();
-
+        var recenturl;
         // recentitem chỉ có khi vào trang redirect rồi
         if (recentitem!==undefined){ 
           // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
@@ -952,6 +937,8 @@ class Item{
             weight = recentitem.weight;
           if (recentitem.category.string!==0)
             category = recentitem.category;
+          if (recentitem.weburl !=="")
+            website.url = recentitem.weburl;
         }
         // Nếu cần lấy Category & Weight từ chung 1 data table thì define DETAILBLOCK
         else if (website.att.DETAILBLOCK!==undefined){
@@ -970,6 +957,7 @@ class Item{
             weight.setWeight(weightString); 
           }
         }
+        
         this.weburl = website.url;
         this.webatt = website.att; // Thuế tại Mỹ của từng web
         
@@ -1027,11 +1015,10 @@ class Item{
   toLog(){
     let logContent =`
 URL : ${this.weburl}
-PRICE : ${this.price.string}
+PRICE : ${this.price.string} ~ ${this.totalString}
 SHIPPING : ${this.shipping.value} ~ ${this.shipping.string}
 WEIGHT : ${this.weight.string} ~ ${this.weight.kg}kg
 CATEGORY : ${this.category.att.ID}
-TOTAL : ${this.totalString}
 CATEGORYSTRING : ${this.category.string}`;
     let logType='success';
     if (this.webatt.DETAILBLOCK!== undefined){
