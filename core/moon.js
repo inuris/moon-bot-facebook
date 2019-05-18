@@ -287,6 +287,11 @@ const CATEGORIES = {
     NOTKEYWORD: []
   }
 };
+const IGNORE_WEBSITES=[
+    "zara.com/es",
+    "ebay.com",
+    "victoriassecret.com"
+]
 const WEBSITES = {
   AMAZON3RD:{
     TAX: 0.083,
@@ -826,30 +831,33 @@ class Website{
     var tempWeb = null;
     var tempUrl = "";
     var tempDomain="";
+    // Kiểm tra trong text có URL ko
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
       tempUrl = tempMatch[0]; // Lấy ra url trong đoạn text
-      for (let i in WEBSITES){             
-        if(tempMatch[0].indexOf(WEBSITES[i].MATCH)>=0){
-          tempUrl = tempMatch[0]; // full url
-          tempDomain = tempMatch[1]; // chỉ có domain
-          if (tempDomain.indexOf('http')!==0)
-            tempDomain="https://"+tempDomain;
-          tempWeb = WEBSITES[i];
-          break;
-        }          
+      if (tempMatch[0].checkKeyword(IGNORE_WEBSITES) === false){
+        for (let i in WEBSITES){             
+          if(tempMatch[0].indexOf(WEBSITES[i].MATCH)>=0){
+            tempUrl = tempMatch[0]; // full url
+            tempDomain = tempMatch[1]; // chỉ có domain
+            if (tempDomain.indexOf('http')!==0)
+              tempDomain="https://"+tempDomain;
+            tempWeb = WEBSITES[i];
+            break;
+          }          
+        }
       }
     }
     if (tempWeb!==null){
       found = true;            
     }
-    this.domain = tempDomain;  // chỉ có domain
-    this.url=tempUrl;  // full url
-    this.isUrl=isUrl; // true false
-    this.att=tempWeb; // các thuộc tính của WEBSITES
-    this.htmlraw="";
-    this.found = found;  
+    this.domain =  tempDomain;  // chỉ có domain
+    this.url    =  tempUrl;     // full url
+    this.isUrl  =  isUrl;       // true false
+    this.att    =  tempWeb;     // các thuộc tính lấy từ WEBSITES
+    this.htmlraw=  "";
+    this.found  =  found;       // true false: có tìm thấy đúng website trong list hay ko
   }
   setDom(htmlraw){
     this.htmlraw=htmlraw;
