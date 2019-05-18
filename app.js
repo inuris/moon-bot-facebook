@@ -102,24 +102,32 @@ async function handleMessage(page_id, sender, received_message) {
             // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
             if (item.price.value==0 && item.redirect!==""){
               website= new Website(item.redirect);
-              await Website.getItem(website,item).then((redirectitem)=>{
-                item = redirectitem;
-                logToDiscord(redirectitem.toLog(), 'redirect');
-              })
+              await Website.getItem(website,item)
+                .then((redirectitem)=>{
+                  item = redirectitem;
+                  logToDiscord(redirectitem.toLog(), 'redirect');
+                })
+                .catch(e=>{
+                  console.log(e);
+                })
             }
             // Nếu tìm được giá thì mới báo
             if (website.att.SILENCE===false && item.total>0){
-              getUserInfo(page_id , sender.id).then((senderInfo)=>{ 
-                if (senderInfo.name===undefined)
-                  senderInfo.name="N/A";
-                logToDiscord(item.toLog(), senderInfo.name);
-                // Chỉ auto reply cho page Rôm Rốp
-                if (PAGE[page_id].auto === true){                     
-                  callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
-                }
-                // Gửi cho Admin suggest reply    
-                callSendAPI(page_id, PAGE[page_id].admin, item.toFBAdmin(sender.id , senderInfo.name));
-              })
+              getUserInfo(page_id , sender.id)
+                .then((senderInfo)=>{ 
+                  if (senderInfo.name===undefined)
+                    senderInfo.name="N/A";
+                  logToDiscord(item.toLog(), senderInfo.name);
+                  // Chỉ auto reply cho page Rôm Rốp
+                  if (PAGE[page_id].auto === true){                     
+                    callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
+                  }
+                  // Gửi cho Admin suggest reply    
+                  callSendAPI(page_id, PAGE[page_id].admin, item.toFBAdmin(sender.id , senderInfo.name));
+                })
+                .catch(e=>{
+                  console.log(e);
+                })
             }
             // Ko tìm dc giá thì log error
             else{
