@@ -543,14 +543,9 @@ const WEBSITES = {
     NAME: "ZeroUV",
     SILENCE: false,
     PRICEBLOCK:[
-<<<<<<< HEAD
-      '.current_price'
-    ]
-=======
       ".current_price"
     ],
     CATEGORYBLOCK:[".product_links"]
->>>>>>> 11b2d835c5b06e0b0c7c6b301a1a79eb4c40371e
   },
 };
 
