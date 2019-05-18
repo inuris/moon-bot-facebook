@@ -96,36 +96,40 @@ async function handleMessage(page_id, sender, received_message) {
   if (received_message.text) {
     var website= new Website(received_message.text);
     // Nếu có trong list website thì mới trả lời
-    if (website.found === true){      
-      
-      await Website.getItem(website).then(async (item)=>{ 
-        // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
-        if (item.price.value==0 && item.redirect!==""){
-          website= new Website(item.redirect);
-          await Website.getItem(website,item).then((redirectitem)=>{
-            item = redirectitem;
-            logToDiscord(redirectitem.toLog(), 'redirect');
-          })
-        }
-        // Nếu tìm được giá thì mới báo
-        if (website.att.SILENCE===false && item.total>0){
-          getUserInfo(page_id , sender.id).then((senderInfo)=>{ 
-            if (senderInfo.name===undefined)
-              senderInfo.name="N/A";
-            logToDiscord(item.toLog(), senderInfo.name);
-            // Chỉ auto reply cho page Rôm Rốp
-            if (PAGE[page_id].auto === true){                     
-              callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
+    if (website.found === true){
+        await Website.getItem(website)
+          .then(async (item)=>{ 
+            // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
+            if (item.price.value==0 && item.redirect!==""){
+              website= new Website(item.redirect);
+              await Website.getItem(website,item).then((redirectitem)=>{
+                item = redirectitem;
+                logToDiscord(redirectitem.toLog(), 'redirect');
+              })
             }
-            // Gửi cho Admin suggest reply    
-            callSendAPI(page_id, PAGE[page_id].admin, item.toFBAdmin(sender.id , senderInfo.name));
+            // Nếu tìm được giá thì mới báo
+            if (website.att.SILENCE===false && item.total>0){
+              getUserInfo(page_id , sender.id).then((senderInfo)=>{ 
+                if (senderInfo.name===undefined)
+                  senderInfo.name="N/A";
+                logToDiscord(item.toLog(), senderInfo.name);
+                // Chỉ auto reply cho page Rôm Rốp
+                if (PAGE[page_id].auto === true){                     
+                  callSendAPI(page_id, sender.id, item.toFBResponse(BADGE_IMAGE_URL));
+                }
+                // Gửi cho Admin suggest reply    
+                callSendAPI(page_id, PAGE[page_id].admin, item.toFBAdmin(sender.id , senderInfo.name));
+              })
+            }
+            // Ko tìm dc giá thì log error
+            else{
+              logToDiscord(item.toLog());
+            }
           })
-        }
-        // Ko tìm dc giá thì log error
-        else{
-          logToDiscord(item.toLog());
-        }
-      })
+        .catch(e=>{
+          console.log(e);
+        })
+      
     }
     else if (["help","menu","list"].includes(received_message.text)){
       let response = { "text": "Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite() }

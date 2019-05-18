@@ -1,5 +1,3 @@
-"use strict"
-// modify from facebook
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
 const request = require("request-promise");
@@ -288,9 +286,11 @@ const CATEGORIES = {
   }
 };
 const IGNORE_WEBSITES=[
-    "zara.com/es",
-    "ebay.com",
-    "victoriassecret.com"
+  "zara.com/es",
+  "ebay.com",
+  "victoriassecret.com",
+  "urbanoutfitters.com",
+  "ruelala.com"
 ]
 const WEBSITES = {
   AMAZON3RD:{
@@ -380,6 +380,16 @@ const WEBSITES = {
         "$..masterData.colors[?(@.isSale==false)].price",
             ]
     } 
+  },
+  DOLLSKILL:{
+    TAX: 0,
+    MATCH: "dollskill.com",
+    NAME: "DollSkill",
+    SILENCE: false,
+    PRICEBLOCK:[
+      '.price-usd .special-price',
+      '.price-usd .price'
+    ]
   },
   FOREVER21: {
     TAX: 0,
@@ -479,7 +489,7 @@ const WEBSITES = {
       INDEX: 29,
       PATH: ["$.Offers.price"]
     } 
-  },
+  },  
   SKIPHOP: {
     TAX: 0.083,
     MATCH: "skiphop.com",
@@ -501,7 +511,12 @@ const WEBSITES = {
   WALGREENS: {
     TAX: 0.083,
     MATCH: "walgreens.com",
-    SILENCE: false
+    NAME: "Walgreens",
+    SILENCE: false,
+    PRICEBLOCK: [
+      "#sales-price-info",
+      "#regular-price-info"
+    ]
   },
   WALMART: {
     TAX: 0,
@@ -522,16 +537,15 @@ const WEBSITES = {
       PATH: ["$[0].offers.price"]
     }
   },
-  // ZARAES:{
-  //   TAX: 0,
-  //   RATE: 'EUR',
-  //   MATCH: "zara.com/es",
-  //   SILENCE: false,
-  //   JSONBLOCK:{
-  //     INDEX: 16,
-  //     PATH: ["$[0].offers.price"]
-  //   }
-  // }
+  ZEROUV: {
+    TAX: 0.083,
+    MATCH: "shopzerouv.com",
+    NAME: "ZeroUV",
+    SILENCE: false,
+    PRICEBLOCK:[
+      '.current_price'
+    ]
+  },
 };
 
 // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
@@ -867,15 +881,12 @@ class Website{
         method: "GET",
         url: website.url,
         gzip: true,
-        jar: true
+        jar: true,
+        headers:{'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'}
     };
     // Nếu website cần Cookie thì set
     if (website.att.COOKIE !== undefined){
-        var cookie = request.cookie(website.att.COOKIE);
-        requestOptions.headers = {
-            'Cookie' : cookie,
-            'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-        };
+        requestOptions.headers.cookie = request.cookie(website.att.COOKIE)
     }
     try {
       const body = await request(requestOptions);
@@ -885,7 +896,7 @@ class Website{
       return item;
     }
     catch (err) {
-      return null;
+      return err;
     }
   }
   
@@ -913,6 +924,7 @@ class Item{
         // Tìm giá trên HTML (có priceBlock)
         if (website.att.PRICEBLOCK!==undefined){
           var priceString = myparser.getText(website.att.PRICEBLOCK);
+          //console.log(priceString);
           price.setPrice(priceString);          
         }
         // Tìm giá trên JSON (ko có priceBlock, chỉ có JSONBlock)
