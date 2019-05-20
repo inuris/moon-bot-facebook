@@ -1,303 +1,26 @@
-const select         = require("soupselect-update").select;
 const htmlparser     = require("htmlparser2");
 const request        = require("request-promise");
-const jp             = require('jsonpath');
 
-const data           = require('./data.js');
-const RATE           = data.RATE;
-const CATEGORIES     = data.CATEGORIES;
-const IGNORE_WEBSITES= data.IGNORE_WEBSITES;
-const WEBSITES       = data.WEBSITES;
+// Data JSON
+const DATA           = require('./data.js');
+const RATE           = DATA.RATE;
+const CATEGORIES     = DATA.CATEGORIES;
+const IGNORE_WEBSITES= DATA.IGNORE_WEBSITES;
+const WEBSITES       = DATA.WEBSITES;
 
-// Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
-Number.prototype.formatMoney = function(c, d, t) {
-  var n = this,
-    c = isNaN((c = Math.abs(c))) ? 2 : c,
-    d = d == undefined ? "." : d,
-    t = t == undefined ? "," : t,
-    s = n < 0 ? "-" : "",
-    i = String(parseInt((n = Math.abs(Number(n) || 0).toFixed(c)))),
-    j = (j = i.length) > 3 ? j % 3 : 0;
-  return (
-    s +
-    (j ? i.substr(0, j) + t : "") +
-    i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) +
-    (c
-      ? d +
-        Math.abs(n - i)
-          .toFixed(c)
-          .slice(2)
-      : "")
-  );
-};
-// Đổi USD sang VND, làm tròn 5000
-Number.prototype.toVND = function(rate){
-  var priceNew = Math.ceil((this * rate) / 5000) * 5000; //Làm tròn lên 5000  
-  return priceNew.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
-};
+// Formatter dùng để format string VND, number...
+const Formatter = require('./formatter.js').Formatter;
 
-// Check a string contain one of any string in Array
-String.prototype.checkKeyword = function(include, exclude){
-  if (include==undefined){
-    return true;    
-  }
-  for (let i=0;i<include.length;i++) {
-    if (this.includes(include[i])) {
-      if (exclude !== undefined){
-        for (let e=0;e<exclude.length;e++) {
-          if (this.includes(exclude[e])) {
-            return false;
-          }
-        }
-      }
-      return true;
-    }
-  }
-  return false;
-}
-class Parser{
-  constructor(dom){
-    this.dom=dom;
-  }
-  // Lấy ra đoạn JSON từ thẻ <script type='application/ld+json'
-  // Default sẽ lấy script đầu tiên, nếu cần lấy cái thứ n thì đổi index 
-  // Lấy ra element theo JSONPath của web.JSONBLOCK
-  getJSON(jsonblock){
-    try{
-      var selector='script';
-      // Mặc định chỉ lấy JSON trong <script>, nếu cần lấy từ element khác thì phải thêm SELECTOR vào db
-      if (jsonblock.SELECTOR!==undefined)
-        selector = jsonblock.SELECTOR;
-      var scriptBlock = select(this.dom, selector);
-      if (scriptBlock === null) return "";
-      var currentBlock;
-      // Nếu web có <script> chứa JSON có index cố định thì set INDEX trong db để lấy đúng cái block[index] đó
-      if (jsonblock.INDEX !==undefined && jsonblock.INDEX < scriptBlock.length){
-        currentBlock = htmlparser.DomUtils.getText(scriptBlock[jsonblock.INDEX])
-      }
-      // Nếu web có <script> chứa JSON nằm bất kì thì phải dò bằng KEYWORD
-      else if (jsonblock.KEYWORD !== undefined){
-        for (let i=0;i<scriptBlock.length;i++){
-          var tempBlock = htmlparser.DomUtils.getText(scriptBlock[i]);
-          if (tempBlock.indexOf(jsonblock.KEYWORD)>=0){
-            currentBlock = tempBlock;
-            break;
-          }
-        }
-      }
-      else{
-        // Mặc định lấy scriptBlock đầu tiên (thường dùng selector sẽ chỉ ra 1 block)
-        currentBlock = htmlparser.DomUtils.getText(scriptBlock[0]);
-      }
-      // Nếu trong <script> ko phải JSON chuẩn thì phải dùng regex lấy phần JSON ra
-      if (jsonblock.REGEX !== undefined){
-        var matchhtml = currentBlock.match(jsonblock.REGEX);
-        if (matchhtml.length>0)
-          currentBlock = matchhtml[0];
-      }
-      //console.log(currentBlock);  
-      var json = JSON.parse(currentBlock);
-      // Có nhiều Path để lấy các trường hợp giá Sale/giá Thường có path khác nhau
-      for (let i=0;i<jsonblock.PATH.length;i++){
-        var query=jp.query(json,jsonblock.PATH[i]).toString();
-        if (query!=="")
-          return query;
-      }
-      //console.log(json);      
-      return "";
-    }
-    catch(e){
-      console.log(e);
-      return "";
-    }
-  }
+// Parser dùng để lấy element từ HTML DOM
+const Parser = require('./htmlparser.js').Parser;
 
-  // Lấy ra link href trong thẻ <a>
-  getLink(blockElementArray, index = 0){
-    try{
-      
-      for (let i = 0; i < blockElementArray.length; i++) {
-        //console.log(blockElementArray[i]);         
-        var link = select(this.dom, blockElementArray[i]);
-        if (link.length>index && link[index].name==='a') {
-          //console.log(link[index]);
-          return link[index].attribs.href;
-        }
-      }  
-      return "";
-    }
-    catch(e){
-      console.log(e);
-      return "";
-    }
-  }
-  // Lấy ra plain text từ array các block selector, default chỉ return 1 string đầu tiên
-  getText(blockElementArray, index = 0){
-    try{    
-      for (let i = 0; i < blockElementArray.length; i++) {          
-          var text = select(this.dom, blockElementArray[i]);
-          //console.log(htmlparser.DomUtils.getText(text));
-          if (text.length>index) {        
-            return htmlparser.DomUtils.getText(text[index]);
-          }
-      }
-      return "";
-    }
-    catch(e){
-      console.log(e);
-      return "";
-    }
-    
-  }
+const Product = require('./product.js');
+const Category= Product.Category;
+const Weight  = Product.Weight;
+const Price   = Product.Price;
 
-  // Lấy ra array text từ 1 bảng <td> hoặc <li>
-  getTextArray(blockElementArray){
-    try{
-      var textArray=[];
-      for (let i = 0; i < blockElementArray.length; i++) {
-        // Nguyên table data
-        //console.log(blockElementArray[i]);
-        var textTable = select(this.dom, blockElementArray[i]);  
-        
-        for (let e of textTable){
-          if (e.type === "tag") {
-            //row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
-            var row = e.children;
-            try{
-              var rowText=htmlparser.DomUtils.getText(row).replace(/\s+/gm," ")
-                                                          .trim()
-                                                          .toLowerCase();            
-              textArray.push(rowText);
-            }
-            catch (err) {}
-          }
-        }
-        if (textArray.length>0)
-          return textArray;
-      }    
-      return null;
-    }
-    catch(e){
-      console.log(e);
-      return null;
-    }
-  }
-}
-class Category{
-  constructor(){
-    this.string = "";
-    this.att = CATEGORIES["UNKNOWN"];
-  }
-  setCategory(detailArray, categoryCondition){
-    var found=false;
-    var catString="";
-    var catType="GENERAL";     
-    if (detailArray!== null){
-      for (let i =0;i<detailArray.length;i++){
-        if (detailArray[i].checkKeyword(categoryCondition)){ 
-          catString=detailArray[i].replace(/\s{2,}|\..+ {.+}|see top 100|(amazon )?best sellers rank:?|#\d*,?\d*/gi, "|");
-          found=true;        
-          // Query từng KEYWORD trong category
-          for (let cat in CATEGORIES) {
-            if (
-              catString.checkKeyword(
-                CATEGORIES[cat].KEYWORD,
-                CATEGORIES[cat].NOTKEYWORD
-              ) === true
-            ){
-              catType = cat;            
-              break;
-            }          
-          }
-        }            
-      }
-    }
-    if (found===false){
-      catType= "UNKNOWN";
-    }
-    this.string= catString;
-    this.att = CATEGORIES[catType];
-  }    
-}
-class Weight{
-  constructor(){ 
-    this.string="";
-    this.kg=0;
-    this.unit="";
-  }
-  setWeight(detailArray, weightCondition){
-    var current= "",
-        kg= 0,
-        unit= "";
-    //console.log(detailArray);
-    var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
-    if (detailArray!== null)
-    for (let i = 0; i < detailArray.length; i++) {
-      if (detailArray[i].checkKeyword(weightCondition)){
-        var weightReg = detailArray[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
-        //console.log(weightReg);
-        if (weightReg !== null) {
-          var weightString = weightReg[0];
-          var weight = parseFloat(weightReg[1]);
-          var weightKg = weight;
-          
-          var weightUnit = weightReg[2];
-          if (weightUnit.indexOf("ounce") >= 0 || weightUnit.indexOf("oz") >= 0)
-            weightKg = weight / 35.274;
-          else if (weightUnit.indexOf("pound") >= 0) weightKg = weight / 2.2;
-          // Tìm weight lớn nhất
-          if (
-            kg < weightKg ||
-            detailArray[i].indexOf("shipping weight") >= 0
-          ) {
-            current = weightString;
-            kg = weightKg;
-            unit = weightUnit;
-          }
-        }
-      }
-    }
-    // Nếu tìm dc cân nặng thì làm tròn
-    if (kg>0){
-      // Làm tròn lên 0.1
-      kg = Math.ceil(kg * 10) / 10;
-      // Nếu nhỏ hơn 0.2kg thì làm tròn 0.2
-      if (kg < 0.2) {kg=0.2};
-    }
-    
-    this.string=current;
-    this.kg=kg;
-    this.unit=unit;
 
-  }
-}
-class Price{
-  constructor(){
-    this.string = "";
-    this.value = 0;
-  }
-  setPrice(priceString, reg){    
-    var tempString = priceString.replace(/\s+/gm," ")
-                                .trim().toLowerCase();
-    this.string = tempString;
-    tempString = tempString.replace(/\$\s*|.*free shipping.*/gm, "")
-                                .replace(" ", ".");
-    if (reg !== undefined){
-        var tempMatch = tempString.match(reg)
-        if (tempMatch!=null){
-          tempString=tempMatch[0];
-        }   
-    } 
-    var value = parseFloat(tempString);
-    if (isNaN(value)){
-      value = 0;
-    }
-    this.value = value;
-  }
-  static getPriceShipping(price, ship){
-    return price.value + ship.value;
-  }
-}
+
 class Website{
   constructor(url){    
     var found=false;
@@ -311,7 +34,7 @@ class Website{
     if (tempMatch!==null){
       isUrl=true;
       tempUrl = tempMatch[0]; // Lấy ra url trong đoạn text
-      if (tempMatch[0].checkKeyword(IGNORE_WEBSITES) === false){
+      if (Formatter.checkKeyword(tempMatch[0],IGNORE_WEBSITES) === false){
         for (let i in WEBSITES){             
           if(tempMatch[0].indexOf(WEBSITES[i].MATCH)>=0){
             tempUrl = tempMatch[0]; // full url
@@ -379,31 +102,31 @@ class Item{
       if (error) {
         console.log(error);
       } else {
-        var myparser = new Parser(dom);
+        var myParser = new Parser(dom);
 
         var price=new Price();
         // Tìm giá trên HTML (có priceBlock)
         if (website.att.PRICEBLOCK!==undefined){
-          var priceString = myparser.getText(website.att.PRICEBLOCK);
+          var priceString = myParser.getText(website.att.PRICEBLOCK);
           //console.log(priceString);
           price.setPrice(priceString);          
         }
         // Tìm giá trên JSON (ko có priceBlock, chỉ có JSONBlock)
         else if (website.att.JSONBLOCK!==undefined){
-          var priceString = myparser.getJSON(website.att.JSONBLOCK); 
+          var priceString = myParser.getJSON(website.att.JSONBLOCK); 
           price.setPrice(priceString);
         }
 
         var shipping=new Price();
         if (website.att.SHIPPINGBLOCK!==undefined){
-          var shippingString = myparser.getText(website.att.SHIPPINGBLOCK);
+          var shippingString = myParser.getText(website.att.SHIPPINGBLOCK);
           var regShipping=/\d+.?\d*/gm;
           shipping.setPrice(shippingString, regShipping);
         }
         
         var redirect="";
         if (website.att.REDIRECT!==undefined){
-          var newurl = myparser.getLink(website.att.REDIRECT);
+          var newurl = myParser.getLink(website.att.REDIRECT);
           if (newurl!=="")
             redirect = website.domain + newurl;            
         }
@@ -424,17 +147,17 @@ class Item{
         // Nếu cần lấy Category & Weight từ chung 1 data table thì define DETAILBLOCK
         else if (website.att.DETAILBLOCK!==undefined){
           // detailArray gồm nhiều row trong table chứa Detail
-          var detailArray = myparser.getTextArray(website.att.DETAILBLOCK);
+          var detailArray = myParser.getTextArray(website.att.DETAILBLOCK);
           weight.setWeight(detailArray,website.att.WEIGHTCONDITION);          
           category.setCategory(detailArray, website.att.CATEGORYCONDITION); 
         }
         else{ // các trang thông thường sẽ có category nằm riêng, weight nằm riêng
           if (website.att.CATEGORYBLOCK!==undefined){
-            var categoryString = myparser.getTextArray(website.att.CATEGORYBLOCK);
+            var categoryString = myParser.getTextArray(website.att.CATEGORYBLOCK);
             category.setCategory(categoryString); 
           }
           if (website.att.WEIGHTBLOCK!==undefined){
-            var weightString = myparser.getTextArray(website.att.WEIGHTBLOCK);
+            var weightString = myParser.getTextArray(website.att.WEIGHTBLOCK);
             weight.setWeight(weightString); 
           }
         }
@@ -458,7 +181,7 @@ class Item{
     });
     var parser = new htmlparser.Parser(handler, { decodeEntities: true });
     parser.parseComplete(website.htmlraw);  
-  }  
+  }
   calculatePrice(){
     var itemPrice = this.priceshipping;
     var itemTax = itemPrice * this.webatt.TAX; // Thuế tại Mỹ
@@ -642,9 +365,9 @@ CATEGORYSTRING : ${this.category.string}`;
   }
   // chuyển giá (float)price sang VND theo RATE, thêm đơn vị VND
   toVND(price){    
-    var rate=this.webatt.RATE!==undefined?RATE[this.webatt.RATE]:RATE['USD'];
+    var rate = this.webatt.RATE || RATE['USD'];
     var priceNew = Math.ceil((price * rate) / 5000) * 5000; //Làm tròn lên 5000 
-    return priceNew.formatMoney(0, ',', '.')+"đ"; // Thêm VND vào
+    return Formatter.formatMoney(priceNew, 0, ',', '.')+"đ"; // Thêm VND vào
   }
 }
 module.exports.Website=Website;
