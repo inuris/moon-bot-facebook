@@ -12,10 +12,8 @@ class Parser{
   // Lấy ra element theo JSONPath của web.JSONBLOCK
   getJSON(jsonblock){
     try{
-      var selector='script';
       // Mặc định chỉ lấy JSON trong <script>, nếu cần lấy từ element khác thì phải thêm SELECTOR vào db
-      if (jsonblock.SELECTOR!==undefined)
-        selector = jsonblock.SELECTOR;
+      var selector= jsonblock.SELECTOR || 'script';      
       var scriptBlock = select(this.dom, selector);
       if (scriptBlock === null) return "";
       var currentBlock;
