@@ -25,6 +25,7 @@ class Website{
   constructor(url){    
     var found=false;
     var isUrl=false;
+    var isIgnored=false;
     var reg=/((?:(?:http|https):\/\/)?(?:\w*\.\w+\.\w+)(?:\.\w+)?)+([\w-;,.\/?%&=]*)?/i;
     var tempWeb = null;
     var tempUrl = "";
@@ -46,16 +47,20 @@ class Website{
           }          
         }
       }
+      else{
+        isIgnored=true;
+      }
     }
     if (tempWeb!==null){
       found = true;            
     }
-    this.domain =  tempDomain;  // chỉ có domain
-    this.url    =  tempUrl;     // full url
-    this.isUrl  =  isUrl;       // true false
-    this.att    =  tempWeb;     // các thuộc tính lấy từ WEBSITES
-    this.htmlraw=  "";
-    this.found  =  found;       // true false: có tìm thấy đúng website trong list hay ko
+    this.domain     =  tempDomain;  // chỉ có domain
+    this.url        =  tempUrl;     // full url
+    this.isUrl      =  isUrl;       // true false : có phải Url ko
+    this.isIgnored  =  isIgnored;   // true false : có trong list IGNORE ko
+    this.att        =  tempWeb;     // các thuộc tính lấy từ WEBSITES
+    this.htmlraw    =  "";
+    this.found      =  found;       // true false: có tìm thấy đúng website trong list hay ko
   }
   setDom(htmlraw){
     this.htmlraw=htmlraw;

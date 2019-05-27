@@ -143,7 +143,7 @@ async function handleMessage(page_id, sender, received_message) {
       let response = { "text": "Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite() }
       callSendAPI(page_id, sender.id, response);
     }
-    else if (website.isUrl){
+    else if (website.isUrl && !website.isIgnored){
       logger.error("Undefined: " + website.url);
     }
   }  
