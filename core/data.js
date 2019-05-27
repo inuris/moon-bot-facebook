@@ -393,6 +393,7 @@ const WEBSITES = {
     NAME: "Forever21",
     SILENCE: false,
     JSONBLOCK:{
+      INDEX: 1,
       SELECTOR:'script[type="application/ld+json"]',
       PATH: ["$.Offers.price"]
     } 
