@@ -2,22 +2,26 @@ class Formatter{
   // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
   static formatMoney(number, c, d, t) {
     var n = number,
-      c = isNaN((c = Math.abs(c))) ? 0 : c,
+      c = isNaN((c = Math.abs(c))) ? 2 : c,
       d = d == undefined ? "." : d,
       t = t == undefined ? "," : t,
       s = n < 0 ? "-" : "",
       i = String(parseInt((n = Math.abs(Number(n) || 0).toFixed(c)))),
       j = (j = i.length) > 3 ? j % 3 : 0;
-    return (
-      s +
-      (j ? i.substr(0, j) + t : "") +
-      i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) +
-      (c
+      c = (c
         ? d +
           Math.abs(n - i)
             .toFixed(c)
             .slice(2)
-        : "")
+        : "");
+      while (c[c.length-1]==='0'){
+        c=c.slice(0,c.length-1);
+      }
+    return (
+      s +
+      (j ? i.substr(0, j) + t : "") +
+      i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + c
+      
     );
   };
   
@@ -58,7 +62,7 @@ class Formatter{
       let n = priceVND;
       let i	=	0;
       let unit = ['','k','m','b'];
-      while (n%100===0 && n > 1000){
+      while (n%100===0 && n >= 1000){
         i++;
         n/=1000;
       }
