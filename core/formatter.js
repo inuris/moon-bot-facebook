@@ -2,7 +2,7 @@ class Formatter{
   // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
   static formatMoney(number, c, d, t) {
     var n = number,
-      c = isNaN((c = Math.abs(c))) ? 2 : c,
+      c = isNaN((c = Math.abs(c))) ? 0 : c,
       d = d == undefined ? "." : d,
       t = t == undefined ? "," : t,
       s = n < 0 ? "-" : "",
@@ -20,7 +20,8 @@ class Formatter{
         : "")
     );
   };
-
+  
+ 
   // Check a string contain one of any string in Array
   static checkKeyword(keyword, include, exclude){
     if (include==undefined){
@@ -43,9 +44,30 @@ class Formatter{
 
   // Đổi USD sang VND, làm tròn 5000
   static toVND(price, rate){
-    var priceNew = Math.ceil((price * rate) / 5000) * 5000; //Làm tròn lên 5000  
-    return this.formatMoney(priceNew, 0, '.', ',')+" VND"; // Thêm VND vào
+    return Math.ceil((price * rate) / 5000) * 5000; //Làm tròn lên 5000  
   };
+  
+  // Format lại số và thêm đ vào tiền
+  static formatVND(priceVND){
+    return this.formatMoney(priceVND)+'đ';
+  }
+
+  static formatShortVND(priceVND){
+    try {
+      if (priceVND === 0) return null;
+      let n = priceVND;
+      let i	=	0;
+      let unit = ['','k','m','b'];
+      while (n%100===0 && n > 1000){
+        i++;
+        n/=1000;
+      }
+      return this.formatMoney(n,2) + unit[i];
+    }
+    catch (e){
+      return null;
+    }
+  }
 
 }
 
