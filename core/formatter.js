@@ -62,7 +62,7 @@ class Formatter{
         i++;
         n/=1000;
       }
-      return this.formatMoney(n,2) + unit[i];
+      return this.formatMoney(n) + unit[i];
     }
     catch (e){
       return null;
