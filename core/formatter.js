@@ -8,15 +8,18 @@ class Formatter{
       s = n < 0 ? "-" : "",
       i = String(parseInt((n = Math.abs(Number(n) || 0).toFixed(c)))),
       j = (j = i.length) > 3 ? j % 3 : 0;
+      console.log(c);
       c = (c
         ? d +
           Math.abs(n - i)
             .toFixed(c)
             .slice(2)
         : "");
-      while (c[c.length-1]==='0'){
+        console.log(c);
+      while (c.length>0 && (c[c.length-1]==='0' || c[c.length-1]==='.')){
         c=c.slice(0,c.length-1);
       }
+      console.log(c);
     return (
       s +
       (j ? i.substr(0, j) + t : "") +
