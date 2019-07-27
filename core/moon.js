@@ -181,7 +181,6 @@ class Item{
         this.category=category; 
 
         this.total =  this.calculatePrice();
-        this.totalString=(this.total===0?"":this.toVND(this.total));;
       }
     });
     var parser = new htmlparser.Parser(handler, { decodeEntities: true });
@@ -213,18 +212,30 @@ class Item{
         : 0); // Phụ thu giá trị cao (HVANCHOR)
     //console.log("high price extra: " + itemHVEXTRA);
   
-    var itemTotal =
+    var itemTotalNonWeight =
       itemPrice > 0
-        ? itemPriceAfterTax + itemMoon + itemShip + itemPriceExtra + itemHVEXTRA
+        ? itemPriceAfterTax + itemMoon + itemPriceExtra + itemHVEXTRA
         : 0;
+    var itemTotal = itemTotalNonWeight + itemShip;
     //console.log("total: " + itemTotal);
-    return itemTotal;
+
+    var itemTotalNonWeightVND = Formatter.toVND(itemTotalNonWeight, this.webatt.RATE || RATE['USD']);
+    var itemTotalVND          = Formatter.toVND(itemTotal, this.webatt.RATE || RATE['USD']);
+
+    return {
+      value: itemTotal,
+      short_VND: Formatter.formatShortVND(itemTotalVND),
+      full_VND: Formatter.formatVND(itemTotalVND),
+      valueNW: itemTotalNonWeight,
+      shortNW_VND: Formatter.formatShortVND(itemTotalNonWeightVND),
+      fullNW_VND: Formatter.formatVND(itemTotalNonWeightVND),
+    };
   }
   // Xuất log gồm log.type (error/success) và log.content dạng string
   toLog(){
     let logContent =`
 URL : ${this.weburl}
-PRICE : ${this.price.string} ~ ${this.totalString}
+PRICE : ${this.price.string} ~ ${this.total.full_VND}
 SHIPPING : ${this.shipping.value} ~ ${this.shipping.string}
 WEIGHT : ${this.weight.string} ~ ${this.weight.kg}kg
 CATEGORY : ${this.category.att.ID}
@@ -247,12 +258,12 @@ CATEGORYSTRING : ${this.category.string}`;
   toText(){
     var response;
     // Nếu ko xác định dc giá
-    if (this.totalString ==""){
+    if (this.total.valueNW === 0){
       response= "Ko xác định được giá sản phẩm. Vui lòng chat với Moon để được báo giá chính xác."
     }
     else{
       var itemTitle, itemSubtitle;
-      itemTitle='Giá dự kiến: ' + this.totalString+".";
+      itemTitle='Giá dự kiến: ' + this.total.full_VND+".";
       // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
       if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
         itemSubtitle = ' Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về.';
@@ -271,7 +282,7 @@ CATEGORYSTRING : ${this.category.string}`;
   toFBResponse(badgeImageUrl){  
     var response;
     // Nếu ko xác định dc giá
-    if (this.totalString ==""){
+    if (this.total.valueNW === 0){
       response= {
         "attachment": {
           "type": "template",
@@ -294,7 +305,7 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     else{
       var itemTitle, itemSubtitle;      
-      itemTitle='Giá tham khảo: ' + this.totalString;
+      itemTitle='Giá tham khảo: ' + this.total.full_VND;
       // Nếu ko có cân nặng và thuộc danh mục có ship,hoặc ko có danh mục (unknown) thì thông báo "cân sau"
       if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
         itemSubtitle = 'Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về';
@@ -343,36 +354,31 @@ CATEGORYSTRING : ${this.category.string}`;
       responseContent += `
 - Cân: ${this.weight.kg}kg
 - Mặt hàng ${this.category.att.NAME}`;
-    let payloadContent_1=`send|${senderid}|Dạ giá sp này là ${this.totalString}`;
-    let payloadContent_2=`send|${senderid}|Cái này là ${this.totalString}`;
+    let buttons=[
+      {
+        "type":"postback",
+        "payload": `send|${senderid}|Dạ giá sp này là ${this.total.fullNW_VND} chưa cân`,
+        "title": this.total.shortNW_VND + " chưa cân ạ"// 1245k chưa cân ạ
+      }      
+    ];
+    if (this.total.value>this.total.valueNW){
+      buttons.push({
+        "type":"postback",
+        "payload": `send|${senderid}|Dạ giá sp này là ${this.total.full_VND}`,
+        "title": this.total.short_VND + " ạ" // 1245k ạ
+      })
+    }
     response =  {
       "attachment": {
         "type": "template",
         "payload": {
           "template_type":"button",
           "text":responseContent,
-          "buttons":[
-            {
-              "type":"postback",
-              "payload": payloadContent_1,
-              "title": "Dạ, " + this.totalString
-            },
-            {
-              "type":"postback",
-              "payload": payloadContent_2,
-              "title": "Cái này " + this.totalString
-            }
-          ]
+          "buttons":buttons
         }
       }
     }  
     return response;
-  }
-  // chuyển giá (float)price sang VND theo RATE, thêm đơn vị VND
-  toVND(price){    
-    var rate = this.webatt.RATE || RATE['USD'];
-    var priceNew = Math.ceil((price * rate) / 5000) * 5000; //Làm tròn lên 5000 
-    return Formatter.formatMoney(priceNew, 0, ',', '.')+"đ"; // Thêm VND vào
   }
 }
 module.exports.Website=Website;

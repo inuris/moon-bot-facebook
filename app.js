@@ -112,7 +112,7 @@ async function handleMessage(page_id, sender, received_message) {
                 })
             }
             // Nếu tìm được giá thì mới báo
-            if (website.att.SILENCE===false && item.total>0){
+            if (website.att.SILENCE===false && item.total.valueNW>0){
               getUserInfo(page_id , sender.id)
                 .then((senderInfo)=>{ 
                   if (senderInfo.name===undefined)

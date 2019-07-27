@@ -197,11 +197,10 @@ const CATEGORIES = {
       "kids",
       "learning",
       "education",
-      "audio & video accessories",
+      "accessories",
       "screen protectors",
       "cases",
       "bags",
-      "camera & photo accessories",
       "accessory kits",
       "cables",
       "holder",
@@ -211,7 +210,8 @@ const CATEGORIES = {
       "repair kits",
       "sticks",
       "tripods",
-      "styluses"
+      "styluses",
+			'screwdrivers'
     ]
   },
   AUTOMOTIVE: {
@@ -286,7 +286,9 @@ const IGNORE_WEBSITES=[
   "ebay.com",
   "victoriassecret.com",
   "urbanoutfitters.com",
-  "ruelala.com"
+  "ruelala.com",
+  "facebook.com",
+  "hm.com"
 ]
 const WEBSITES = {
   AMAZON3RD:{
