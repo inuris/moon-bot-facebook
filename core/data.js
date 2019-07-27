@@ -286,7 +286,9 @@ const IGNORE_WEBSITES=[
   "ebay.com",
   "victoriassecret.com",
   "urbanoutfitters.com",
-  "ruelala.com"
+  "ruelala.com",
+  "facebook.com",
+  "hm.com"
 ]
 const WEBSITES = {
   AMAZON3RD:{
